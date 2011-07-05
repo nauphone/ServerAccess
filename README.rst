@@ -7,8 +7,8 @@ ServerAccess is a tool to provide easy and seamless access to multiple servers. 
 Prerequisites
 =============
 
- * Requires JRE to run.
- * Requires JDK and Apache Ant to build.
+* Requires JRE to run.
+* Requires JDK and Apache Ant to build.
 
 Build and install
 =================
