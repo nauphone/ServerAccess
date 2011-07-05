@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Naumen Server Access
+Comment=A SSH client
+Exec=/opt/naumen/server-access/server-access
+Icon=naumen_server_access
+Terminal=false
+Type=Application
+Categories=Network;RemoteAccess;
+StartupNotify=true
+X-Desktop-File-Install-Version=0.16

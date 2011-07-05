@@ -1,0 +1,7 @@
+Anton Patrushev <apatrushev@naumen.ru>
+Ilya Shabalin <ishabalin@naumen.ru>
+Andrey Pinaev <apinaev@naumen.ru>
+Aleksandr Likulin <alikulin@naumen.ru>
+Vasiliy Kuznetsov <kvas@naumen.ru>
+Nikita Vetoshkin <nvetoshkin@naumen.ru>
+Sergey Panov <spanov@naumen.ru>

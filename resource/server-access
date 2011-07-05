@@ -1,0 +1,13 @@
+#!/bin/sh
+#export JAVA_HOME=/opt/sun-jdk-1.6.0.07/bin
+#export PATH=/opt/sun-jdk-1.6.0.07
+#/opt/sun-jdk-1.6.0.07/bin/java -classpath mindterm.jar -jar servacc.jar
+#export PATH=$PATH
+
+cd /opt/naumen/server-access
+ARCH=`uname -i`
+if [ $ARCH == "x86_64" ] ;then
+  java -d64 -classpath "/usr/lib64/java/swt.jar:mindterm.jar:servacc.jar" ru.naumen.servacc.ui.Main
+else
+  java -classpath "/usr/lib/java/swt.jar:mindterm.jar:servacc.jar" ru.naumen.servacc.ui.Main
+fi

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="servacc" default="jar" basedir=".">
+    <property
+        name="version"
+        value="0.9.9" />
+    <property
+        name="src"
+        location="src" />
+    <property
+        name="build"
+        location="build" />
+    <property
+        name="distr"
+        location="distr" />
+    <property
+        name="debug"
+        value="true" />
+    <property
+        name="debuglevel"
+        value="lines,vars,source" />
+    <property
+        name="swt-version"
+        value="3.5.1" />
+
+    <path
+        id="saclient.class.path">
+        <pathelement
+            path="${java.class.path}/" />
+        <pathelement
+            path="build" />
+        <pathelement location="lib/swt.jar"/>
+        <pathelement location="lib/mindterm.jar"/>
+    </path>
+
+    <target
+        name="jar"
+        depends="init"
+        description="--> build jar">
+        <jar
+            destfile="${distr}/servacc.jar"
+            manifest="resource/MANIFEST.MF">
+            <fileset dir="${build}" />
+            <fileset dir="resource">
+                <include name="*.ico" />
+                <include name="icons/**" />
+            </fileset>
+        </jar>
+    </target>
+
+    <target
+        name="init">
+        <mkdir dir="${build}" />
+        <mkdir dir="${distr}" />
+    </target>
+
+    <target
+        name="installer"
+        depends="jar"
+        description="make installer *.exe">
+        <exec
+            executable="makensis"
+            dir="nsis">
+            <arg
+                line="serveraccess.nsi" />
+            <redirector>
+                <outputmapper
+                    type="merge"
+                    to="redirector.out" />
+                <errormapper
+                    type="merge"
+                    to="redirector.err" />
+            </redirector>
+        </exec>
+    </target>
+
+    <target
+        name="win32"
+        depends="clean, init, java-build, jar"
+        description="make win32 installer">
+
+        <mkdir dir="${build}/swt" />
+        <exec executable="unzip" dir="${build}/swt">
+            <arg value="../../lib/swt/swt-${swt-version}-win32-win32-x86.zip"/>
+        </exec>
+
+        <!-- Windows users, add makensis to your PATH -->
+        <exec
+            executable="makensis"
+            dir="nsis">
+            <arg line="serveraccess2.nsi" />
+            <redirector>
+                <outputmapper type="merge" to="redirector.out" />
+                <errormapper type="merge" to="redirector.err" />
+            </redirector>
+        </exec>
+
+        <delete dir="${build}/swt" />
+    </target>
+
+    <target
+        name="java-build"
+        depends="init"
+        description="--> .java to build">
+        <javac
+            destdir="${build}"
+            classpathref="saclient.class.path"
+            debug="${debug}"
+            debuglevel="${debuglevel}"
+            optimize="true">
+            <src
+                path="${src}" />
+        </javac>
+    </target>
+
+    <target
+        name="clean"
+        description="--> remove stuff">
+        <delete
+            dir="${build}" />
+        <delete
+            dir="${distr}" />
+    </target>
+
+    <target
+        name="macosx-common"
+        depends="clean, init, java-build, jar"
+        description="--> Mac OS X app template">
+
+        <exec executable="unzip" dir="${distr}">
+            <arg value="../resource/ServerAccess.app.tmpl.zip"/>
+        </exec>
+
+        <copy
+            file="lib/mindterm.jar"
+            todir="${distr}/ServerAccess.app/Contents/MacOS" />
+        <copy
+            file="${distr}/servacc.jar"
+            todir="${distr}/ServerAccess.app/Contents/MacOS" />
+    </target>
+
+    <target
+        name="macosx-cocoa"
+        depends="clean, init, java-build, jar, macosx-common"
+        description="--> build Mac OS X + Cocoa app">
+
+        <copy
+            file="resource/scripts/serveraccess"
+            tofile="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
+        <exec executable="chmod">
+            <arg value="+x" />
+            <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
+        </exec>
+        <mkdir dir="${build}/swt" />
+        <exec executable="unzip" dir="${build}/swt">
+            <arg value="../../lib/swt/swt-${swt-version}-cocoa-macosx.zip"/>
+        </exec>
+        <copy
+            file="${build}/swt/swt.jar"
+            todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
+        <delete dir="${build}/swt" />
+    </target>
+
+    <target
+        name="macosx-cocoa-x86_64"
+        depends="clean, init, java-build, jar, macosx-common"
+        description="--> build Mac OS X + Cocoa x86_64 app">
+
+        <copy
+            file="resource/scripts/serveraccess_64"
+            tofile="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
+        <exec executable="chmod">
+            <arg value="+x" />
+            <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
+        </exec>
+        <mkdir dir="${build}/swt" />
+        <exec executable="unzip" dir="${build}/swt">
+            <arg value="../../lib/swt/swt-${swt-version}-cocoa-macosx-x86_64.zip"/>
+        </exec>
+        <copy
+            file="${build}/swt/swt.jar"
+            todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
+        <delete dir="${build}/swt" />
+    </target>
+
+    <target
+        name="macosx-carbon"
+        depends="clean, init, java-build, jar, macosx-common"
+        description="--> build Mac OS X + Carbon app">
+
+        <copy
+            file="resource/scripts/serveraccess"
+            tofile="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
+        <exec executable="chmod">
+            <arg value="+x" />
+            <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
+        </exec>
+        <mkdir dir="${build}/swt" />
+        <exec executable="unzip" dir="${build}/swt">
+            <arg value="../../lib/swt/swt-${swt-version}-carbon-macosx.zip"/>
+        </exec>
+        <copy
+            file="${build}/swt/swt.jar"
+            todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
+        <delete dir="${build}/swt" />
+    </target>
+
+</project>
