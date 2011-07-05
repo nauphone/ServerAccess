@@ -1,13 +1,17 @@
 Description
 ===========
 
-ServerAccess is a tool to provide easy and seamless access to multiple servers. It it aware of various protocols, such as SSH2, HTTP, FTP, and RDP. It uses accounts stored in either file system or on a remote web server. It can make local port forwarding on demand or by predefined settings. It can make connections through several tunnels.
+ServerAccess is a tool to provide easy and seamless access to multiple servers. It is aware of various protocols such as SSH2, HTTP, FTP, and RDP. It uses accounts stored in either file system or on a remote web server. It can make local port forwarding on demand or by predefined settings. It can make connections through several tunnels.
 
+
+Prerequisites
+=============
+
+ * Requires JRE to run.
+ * Requires JDK and Apache Ant to build.
 
 Build and install
 =================
-
-Prerequisites: JRE, Apache Ant.
 
 Windows
 -------
