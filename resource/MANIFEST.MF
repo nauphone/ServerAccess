@@ -1,2 +1,2 @@
-Main-Class: ru.naumen.servacc.ServAcc
+Main-Class: ru.naumen.servacc.ui.Main
 Class-Path: swt.jar mindterm.jar
