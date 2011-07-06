@@ -1,4 +1,4 @@
-Anton Patrushev <apatrushev@naumen.ru>
+Anton Patrushev <apatrushev@gmail.com>
 Ilya Shabalin <ishabalin@naumen.ru>
 Andrey Pinaev <apinaev@naumen.ru>
 Aleksandr Likulin <alikulin@naumen.ru>
