@@ -166,7 +166,16 @@ public class Main implements Runnable
         if (configFile.createNewFile())
         {
             // generate default configuration
-            String data = "source=PATH-TO-YOUR-ACCOUNTS.XML";
+            String data;
+            File accountsFile = new File(appDirectory, "accounts.xml");
+            if (accountsFile.createNewFile())
+            {
+                data = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>"
+                     + System.getProperty("line.separator")
+                     + "<Accounts version=\"2\"></Accounts>";
+                new FileOutputStream(accountsFile).write(data.getBytes());
+            }
+            data = "source=file://" + accountsFile.getPath();
             new FileOutputStream(configFile).write(data.getBytes());
         }
         return configFile;

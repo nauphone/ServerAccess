@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Accounts version="2">
+    <Account type="ssh">
+        <Param name="login" value="example0" />
+        <Param name="password" value="example0" />
+        <Param name="address" value="example.com:22" />
+        <Param name="putty_options" value="-load utf" />
+    </Account>
+    <Group name="example.com">
+        <Account type="ssh" id="1">
+            <Param name="login" value="example1" />
+            <Param name="password" value="example1" />
+            <Param name="address" value="example.com:22" />
+        </Account>
+        <Group name="node 1">
+            <Account type="ssh">
+                <Param name="login" value="example2" />
+                <Param name="password" value="example2" />
+                <Param name="address" value="node1.example.com:22" />
+                <Param name="through" value="1" />
+            </Account>
+            <Account type="http">
+                <Param name="login" value="example3" />
+                <Param name="password" value="example3" />
+                <Param name="url" value="http://node1.example.com" />
+                <Param name="through" value="1" />
+            </Account>
+        </Group>
+    </Group>
+</Accounts>
