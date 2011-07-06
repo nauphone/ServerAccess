@@ -1,8 +1,19 @@
 Description
 ===========
+Overview
+-----------
+ServerAccess is a tool to provide easy and seamless access to multiple servers.
+ * supporting of various protocols such as SSH2, HTTP, FTP, and RDP;
+ * supporting all major operating systems (Windows, Linux, Mac OS X);
+ * storing accounts in either file system or on a remote web server;
+ * local port forwarding on demand or by predefined settings;
+ * making connections through several tunnels.
 
-ServerAccess is a tool to provide easy and seamless access to multiple servers. It is aware of various protocols such as SSH2, HTTP, FTP, and RDP. It uses accounts stored in either file system or on a remote web server. It can make local port forwarding on demand or by predefined settings. It can make connections through several tunnels.
-
+.. Use cases
+.. =========
+.. 
+.. Intranet web application behind two ssh hop's
+.. ---------------------------------------------
 
 Prerequisites
 =============
