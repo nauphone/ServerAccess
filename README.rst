@@ -1,6 +1,8 @@
 Overview
 ========
 
+.. image:: https://github.com/w31rd0/ServerAccess/raw/master/screenshot-1-main.png
+
 ServerAccess is a tool to provide easy and seamless access to multiple servers. Some feature highlights:
 
 * Support for various protocols such as SSH2, HTTP, FTP, and RDP.
@@ -8,6 +10,9 @@ ServerAccess is a tool to provide easy and seamless access to multiple servers. 
 * Accounts can be stored either in a file on disk or on a remote web server.
 * Local port forwarding on demand or by predefined settings.
 * Connections can be made through several tunnels.
+* Outstanding search feature.
+
+.. image:: https://github.com/w31rd0/ServerAccess/raw/master/screenshot-2-search.png
 
 .. Use cases
 .. =========
