@@ -14,6 +14,7 @@ import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -132,17 +133,18 @@ public class Backend
         try
         {
             server.setSoTimeout(30000);
+            Object[] params = new Object[]{SocketReserver.LOCALHOST, server.getLocalPort(), options};
             if (Util.isLinux())
             {
-                Runtime.getRuntime().exec("putty " + options + " -telnet 127.0.0.1 -P " + server.getLocalPort());
+                Runtime.getRuntime().exec(MessageFormat.format("putty {2} -telnet {0} -P {1,number,#}", params));
             }
             else if (Util.isMacOSX())
             {
-                Runtime.getRuntime().exec("open telnet://127.0.0.1:" + server.getLocalPort());
+                Runtime.getRuntime().exec(MessageFormat.format("open telnet://{0}:{1,number,#}", params));
             }
             else
             {
-                Runtime.getRuntime().exec("cmd /C start putty " + options + " -telnet 127.0.0.1 -P " + server.getLocalPort());
+                Runtime.getRuntime().exec(MessageFormat.format("cmd /C start putty {2} -telnet {0} -P {1,number,#}", params));
             }
             // FIXME: collect children and kill it on
             Socket socket = server.accept();
@@ -160,18 +162,18 @@ public class Backend
         try
         {
             server.setSoTimeout(30000);
+            Object[] params = new Object[]{SocketReserver.LOCALHOST, server.getLocalPort()};
             if (Util.isLinux())
             {
-                Runtime.getRuntime().exec("gftp ftp://anonymous@127.0.0.1:" + server.getLocalPort());
+                Runtime.getRuntime().exec(MessageFormat.format("gftp ftp://anonymous@{0}:{1,number,#}", params));
             }
             else if (Util.isMacOSX())
             {
-                String url = "ftp://anonymous@127.0.0.1:" + server.getLocalPort();
-                Runtime.getRuntime().exec("open " + url);
+                Runtime.getRuntime().exec(MessageFormat.format("open ftp://anonymous@{0}:{1,number,#}", params));
             }
             else
             {
-                Runtime.getRuntime().exec("cmd /C explorer /n,ftp://127.0.0.1:" + server.getLocalPort());
+                Runtime.getRuntime().exec(MessageFormat.format("cmd /C explorer /n,ftp://{0}:{1,number,#}", params));
             }
             Socket socket = server.accept();
             return socket;

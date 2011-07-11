@@ -530,7 +530,7 @@ public class UIController
             {
                 PortForwardingDialog dialog = new PortForwardingDialog(shell);
                 dialog.setLocalPort(SocketReserver.getFreePort());
-                dialog.setRemoteHost("127.0.0.1");
+                dialog.setRemoteHost(SocketReserver.LOCALHOST);
                 if (dialog.show())
                 {
                     backend.forwardPort((SSHAccount) tic.getData(),
