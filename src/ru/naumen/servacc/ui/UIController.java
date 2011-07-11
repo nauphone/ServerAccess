@@ -59,7 +59,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 import ru.naumen.servacc.Backend;
-import ru.naumen.servacc.SocketReserver;
+import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
@@ -529,11 +529,11 @@ public class UIController
             try
             {
                 PortForwardingDialog dialog = new PortForwardingDialog(shell);
-                dialog.setLocalPort(SocketReserver.getFreePort());
-                dialog.setRemoteHost(SocketReserver.LOCALHOST);
+                dialog.setLocalPort(SocketUtils.getFreePort());
+                dialog.setRemoteHost(SocketUtils.LOCALHOST);
                 if (dialog.show())
                 {
-                    backend.forwardPort((SSHAccount) tic.getData(),
+                    backend.localPortForward((SSHAccount) tic.getData(),
                         dialog.getLocalPort(),
                         dialog.getRemoteHost(),
                         dialog.getRemotePort());

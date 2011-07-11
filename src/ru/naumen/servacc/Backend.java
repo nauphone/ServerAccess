@@ -118,7 +118,7 @@ public class Backend
             secureRandom = new SecureRandomAndPad(new SecureRandom(seed.getBytesBlocking(20, false)));
         }
         Socket sock = new Socket();
-        sock.connect(new InetSocketAddress(host, port), 30000);
+        sock.connect(new InetSocketAddress(host, port), SocketUtils.DEFAULT_TIMEOUT);
         SSH2Transport transport = new SSH2Transport(sock, secureRandom);
         SSH2Authenticator auth = new SSH2Authenticator(login);
         auth.addModule(new SSH2AuthPassword(password));
@@ -129,11 +129,11 @@ public class Backend
 
     public static Socket openTerminal(String options) throws Exception
     {
-        ServerSocket server = SocketReserver.createListener(SocketReserver.LOCALHOST);
+        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
         {
-            server.setSoTimeout(30000);
-            Object[] params = new Object[]{SocketReserver.LOCALHOST, server.getLocalPort(), options};
+            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
+            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort(), options};
             if (Util.isLinux())
             {
                 Runtime.getRuntime().exec(MessageFormat.format("putty {2} -telnet {0} -P {1,number,#}", params));
@@ -158,11 +158,11 @@ public class Backend
 
     public static Socket openFTPBrowser() throws Exception
     {
-        ServerSocket server = SocketReserver.createListener(SocketReserver.LOCALHOST);
+        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
         {
-            server.setSoTimeout(30000);
-            Object[] params = new Object[]{SocketReserver.LOCALHOST, server.getLocalPort()};
+            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
+            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort()};
             if (Util.isLinux())
             {
                 Runtime.getRuntime().exec(MessageFormat.format("gftp ftp://anonymous@{0}:{1,number,#}", params));
@@ -279,9 +279,11 @@ public class Backend
         SSHAccount throughAccount = getThrough(account);
         if (throughAccount != null)
         {
-            InetSocketAddress addr = forwardThrough(host, port, throughAccount);
-            host = addr.getHostName();
-            port = addr.getPort();
+        	//FIXME: host/port used twice as in/out params of this block
+            int localPort = SocketUtils.getFreePort();
+			localPortForward(throughAccount, localPort, host, port);
+            host = SocketUtils.LOCALHOST;
+            port = localPort;
         }
         targetURL.append(host + ":" + port);
         // path info
@@ -294,10 +296,10 @@ public class Backend
         openURLInBrowser(targetURL.toString());
     }
 
-    public void forwardPort(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
+    public void localPortForward(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
-        client.getConnection().newLocalForward(SocketReserver.LOCALHOST, localPort, remoteHost, remotePort);
+        client.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, remoteHost, remotePort);
     }
 
     public void browseViaFTP(SSHAccount account) throws Exception
@@ -323,10 +325,10 @@ public class Backend
         int port = account.getPort() >= 0 ? account.getPort() : 22;
         if (through != null)
         {
-            int forwardingPort = SocketReserver.getFreePort();
-            through.getConnection().newLocalForward(SocketReserver.LOCALHOST, forwardingPort, host, port);
-            host = SocketReserver.LOCALHOST;
-            port = forwardingPort;
+            int localPort = SocketUtils.getFreePort();
+            through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port); //FIXME: localize newLocalForward usage in localPortForward
+            host = SocketUtils.LOCALHOST;
+            port = localPort;
         }
         String login = account.getLogin();
         String password = account.getPassword();
@@ -391,13 +393,5 @@ public class Backend
             throughAccount = globalThrough;
         }
         return throughAccount;
-    }
-
-    private InetSocketAddress forwardThrough(String host, int port, SSHAccount through) throws Exception
-    {
-        SSH2SimpleClient throughClient = getSSH2Client(through);
-        int forwardingPort = SocketReserver.getFreePort();
-        throughClient.getConnection().newLocalForward(SocketReserver.LOCALHOST, forwardingPort, host, port);
-        return new InetSocketAddress(SocketReserver.LOCALHOST, forwardingPort);
     }
 }
