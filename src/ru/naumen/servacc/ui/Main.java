@@ -226,7 +226,7 @@ public class Main implements Runnable
                 {
                     throw new IOException("File '" + file.getAbsolutePath() + "' does not exist.");
                 }
-                return loadConfigFromFile(new File(source));
+                return loadConfigFromFile(file);
             }
             else
             {

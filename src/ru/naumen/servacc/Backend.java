@@ -38,8 +38,6 @@ import com.mindbright.util.SecureRandomAndPad;
 
 public class Backend
 {
-    private static final String LOCALHOST = "127.0.0.1";
-
     private ConnectionsManager connections;
     private SSHAccount globalThrough;
 
@@ -130,7 +128,7 @@ public class Backend
 
     public static Socket openTerminal(String options) throws Exception
     {
-        ServerSocket server = SocketReserver.createListener(LOCALHOST);
+        ServerSocket server = SocketReserver.createListener(SocketReserver.LOCALHOST);
         try
         {
             server.setSoTimeout(30000);
@@ -158,7 +156,7 @@ public class Backend
 
     public static Socket openFTPBrowser() throws Exception
     {
-        ServerSocket server = SocketReserver.createListener(LOCALHOST);
+        ServerSocket server = SocketReserver.createListener(SocketReserver.LOCALHOST);
         try
         {
             server.setSoTimeout(30000);
@@ -201,7 +199,6 @@ public class Backend
         }
     }
 
-    @SuppressWarnings("unchecked")
     public void openSSHAccount(SSHAccount account) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
@@ -298,7 +295,7 @@ public class Backend
     public void forwardPort(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
-        client.getConnection().newLocalForward(LOCALHOST, localPort, remoteHost, remotePort);
+        client.getConnection().newLocalForward(SocketReserver.LOCALHOST, localPort, remoteHost, remotePort);
     }
 
     public void browseViaFTP(SSHAccount account) throws Exception
@@ -325,8 +322,8 @@ public class Backend
         if (through != null)
         {
             int forwardingPort = SocketReserver.getFreePort();
-            through.getConnection().newLocalForward(LOCALHOST, forwardingPort, host, port);
-            host = LOCALHOST;
+            through.getConnection().newLocalForward(SocketReserver.LOCALHOST, forwardingPort, host, port);
+            host = SocketReserver.LOCALHOST;
             port = forwardingPort;
         }
         String login = account.getLogin();
@@ -398,7 +395,7 @@ public class Backend
     {
         SSH2SimpleClient throughClient = getSSH2Client(through);
         int forwardingPort = SocketReserver.getFreePort();
-        throughClient.getConnection().newLocalForward(LOCALHOST, forwardingPort, host, port);
-        return new InetSocketAddress(LOCALHOST, forwardingPort);
+        throughClient.getConnection().newLocalForward(SocketReserver.LOCALHOST, forwardingPort, host, port);
+        return new InetSocketAddress(SocketReserver.LOCALHOST, forwardingPort);
     }
 }
