@@ -80,7 +80,7 @@ public class ShowAccountDialog {
         return result;
     }
 
-	public boolean run()
+    public boolean run()
     {
         shell.open();
         Display display = Display.findDisplay(Thread.currentThread());

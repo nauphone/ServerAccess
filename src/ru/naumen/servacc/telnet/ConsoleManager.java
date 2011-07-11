@@ -21,8 +21,8 @@ import java.util.logging.Logger;
 
 import com.mindbright.ssh2.SSH2SessionChannel;
 
-public class ConsoleManager {
-
+public class ConsoleManager
+{
     private static Logger logger = Logger.getLogger("ru.naumen.servacc");
 
     // Telnet protocol commands:
@@ -52,18 +52,21 @@ public class ConsoleManager {
     public static final int O_SUPPRESS_GA = 3;      // Suppress Go Ahead
     public static final int O_WINDOW_SIZE_NEG = 31; // Window Size Negotiation
 
-	class ConsoleManagerInputStream extends PushbackInputStream {
+    class ConsoleManagerInputStream extends PushbackInputStream
+    {
+        private ConsoleManager manager;
 
-		private ConsoleManager manager;
+        public ConsoleManagerInputStream(ConsoleManager manager) throws IOException
+        {
+            super(new LFInputStream(manager.client.getInputStream()), 1024);
+            this.manager = manager;
+        }
 
-		public ConsoleManagerInputStream(ConsoleManager manager) throws IOException {
-			super(new LFInputStream(manager.client.getInputStream()), 1024);
-			this.manager = manager;
-		}
-
-        private void processDO() throws IOException {
+        private void processDO() throws IOException
+        {
             int option = super.read();
-            switch (option) {
+            switch (option)
+            {
             case O_ECHO:
                 say(IAC, WILL, O_ECHO);
                 logger.info("IAC DO ECHO");
@@ -79,9 +82,11 @@ public class ConsoleManager {
             }
         }
 
-        private void processIAC() throws IOException {
+        private void processIAC() throws IOException
+        {
             int command = super.read();
-            switch (command) {
+            switch (command)
+            {
             case WILL:
                 processWILL();
                 break;
@@ -97,18 +102,21 @@ public class ConsoleManager {
             }
         }
 
-        private void processSB() throws IOException {
+        private void processSB() throws IOException
+        {
             int command = super.read();
             int val = super.read();
             Vector lst = new Vector();
-            while (val != IAC) {
+            while (val != IAC)
+            {
                 lst.add(new Integer(val));
                 val = super.read();
             }
             super.read();
             Integer[] arr = (Integer[]) lst.toArray(new Integer[] {});
             StringBuffer buffer = new StringBuffer();
-            switch (command) {
+            switch (command)
+            {
             case O_WINDOW_SIZE_NEG:
                 session.sendWindowChange(
                     arr[2].intValue() * 256 + arr[3].intValue(),
@@ -121,9 +129,11 @@ public class ConsoleManager {
             }
         }
 
-        private void processWILL() throws IOException {
+        private void processWILL() throws IOException
+        {
             int command = super.read();
-            switch (command) {
+            switch (command)
+            {
             case O_SUPPRESS_GA:
                 say(IAC, DO, O_SUPPRESS_GA);
                 logger.info("IAC WILL SUPPRESS GO AHEAD");
@@ -139,121 +149,153 @@ public class ConsoleManager {
             }
         }
 
-		public int read() throws IOException {
-			int val = super.read();
-			while (val == IAC || val == 17) {
-				switch (val) {
-				case IAC:
-					processIAC();
-					break;
-				case 17:
-					unread(((String) params.get("password") + "\n").getBytes());
-					break;
-				}
-				val = super.read();
-			}
-			return val;
-		}
+        public int read() throws IOException
+        {
+            int val = super.read();
+            while (val == IAC || val == 17)
+            {
+                switch (val)
+                {
+                case IAC:
+                    processIAC();
+                    break;
+                case 17:
+                    unread(((String) params.get("password") + "\n").getBytes());
+                    break;
+                }
+                val = super.read();
+            }
+            return val;
+        }
 
-		public int read(byte[] b, int off, int len) throws IOException {
-			if (manager.inSudoLogin) {
-				return 0;
-			}
-			while (true) {
-				int res;
-				if (available() != 0) {
-					res = super.read(b, off, available());
-				} else {
-					res = super.read(b, off, len);
-				}
-				System.out.println(res);
-				if (res == -1)
-					return -1;
-				int ptr = 0;
-				while (b[off + ptr] != (byte) IAC && b[off + ptr] != 17 && ptr < res)
-					ptr++;
-				if (ptr == res)
-					return res;
-				if (ptr != 0) {
-					unread(b, off + ptr, res - ptr);
-					return ptr;
-				}
-				unread(b, off, res);
-				int nextb = read(); 
-				if (nextb == -1)
-					return -1;
-				unread(nextb);
-			}
-		}
+        public int read(byte[] b, int off, int len) throws IOException
+        {
+            if (manager.inSudoLogin)
+            {
+                return 0;
+            }
+            while (true)
+            {
+                int res;
+                if (available() != 0)
+                {
+                    res = super.read(b, off, available());
+                }
+                else
+                {
+                    res = super.read(b, off, len);
+                }
+                System.out.println(res);
+                if (res == -1)
+                {
+                    return -1;
+                }
+                int ptr = 0;
+                while (b[off + ptr] != (byte) IAC && b[off + ptr] != 17 && ptr < res)
+                {
+                    ptr++;
+                }
+                if (ptr == res)
+                {
+                    return res;
+                }
+                if (ptr != 0)
+                {
+                    unread(b, off + ptr, res - ptr);
+                    return ptr;
+                }
+                unread(b, off, res);
+                int nextb = read();
+                if (nextb == -1)
+                {
+                    return -1;
+                }
+                unread(nextb);
+            }
+        }
+    }
 
-	}
+    class ConsoleManagerOutputStream extends FilterOutputStream
+    {
+        private ConsoleManager manager;
+        public ConsoleManagerOutputStream(ConsoleManager manager) throws IOException
+        {
+            super(manager.client.getOutputStream());
+            this.manager = manager;
+        }
 
-	class ConsoleManagerOutputStream extends FilterOutputStream {
+        public void write_(byte[] bs) throws IOException
+        {
+            out.write(bs);
+        }
 
-		private ConsoleManager manager;
-		public ConsoleManagerOutputStream(ConsoleManager manager) throws IOException {
-			super(manager.client.getOutputStream());
-			this.manager = manager;
-		}
+        public void write(byte[] b, int off, int len) throws IOException
+        {
+            if ((off | len | (b.length - (len + off)) | (off + len)) < 0)
+            {
+                throw new IndexOutOfBoundsException();
+            }
+            out.write(b, off, len);
+            //TODO: auto password enter
+//            if (unreadPassword)
+//            {
+//                manager.in.unread(((String) manager.params.get("password") + "\n").getBytes());
+//                manager.inSudoLogin = false;
+//                unreadPassword = false;
+//            }
+            if (manager.inSudoLogin && b[0] != 27 && b[1] != 97)
+            {
+                manager.in.unread("sudo su -\n".getBytes());
+                manager.inSudoLogin = false;
+            }
+        }
 
-		public void write_(byte[] bs) throws IOException {
-			out.write(bs);
-		}
+        public void write(int b) throws IOException
+        {
+            out.write(b);
+        }
+    }
 
-		public void write(byte[] b, int off, int len) throws IOException {
-			if ((off | len | (b.length - (len + off)) | (off + len)) < 0)
-				throw new IndexOutOfBoundsException();
-			out.write(b, off, len);
-			//TODO: auto password enter
-//			if (unreadPassword) {
-//				manager.in.unread(((String) manager.params.get("password") + "\n").getBytes());
-//				manager.inSudoLogin = false;
-//				unreadPassword = false;
-//			}
-			if (manager.inSudoLogin && b[0] != 27 && b[1] != 97) {
-				manager.in.unread("sudo su -\n".getBytes());
-				manager.inSudoLogin = false;
-			}
-		}
+    private Socket client;
+    private ConsoleManagerInputStream in = null;
+    private ConsoleManagerOutputStream out = null;
+    private SSH2SessionChannel session;
+    private HashMap params;
+    private boolean inSudoLogin;
 
-		public void write(int b) throws IOException {
-			out.write(b);
-		}
+    public ConsoleManager(Socket client, SSH2SessionChannel session, HashMap params)
+    {
+        this.client = client;
+        this.session = session;
+        this.params = params;
+        this.inSudoLogin = params.containsKey("sudologin");
+    }
 
-	}
+    public InputStream getInputStream() throws IOException
+    {
+        if (in == null)
+        {
+            in = new ConsoleManagerInputStream(this);
+        }
+        return in;
+    }
 
-	private Socket client;
-	private ConsoleManagerInputStream in = null;
-	private ConsoleManagerOutputStream out = null;
-	private SSH2SessionChannel session;
-	private HashMap params;
-	private boolean inSudoLogin;
-
-	public ConsoleManager(Socket client, SSH2SessionChannel session, HashMap params) {
-		this.client = client;
-		this.session = session;
-		this.params = params;
-		this.inSudoLogin = params.containsKey("sudologin");
-	}
-
-	public InputStream getInputStream() throws IOException {
-		if (in == null)
-			in = new ConsoleManagerInputStream(this);
-		return in;
-	}
-
-    public OutputStream getOutputStream() throws IOException {
-        if (out == null) {
+    public OutputStream getOutputStream() throws IOException
+    {
+        if (out == null)
+        {
             out = new ConsoleManagerOutputStream(this);
         }
         return out;
     }
 
-    private void say(int a, int b, int c) throws IOException {
+    private void say(int a, int b, int c) throws IOException
+    {
         getOutputStream().write(new byte[] {(byte) a, (byte) b, (byte) c});
     }
 
-    public void negotiateProtocolOptions() throws IOException {
+    public void negotiateProtocolOptions() throws IOException
+    {
         say(IAC, DO, O_WINDOW_SIZE_NEG);
         say(IAC, WILL, O_ECHO);
         say(IAC, WILL, O_SUPPRESS_GA);

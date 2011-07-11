@@ -1,12 +1,12 @@
 /******************************************************************************
  *
  * Copyright (c) 1999-2003 AppGate Network Security AB. All Rights Reserved.
- * 
+ *
  * This file contains Original Code and/or Modifications of Original Code as
  * defined in and that are subject to the MindTerm Public Source License,
  * Version 2.0, (the 'License'). You may not use this file except in compliance
  * with the License.
- * 
+ *
  * You should have received a copy of the MindTerm Public Source License
  * along with this software; see the file LICENSE.  If not, write to
  * AppGate Network Security AB, Otterhallegatan 2, SE-41118 Goteborg, SWEDEN
@@ -55,7 +55,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
     /**
      * Connect this instance with an <code>SSH2Connection</code> which is
      * connected to the server we want to transfer files to/from.
-     * 
+     *
      * @param connection
      *            Established connection to the server.
      */
@@ -77,7 +77,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
 
     /**
      * Initialize the FTP server portion of this class.
-     * 
+     *
      * @param ftpInput
      *            The ftp command input stream.
      * @param ftpOutput
@@ -96,12 +96,12 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
     /**
      * Login to server. This is actually a null operation for this class since
      * the user is already authenticated as part of the SSH connection.
-     * 
+     *
      * @param user
      *            Username to login as.
      * @param pass
      *            Password.
-     * 
+     *
      * @return Returns true if the login was successful.
      */
     public boolean login(String user, String pass)
@@ -462,7 +462,9 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
             try
             {
                 if (handle != null)
+                {
                     sftp.close(handle);
+                }
             }
             catch (Exception e)
             { /* don't care */
@@ -483,18 +485,23 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
             return remoteDir;
         }
         if (name.charAt(0) != '/')
+        {
             name = remoteDir + "/" + name;
+        }
         return name;
     }
 
-	public void chmod(int mod, String file) throws FTPException {
-        try { 
+    public void chmod(int mod, String file) throws FTPException
+    {
+        try
+        {
             SSH2SFTP.FileAttributes fa = new SSH2SFTP.FileAttributes();
             fa.permissions = mod;
             fa.hasPermissions = true;
             sftp.setstat(expandRemote(file), fa);
-        } catch (SSH2SFTP.SFTPException e) {
         }
-	}
-
+        catch (SSH2SFTP.SFTPException e)
+        {
+        }
+    }
 }
