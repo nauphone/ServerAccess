@@ -801,6 +801,7 @@ public class UIController
                     public void run()
                     {
                         updateTree(filter);
+                        refreshTimer.cancel();
                     }
                 });
             }
