@@ -517,7 +517,7 @@ public class UIController
         {
             if (tic.getData() instanceof SSHAccount)
             {
-                new Thread(new Runnable() {
+                Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run()
                     {
@@ -531,11 +531,13 @@ public class UIController
                             showAlertFromThread(e.getMessage());
                         }
                     }
-                }, "Connecting to " + tic.getData()).start();
+                }, "Connecting to " + tic.getData());
+                thread.setDaemon(true);
+                thread.start();
             }
             else if (tic.getData() instanceof HTTPAccount)
             {
-                new Thread(new Runnable() {
+                Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run()
                     {
@@ -549,7 +551,9 @@ public class UIController
                             showAlertFromThread(e.getMessage());
                         }
                     }
-                }, "Connecting to " + tic.getData()).start();
+                }, "Connecting to " + tic.getData());
+                thread.setDaemon(true);
+                thread.start();
             }
             else
             {
