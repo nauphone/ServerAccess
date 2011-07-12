@@ -185,7 +185,7 @@ public class ConsoleManager
                 {
                     res = super.read(b, off, len);
                 }
-                System.out.println(res);
+                System.err.println(res);
                 if (res == -1)
                 {
                     return -1;

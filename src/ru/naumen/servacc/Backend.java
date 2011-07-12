@@ -10,124 +10,28 @@
 package ru.naumen.servacc;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 
 import org.eclipse.swt.program.Program;
 
-import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.telnet.ConsoleManager;
 
-import com.mindbright.jca.security.SecureRandom;
-import com.mindbright.ssh2.SSH2AuthKbdInteract;
-import com.mindbright.ssh2.SSH2AuthPassword;
-import com.mindbright.ssh2.SSH2Authenticator;
 import com.mindbright.ssh2.SSH2SessionChannel;
 import com.mindbright.ssh2.SSH2SimpleClient;
-import com.mindbright.ssh2.SSH2Transport;
-import com.mindbright.util.RandomSeed;
-import com.mindbright.util.SecureRandomAndPad;
 
-public class Backend
+/**
+ * @author tosha
+ *
+ */
+public class Backend extends SSH2Backend
 {
-    private ConnectionsManager connections;
-    private SSHAccount globalThrough;
-
-    private static RandomSeed seed;
-    private static SecureRandomAndPad secureRandom;
-
-    private class ConnectionsManager
-    {
-        private List<SSH2SimpleClient> connections;
-        private HashMap<String, SSH2SimpleClient> cache;
-
-        public ConnectionsManager()
-        {
-            cache = new HashMap<String, SSH2SimpleClient>();
-            connections = new ArrayList<SSH2SimpleClient>();
-        }
-
-        public void put(String key, SSH2SimpleClient client)
-        {
-            cache.put(key, client);
-        }
-
-        public void remove(String key)
-        {
-            cache.remove(key);
-        }
-
-        public SSH2SimpleClient get(String key)
-        {
-            return cache.get(key);
-        }
-
-        public boolean containsKey(String key)
-        {
-            return cache.containsKey(key);
-        }
-
-        public void clearCache()
-        {
-            // keep track of all open connections so we can close them on exit
-            connections.addAll(cache.values());
-            cache.clear();
-        }
-
-        public void cleanup()
-        {
-            clearCache();
-            for (SSH2SimpleClient client : connections)
-            {
-                if (client.getTransport().isConnected())
-                {
-                    client.getTransport().normalDisconnect("quit");
-                }
-            }
-        }
-    }
-
-    public Backend()
-    {
-        connections = new ConnectionsManager();
-    }
-
-    public void setGlobalThrough(SSHAccount account)
-    {
-        globalThrough = account;
-        connections.clearCache();
-    }
-
-    public static SSH2SimpleClient createSSH2Client(String host, Integer port, String login, String password) throws Exception
-    {
-        if (seed == null)
-        {
-            seed = new RandomSeed();
-        }
-        if (secureRandom == null)
-        {
-            secureRandom = new SecureRandomAndPad(new SecureRandom(seed.getBytesBlocking(20, false)));
-        }
-        Socket sock = new Socket();
-        sock.connect(new InetSocketAddress(host, port), SocketUtils.DEFAULT_TIMEOUT);
-        SSH2Transport transport = new SSH2Transport(sock, secureRandom);
-        SSH2Authenticator auth = new SSH2Authenticator(login);
-        auth.addModule(new SSH2AuthPassword(password));
-        auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(password)));
-        SSH2SimpleClient client = new SSH2SimpleClient(transport, auth);
-        return client;
-    }
-
-    public static Socket openTerminal(String options) throws Exception
+    private static Socket openTerminal(String options) throws Exception
     {
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
@@ -156,7 +60,7 @@ public class Backend
         }
     }
 
-    public static Socket openFTPBrowser() throws Exception
+    private static Socket openFTPBrowser() throws Exception
     {
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
@@ -184,7 +88,7 @@ public class Backend
         }
     }
 
-    public static void openURLInBrowser(String url) throws Exception
+    private static void openURLInBrowser(String url) throws Exception
     {
         if (Util.isLinux())
         {
@@ -207,7 +111,7 @@ public class Backend
         if (!client.getTransport().isConnected())
         {
             connections.remove(account.getUniqueIdentity());
-            System.out.println("Connection broken, trying again");
+            System.err.println("Connection broken, trying again");
             openSSHAccount(account);
             return;
         }
@@ -310,88 +214,6 @@ public class Backend
             client.getConnection(),
             socket.getInputStream(),
             socket.getOutputStream(),
-            "FTP Server")
-        .toString(); // TODO: is toString really necessary?
-    }
-
-    public void cleanup()
-    {
-        connections.cleanup();
-    }
-
-    private static SSH2SimpleClient getSSH2Client(SSHAccount account, SSH2SimpleClient through) throws Exception
-    {
-        String host = account.getHost();
-        int port = account.getPort() >= 0 ? account.getPort() : 22;
-        if (through != null)
-        {
-            int localPort = SocketUtils.getFreePort();
-            through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port); //FIXME: localize newLocalForward usage in localPortForward
-            host = SocketUtils.LOCALHOST;
-            port = localPort;
-        }
-        String login = account.getLogin();
-        String password = account.getPassword();
-        SSH2SimpleClient client = createSSH2Client(host, port, login, password);
-        return client;
-    }
-
-    private SSH2SimpleClient getSSH2Client(SSHAccount account) throws Exception
-    {
-        String id = account.getUniqueIdentity();
-        if (connections.containsKey(id))
-        {
-            return connections.get(id);
-        }
-        // follow the 'through' chain
-        List<SSHAccount> throughChain = new ArrayList<SSHAccount>();
-        SSHAccount cur = getThrough(account);
-        while (cur instanceof SSHAccount)
-        {
-            if (throughChain.contains(cur))
-            {
-                // circular reference
-                break;
-            }
-            throughChain.add(cur);
-            if (connections.containsKey(cur.getUniqueIdentity()))
-            {
-                // account is found in the cache, no need to go further
-                break;
-            }
-            cur = getThrough(cur);
-        }
-        Collections.reverse(throughChain);
-        SSH2SimpleClient last = null;
-        for (SSHAccount through : throughChain)
-        {
-            String throughId = through.getUniqueIdentity();
-            if (connections.containsKey(throughId))
-            {
-                last = connections.get(throughId);
-            }
-            else
-            {
-                last = getSSH2Client(through, last);
-                connections.put(throughId, last);
-            }
-        }
-        SSH2SimpleClient client = getSSH2Client(account, last);
-        connections.put(id, client);
-        return client;
-    }
-
-    private SSHAccount getThrough(Account account)
-    {
-        SSHAccount throughAccount = null;
-        if (account.through instanceof SSHAccount)
-        {
-            throughAccount = (SSHAccount) account.through;
-        }
-        else if (globalThrough instanceof SSHAccount)
-        {
-            throughAccount = globalThrough;
-        }
-        return throughAccount;
+            "FTP Server");
     }
 }
