@@ -166,7 +166,17 @@ public class UIController
         mb.open();
     }
 
-    public void cleanup()
+    protected void showAlertFromThread(final String message)
+    {
+        Display.getDefault().asyncExec(new Runnable() {
+            @Override
+            public void run() {
+                showAlert(message);
+            }
+        });
+    }
+
+	public void cleanup()
     {
         backend.cleanup();
     }
@@ -498,7 +508,7 @@ public class UIController
 
     private void defaultActionRequested(TreeItem item)
     {
-        TreeItemController tic = getConfigTreeItem(item);
+        final TreeItemController tic = getConfigTreeItem(item);
         if (tic == null)
         {
             return;
@@ -507,11 +517,43 @@ public class UIController
         {
             if (tic.getData() instanceof SSHAccount)
             {
-                backend.openSSHAccount((SSHAccount) tic.getData());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            backend.openSSHAccount((SSHAccount) tic.getData());
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                            showAlertFromThread(e.getMessage());
+                        }
+                    }
+                }, "Connecting to " + tic.getData()).start();
             }
             else if (tic.getData() instanceof HTTPAccount)
             {
-                backend.openHTTPAccount((HTTPAccount) tic.getData());
+                new Thread(new Runnable() {
+                    @Override
+                    public void run()
+                    {
+                        try
+                        {
+                            backend.openHTTPAccount((HTTPAccount) tic.getData());
+                        }
+                        catch (Exception e)
+                        {
+                            e.printStackTrace();
+                            showAlertFromThread(e.getMessage());
+                        }
+                    }
+                }, "Connecting to " + tic.getData()).start();
+            }
+            else
+            {
+                throw new Exception("Unknown account type");
             }
         }
         catch (Exception ex)
