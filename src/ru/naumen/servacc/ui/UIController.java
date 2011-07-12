@@ -176,7 +176,7 @@ public class UIController
         });
     }
 
-	public void cleanup()
+    public void cleanup()
     {
         backend.cleanup();
     }
