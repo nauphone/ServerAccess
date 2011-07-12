@@ -14,6 +14,9 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.InflaterInputStream;
+import java.util.zip.Inflater;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -72,6 +75,7 @@ public class HTTPResource
         close();
         connection = (HttpURLConnection) url.openConnection();
         connection.setReadTimeout(TIMEOUT);
+        connection.setRequestProperty("Accept-Encoding", "gzip, deflate");
         if ("https".equals(url.getProtocol()) && connection instanceof HttpsURLConnection)
         {
             ((HttpsURLConnection) connection).setSSLSocketFactory(getSSLSocketFactory());
@@ -87,7 +91,23 @@ public class HTTPResource
         {
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
             {
-                return connection.getInputStream();
+                String encoding = connection.getContentEncoding();
+                InputStream inputStream = null;
+                
+                if (encoding != null && encoding.equalsIgnoreCase("gzip"))
+                {
+                    inputStream = new GZIPInputStream(connection.getInputStream());
+                }
+                else if (encoding != null && encoding.equalsIgnoreCase("deflate"))
+                {
+                    inputStream = new InflaterInputStream(connection.getInputStream(), new Inflater(true));
+                }
+                else
+                {
+                    inputStream = connection.getInputStream();
+                }
+                
+                return inputStream;
             }
             else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED)
             {
