@@ -74,7 +74,7 @@ import ru.naumen.servacc.config2.i.IPortForwarder;
 
 public class UIController
 {
-    private Shell shell;
+    private final Shell shell;
     private Clipboard clipboard;
     private Backend backend;
     private IConfigLoader configLoader;
@@ -98,12 +98,12 @@ public class UIController
 
     private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
 
-    public UIController(Shell shell, IConfigLoader configLoader, Backend backend)
+    public UIController(Shell shell, Backend backend)
     {
         this.shell = shell;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
-        this.configLoader = configLoader;
+        this.configLoader = new ConfigLoader(this, shell);
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
