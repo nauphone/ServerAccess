@@ -94,12 +94,12 @@ public class ConfigLoader implements IConfigLoader
             }
             catch (HTTPResource.NotAuthenticatedError e)
             {
-                LoginDialog dialog = new LoginDialog(shell);
+                ResourceDialog dialog = new ResourceDialog(shell, true);
                 dialog.setURL(url);
                 if (dialog.show())
                 {
-                    String login = dialog.getLogin();
-                    String password = dialog.getPassword();
+                    String login = dialog.getFieldValue("Login");
+                    String password = dialog.getFieldValue("Password");
                     resource.setAuthentication(login, password);
                     authCache.put(url, new String[] {login, password});
                 }

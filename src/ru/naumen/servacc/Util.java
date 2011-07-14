@@ -50,4 +50,14 @@ public class Util
     {
         return new String(Base64.encode(bytes));
     }
+
+    public static byte[] base64decode(String encryptedString)
+    {
+        return base64decode(encryptedString.getBytes());
+    }
+
+    public static byte[] base64decode(byte[] bytes)
+    {
+        return Base64.decode(bytes);
+    }
 }
