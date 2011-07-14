@@ -9,12 +9,21 @@
  */
 package ru.naumen.servacc.util;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.regex.Pattern;
+
 
 import com.mindbright.util.Base64;
 
 public class Util
 {
+    public static final byte[] header = "RSACC".getBytes();
+
     public static boolean isEmptyOrNull(String str)
     {
         return str == null || str.trim().length() == 0;
@@ -50,14 +59,43 @@ public class Util
     {
         return new String(Base64.encode(bytes));
     }
-
+    
     public static byte[] base64decode(String encryptedString)
     {
         return base64decode(encryptedString.getBytes());
     }
-
     public static byte[] base64decode(byte[] bytes)
     {
         return Base64.decode(bytes);
+    }
+    
+    public static boolean isConfigEncrypted(String config) throws Exception
+    {
+        File file = new File(config);
+        if (!file.exists())
+        {
+            throw new IOException("File '" + file.getAbsolutePath() + "' does not exist.");
+        }
+
+        byte[] b = new byte[header.length];        
+        if (new FileInputStream(file).read(b) != b.length)
+        {
+            throw new IOException("Preread accounts file '" + file.getAbsolutePath() + "' failed.");
+        }
+        
+        return Arrays.equals(b, header);
+    }
+
+    public static <T> Collection<T> filter(Collection<T> target, Predicate<T> predicate)
+    {
+        Collection<T> result = new ArrayList<T>();
+        for (T element : target)
+        {
+            if (predicate.apply(element))
+            {
+                result.add(element);
+            }
+        }
+        return result;
     }
 }

@@ -1,12 +1,15 @@
 package ru.naumen.servacc.ui;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Scanner;
 
 import org.eclipse.swt.widgets.Shell;
 
@@ -16,6 +19,8 @@ import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigLoader;
 import ru.naumen.servacc.util.AppProperties;
+import ru.naumen.servacc.util.StringEncrypter;
+import ru.naumen.servacc.util.Util;
 
 public class ConfigLoader implements IConfigLoader
 {
@@ -64,13 +69,12 @@ public class ConfigLoader implements IConfigLoader
         }
         else if (source.startsWith("file://"))
         {
-            source = source.substring("file://".length());
-            File file = new File(source);
+            File file = new File(source.substring("file://".length()));
             if (!file.exists())
             {
                 throw new IOException("File '" + file.getAbsolutePath() + "' does not exist.");
             }
-            return loadConfigFromFile(file);
+            return loadConfigFromFile(source);
         }
         else
         {
@@ -115,8 +119,45 @@ public class ConfigLoader implements IConfigLoader
         }
     }
 
-    private IConfig loadConfigFromFile(File file) throws Exception
+    private IConfig loadConfigFromFile(String source) throws Exception
     {
-        return new Config(new FileInputStream(file));
+        File file = new File(source.substring("file://".length()));
+        if (!file.exists())
+        {
+            throw new IOException("File '" + file.getAbsolutePath() + "' does not exist.");
+        }
+
+        InputStream input = new FileInputStream(file);
+        if (Util.isConfigEncrypted(source.substring("file://".length())))
+        {
+            input.skip(Util.header.length);
+            String content = new Scanner(input).useDelimiter("\\A").next();
+            String password = null;
+            while (true)
+            {
+                try
+                {
+                    ResourceDialog dialog = new ResourceDialog(shell, false);
+                    dialog.setURL(source);
+                    if (dialog.show())
+                    {
+                        password = dialog.getFieldValue("Password");
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    content = new StringEncrypter("DESede", password).decrypt(content);
+                    break;
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+            input = new ByteArrayInputStream(content.getBytes());
+        }
+
+        return new Config(input);
     }
 }

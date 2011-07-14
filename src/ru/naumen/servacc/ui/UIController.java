@@ -9,11 +9,15 @@
  */
 package ru.naumen.servacc.ui;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -70,6 +74,9 @@ import ru.naumen.servacc.config2.i.IConfigLoader;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
+import ru.naumen.servacc.util.AppProperties;
+import ru.naumen.servacc.util.Predicate;
+import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
 public class UIController
@@ -477,6 +484,147 @@ public class UIController
         });
         // tray item menu which is the only way to quit
         final Menu menu = new Menu(shell, SWT.POP_UP);
+        MenuItem itemEncrypt = new MenuItem(menu, SWT.NULL);
+        itemEncrypt.setText("Encrypt local configs");
+        itemEncrypt.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event event)
+            {
+                try
+                {
+                    Collection<String> configSources = AppProperties.getConfigSources();
+                    configSources = Util.filter(configSources, new Predicate<String>() {
+                        @Override
+                        public boolean apply(String t)
+                        {
+                            return t.startsWith("file://");
+                        }
+                    });
+                
+                    if (configSources.size() == 0)
+                    {
+                        throw new Exception("Local configs not found.");
+                    }
+                    
+                    boolean someConfigsEncrypted = false;
+                    for (String config : configSources)
+                    {
+                        String filePath = config.substring("file://".length());
+                        if (Util.isConfigEncrypted(filePath))
+                            continue;
+                
+                        String password;
+                        while(true)
+                        {
+                            ResourceDialog dialog = new ResourceDialog(shell, ResourceDialog.passwordChangeFields, "Please enter new password for following resource twice.");
+                            dialog.setURL(config);
+                            if (!dialog.show())
+                            {
+                                break;
+                            }
+                            
+                            password = dialog.getFieldValue("Password");
+                            String second = dialog.getFieldValue("Again");
+                            
+                            if (!password.equals(second))
+                            {
+                                continue;
+                            }
+
+                            String content = new Scanner(new FileInputStream(filePath)).useDelimiter("\\A").next();
+                            OutputStream os = new FileOutputStream(filePath);
+                            os.write(Util.header);
+                            os.write(System.getProperty("line.separator").getBytes());
+                            os.write(new StringEncrypter("DESede", password).encrypt(content).getBytes());
+                            os.close();
+
+                            someConfigsEncrypted = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!someConfigsEncrypted)
+                    {
+                        throw new Exception("Nothing to encrypt - all configs already encrypted.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    showAlert(e.getMessage());
+                }
+            }
+        });
+        MenuItem itemDecrypt = new MenuItem(menu, SWT.NULL);
+        itemDecrypt.setText("Decrypt local configs");
+        itemDecrypt.addListener(SWT.Selection, new Listener() {
+            public void handleEvent(Event event)
+            {
+                try
+                {
+                    Collection<String> configSources = AppProperties.getConfigSources();
+                    configSources = Util.filter(configSources, new Predicate<String>() {
+                        @Override
+                        public boolean apply(String t)
+                        {
+                            return t.startsWith("file://");
+                        }
+                    });
+                
+                    if (configSources.size() == 0)
+                    {
+                        throw new Exception("Local configs not found.");
+                    }
+                    
+                    boolean showNullActionInfo = true;
+                    for (String config : configSources)
+                    {
+                        String filePath = config.substring("file://".length());
+                        if (!Util.isConfigEncrypted(filePath))
+                            continue;
+                
+                        InputStream input = new FileInputStream(filePath);
+                        input.skip(Util.header.length);
+                        String content = new Scanner(input).useDelimiter("\\A").next();
+                        String password = null;
+                        while (true)
+                        {
+                            try
+                            {
+                                ResourceDialog dialog = new ResourceDialog(shell, false);
+                                dialog.setURL(config);
+                                showNullActionInfo = false;
+                                if (dialog.show())
+                                {
+                                    password = dialog.getFieldValue("Password");
+                                }
+                                else
+                                {
+                                    content = null;
+                                    break;
+                                }
+                                content = new StringEncrypter("DESede", password).decrypt(content);
+                                break;
+                            }
+                            catch (Exception e)
+                            {
+                            }
+                        }
+                        FileOutputStream os = new FileOutputStream(filePath);
+                        os.write(content.getBytes());
+                        os.close();
+                    }
+                    
+                    if (showNullActionInfo)
+                    {
+                        throw new Exception("Nothing to decrypt - all configs already decrypted.");
+                    }
+                }
+                catch (Exception e)
+                {
+                    showAlert(e.getMessage());
+                }
+            }
+        });
+        new MenuItem(menu, SWT.SEPARATOR);
         MenuItem itemQuit = new MenuItem(menu, SWT.NULL);
         itemQuit.setText("Quit");
         itemQuit.addListener(SWT.Selection, new Listener()
