@@ -11,13 +11,9 @@ package ru.naumen.servacc.ui;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.InvalidPropertiesFormatException;
 import java.util.Map;
 import java.util.Properties;
 
@@ -31,11 +27,11 @@ import org.eclipse.swt.widgets.Shell;
 
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.HTTPResource;
-import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigLoader;
+import ru.naumen.servacc.util.AppProperties;
 
 public class Main implements Runnable
 {
@@ -110,18 +106,18 @@ public class Main implements Runnable
 
     private static void storeShellPosition(Shell shell) throws Exception
     {
-        AppProperties properties = getAppProperties();
+        AppProperties properties = AppProperties.getAppProperties();
         Rectangle bounds = shell.getBounds();
         properties.setProperty(WINDOW_X, String.valueOf(bounds.x));
         properties.setProperty(WINDOW_Y, String.valueOf(bounds.y));
         properties.setProperty(WINDOW_WIDTH, String.valueOf(bounds.width));
         properties.setProperty(WINDOW_HEIGHT, String.valueOf(bounds.height));
-        properties.store(getConfigFile());
+        properties.store(AppProperties.getConfigFile());
     }
 
     private static void restoreShellPosition(Shell shell) throws Exception
     {
-        AppProperties properties = getAppProperties();
+        AppProperties properties = AppProperties.getAppProperties();
         Rectangle bounds = shell.getBounds();
         shell.setBounds(
             Integer.parseInt(properties.getProperty(WINDOW_X, String.valueOf(bounds.x))),
@@ -131,63 +127,13 @@ public class Main implements Runnable
         );
     }
 
-    private static AppProperties getAppProperties() throws Exception
-    {
-        AppProperties properties = new AppProperties();
-        properties.load(getConfigFile());
-        return properties;
-    }
-
-    private static File getConfigFile() throws IOException
-    {
-        final String userHome = System.getProperty("user.home");
-        File appDirectory = null;
-        if (Util.isMacOSX())
-        {
-            appDirectory = new File(userHome, "Library/Application Support");
-            appDirectory = new File(appDirectory, "Server Access");
-        }
-        else if (Util.isWindows())
-        {
-            String appData = System.getenv("APPDATA");
-            if (!Util.isEmptyOrNull(appData))
-            {
-                appDirectory = new File(appData);
-                appDirectory = new File(appDirectory, "Server Access");
-            }
-        }
-        // Linux and everything else
-        if (appDirectory == null)
-        {
-            appDirectory = new File(userHome, ".serveraccess");
-        }
-        appDirectory.mkdirs();
-        File configFile = new File(appDirectory, "serveraccess.properties");
-        if (configFile.createNewFile())
-        {
-            // generate default configuration
-            String data;
-            File accountsFile = new File(appDirectory, "accounts.xml");
-            if (accountsFile.createNewFile())
-            {
-                data = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>"
-                     + System.getProperty("line.separator")
-                     + "<Accounts version=\"2\"></Accounts>";
-                new FileOutputStream(accountsFile).write(data.getBytes());
-            }
-            data = "source=file://" + accountsFile.getPath();
-            new FileOutputStream(configFile).write(data.getBytes());
-        }
-        return configFile;
-    }
-
     private class ConfigLoader implements IConfigLoader
     {
         private Map<String, String[]> authCache = new HashMap<String, String[]>();
 
         public IConfig loadConfig() throws Exception
         {
-            Properties properties = getAppProperties();
+            Properties properties = AppProperties.getAppProperties();
             CompositeConfig compositeConfig = new CompositeConfig();
             String[] keys = properties.keySet().toArray(new String[] {});
             Arrays.sort(keys);
@@ -274,44 +220,6 @@ public class Main implements Runnable
         private IConfig loadConfigFromFile(File file) throws Exception
         {
             return new Config(new FileInputStream(file));
-        }
-    }
-
-    private static class AppProperties extends Properties
-    {
-        private static final long serialVersionUID = 8932887805597715912L;
-        private Boolean isXML = false;
-
-        public void load(File file) throws IOException
-        {
-            try
-            {
-                this.loadFromXML(new FileInputStream(file));
-            }
-            catch (InvalidPropertiesFormatException e)
-            {
-                super.load(new FileInputStream(file));
-            }
-        }
-
-        public void loadFromXML(InputStream in) throws IOException
-        {
-            super.loadFromXML(in);
-            isXML = true;
-        }
-
-        public void store(File file) throws IOException
-        {
-            OutputStream os = new FileOutputStream(file);
-            String comment = "";
-            if (isXML)
-            {
-                super.storeToXML(os, comment);
-            }
-            else
-            {
-                super.store(os, comment);
-            }
         }
     }
 }
