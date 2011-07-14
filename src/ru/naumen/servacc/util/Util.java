@@ -7,7 +7,7 @@
  * packaging of this file.
  *
  */
-package ru.naumen.servacc;
+package ru.naumen.servacc.util;
 
 import java.util.regex.Pattern;
 

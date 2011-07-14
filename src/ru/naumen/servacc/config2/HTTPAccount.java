@@ -9,8 +9,8 @@
  */
 package ru.naumen.servacc.config2;
 
-import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.i.IConnectable;
+import ru.naumen.servacc.util.Util;
 
 public class HTTPAccount extends Account implements IConnectable
 {

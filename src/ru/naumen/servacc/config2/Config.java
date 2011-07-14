@@ -21,9 +21,9 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigItem;
+import ru.naumen.servacc.util.Util;
 
 public class Config implements IConfig
 {

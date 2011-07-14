@@ -15,12 +15,12 @@ import java.util.Vector;
 
 import org.eclipse.swt.graphics.Image;
 
-import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfigItem;
+import ru.naumen.servacc.util.Util;
 
 public class TreeItemController
 {

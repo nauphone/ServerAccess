@@ -24,6 +24,8 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import ru.naumen.servacc.util.Util;
+
 public class HTTPResource
 {
     private static final int TIMEOUT = 0;

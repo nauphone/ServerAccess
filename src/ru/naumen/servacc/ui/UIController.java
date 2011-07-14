@@ -60,7 +60,6 @@ import org.eclipse.swt.widgets.TreeItem;
 
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.SocketUtils;
-import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
@@ -71,6 +70,7 @@ import ru.naumen.servacc.config2.i.IConfigLoader;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
+import ru.naumen.servacc.util.Util;
 
 public class UIController
 {

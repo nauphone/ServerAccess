@@ -24,7 +24,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import ru.naumen.servacc.Util;
+import ru.naumen.servacc.util.Util;
 
 public class ResourceDialog extends DialogBase
 {

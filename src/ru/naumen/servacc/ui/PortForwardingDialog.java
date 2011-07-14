@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import ru.naumen.servacc.Util;
+import ru.naumen.servacc.util.Util;
 
 public class PortForwardingDialog extends DialogBase
 {

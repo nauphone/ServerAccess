@@ -21,6 +21,7 @@ import org.eclipse.swt.program.Program;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.telnet.ConsoleManager;
+import ru.naumen.servacc.util.Util;
 
 import com.mindbright.ssh2.SSH2SessionChannel;
 import com.mindbright.ssh2.SSH2SimpleClient;

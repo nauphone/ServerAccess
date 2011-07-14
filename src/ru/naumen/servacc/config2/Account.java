@@ -12,8 +12,8 @@ package ru.naumen.servacc.config2;
 import java.util.HashMap;
 import java.util.Map;
 
-import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.i.IConfigItem;
+import ru.naumen.servacc.util.Util;
 
 public class Account implements IConfigItem
 {

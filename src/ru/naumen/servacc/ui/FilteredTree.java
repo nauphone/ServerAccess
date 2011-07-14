@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import ru.naumen.servacc.Util;
+import ru.naumen.servacc.util.Util;
 
 public class FilteredTree extends Composite
 {

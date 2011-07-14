@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
-import ru.naumen.servacc.Util;
 
 public class AppProperties extends Properties
 {

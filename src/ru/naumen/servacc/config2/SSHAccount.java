@@ -12,10 +12,10 @@ package ru.naumen.servacc.config2;
 import java.util.ArrayList;
 import java.util.List;
 
-import ru.naumen.servacc.Util;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
+import ru.naumen.servacc.util.Util;
 
 public class SSHAccount extends Account implements IConnectable, IPortForwarder, IFTPBrowseable
 {
