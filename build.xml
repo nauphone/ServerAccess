@@ -22,7 +22,15 @@
     <property
         name="swt-version"
         value="3.5.1" />
-
+    <property
+        environment="env"/>
+    <condition
+        property="nsis_cmd"
+    	value="${env.ProgramFiles}\NSIS\makensis.exe"
+    	else="makensis">
+        <os family="windows"/>
+    </condition>
+    
     <path
         id="saclient.class.path">
         <pathelement
@@ -55,45 +63,35 @@
     </target>
 
     <target
-        name="installer"
-        depends="jar"
-        description="make installer *.exe">
-        <exec
-            executable="makensis"
-            dir="nsis">
-            <arg
-                line="serveraccess.nsi" />
-            <redirector>
-                <outputmapper
-                    type="merge"
-                    to="redirector.out" />
-                <errormapper
-                    type="merge"
-                    to="redirector.err" />
-            </redirector>
-        </exec>
-    </target>
-
-    <target
         name="win32"
         depends="clean, init, java-build, jar"
         description="make win32 installer">
 
         <mkdir dir="${build}/swt" />
-    	<unzip src="lib/swt/swt-${swt-version}-win32-win32-x86.zip" dest="${build}/swt"/>
+        <unzip src="lib/swt/swt-${swt-version}-win32-win32-x86.zip" dest="${build}/swt"/>
 
         <!-- Windows users, add makensis to your PATH -->
         <exec
-            executable="C:\Program Files\NSIS\makensis.exe"
-            dir="nsis">
+            executable="${nsis_cmd}"
+            dir="nsis"
+            resultproperty="nsis_exec_result">
             <arg line="serveraccess2.nsi" />
             <redirector>
-                <outputmapper type="merge" to="redirector.out" />
-                <errormapper type="merge" to="redirector.err" />
+                <outputmapper type="merge" to="build/redirector.out" />
+                <errormapper type="merge" to="build/redirector.err" />
             </redirector>
         </exec>
 
         <delete dir="${build}/swt" />
+        <move file="nsis/sa_install.exe" todir="build" failonerror="false"/>
+
+    	<fail message="NSIS build failed">
+            <condition>
+                <not>
+                    <equals arg1="${nsis_exec_result}" arg2="0"/>
+                </not>
+            </condition>
+        </fail>
     </target>
 
     <target
