@@ -9,7 +9,6 @@
  */
 package ru.naumen.servacc.ui;
 
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -63,6 +62,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
@@ -75,7 +75,6 @@ import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.util.AppProperties;
-import ru.naumen.servacc.util.Predicate;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
@@ -489,68 +488,7 @@ public class UIController
         itemEncrypt.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event)
             {
-                try
-                {
-                    Collection<String> configSources = AppProperties.getConfigSources();
-                    configSources = Util.filter(configSources, new Predicate<String>() {
-                        @Override
-                        public boolean apply(String t)
-                        {
-                            return t.startsWith("file://");
-                        }
-                    });
-                
-                    if (configSources.size() == 0)
-                    {
-                        throw new Exception("Local configs not found.");
-                    }
-                    
-                    boolean someConfigsEncrypted = false;
-                    for (String config : configSources)
-                    {
-                        String filePath = config.substring("file://".length());
-                        if (Util.isConfigEncrypted(filePath))
-                            continue;
-                
-                        String password;
-                        while(true)
-                        {
-                            ResourceDialog dialog = new ResourceDialog(shell, ResourceDialog.passwordChangeFields, "Please enter new password for following resource twice.");
-                            dialog.setURL(config);
-                            if (!dialog.show())
-                            {
-                                break;
-                            }
-                            
-                            password = dialog.getFieldValue("Password");
-                            String second = dialog.getFieldValue("Again");
-                            
-                            if (!password.equals(second))
-                            {
-                                continue;
-                            }
-
-                            String content = new Scanner(new FileInputStream(filePath)).useDelimiter("\\A").next();
-                            OutputStream os = new FileOutputStream(filePath);
-                            os.write(Util.header);
-                            os.write(System.getProperty("line.separator").getBytes());
-                            os.write(new StringEncrypter("DESede", password).encrypt(content).getBytes());
-                            os.close();
-
-                            someConfigsEncrypted = true;
-                            break;
-                        }
-                    }
-                    
-                    if (!someConfigsEncrypted)
-                    {
-                        throw new Exception("Nothing to encrypt - all configs already encrypted.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    showAlert(e.getMessage());
-                }
+                encryptLocalConfigs();
             }
         });
         MenuItem itemDecrypt = new MenuItem(menu, SWT.NULL);
@@ -558,70 +496,7 @@ public class UIController
         itemDecrypt.addListener(SWT.Selection, new Listener() {
             public void handleEvent(Event event)
             {
-                try
-                {
-                    Collection<String> configSources = AppProperties.getConfigSources();
-                    configSources = Util.filter(configSources, new Predicate<String>() {
-                        @Override
-                        public boolean apply(String t)
-                        {
-                            return t.startsWith("file://");
-                        }
-                    });
-                
-                    if (configSources.size() == 0)
-                    {
-                        throw new Exception("Local configs not found.");
-                    }
-                    
-                    boolean showNullActionInfo = true;
-                    for (String config : configSources)
-                    {
-                        String filePath = config.substring("file://".length());
-                        if (!Util.isConfigEncrypted(filePath))
-                            continue;
-                
-                        InputStream input = new FileInputStream(filePath);
-                        input.skip(Util.header.length);
-                        String content = new Scanner(input).useDelimiter("\\A").next();
-                        String password = null;
-                        while (true)
-                        {
-                            try
-                            {
-                                ResourceDialog dialog = new ResourceDialog(shell, false);
-                                dialog.setURL(config);
-                                showNullActionInfo = false;
-                                if (dialog.show())
-                                {
-                                    password = dialog.getFieldValue("Password");
-                                }
-                                else
-                                {
-                                    content = null;
-                                    break;
-                                }
-                                content = new StringEncrypter("DESede", password).decrypt(content);
-                                break;
-                            }
-                            catch (Exception e)
-                            {
-                            }
-                        }
-                        FileOutputStream os = new FileOutputStream(filePath);
-                        os.write(content.getBytes());
-                        os.close();
-                    }
-                    
-                    if (showNullActionInfo)
-                    {
-                        throw new Exception("Nothing to decrypt - all configs already decrypted.");
-                    }
-                }
-                catch (Exception e)
-                {
-                    showAlert(e.getMessage());
-                }
+                decryptLocalConfigs();
             }
         });
         new MenuItem(menu, SWT.SEPARATOR);
@@ -774,6 +649,90 @@ public class UIController
             {
                 e.printStackTrace();
             }
+        }
+    }
+
+    private void encryptLocalConfigs()
+    {
+        try
+        {
+            Collection<String> configSources = AppProperties.getConfigSources();
+
+            boolean someDialogsShowned = false;
+            for (String config : configSources)
+            {
+                if (!config.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(config))
+                    continue;
+                
+                String content = new Scanner(ConfigLoader.getConfigStream(config, shell)).useDelimiter("\\A").next();
+                String password;
+                while(true)
+                {
+                    password = null;
+                    ResourceDialog dialog = new ResourceDialog(shell, ResourceDialog.passwordChangeFields, "Please enter new password for following resource twice.");
+                    dialog.setURL(config);
+                    if (!dialog.show())
+                        break;
+                    
+                    password = dialog.getFieldValue("Password");
+                    String second = dialog.getFieldValue("Again");
+                    
+                    if (password.equals(second))
+                        break;
+                }
+                
+                if (password == null)
+                    continue;
+
+                OutputStream os = new FileOutputStream(config.substring(FileResource.uriPrefix.length()));
+                os.write(FileResource.encryptedHeader);
+                os.write(System.getProperty("line.separator").getBytes());
+                os.write(new StringEncrypter("DESede", password).encrypt(content).getBytes());
+                os.close();
+
+                someDialogsShowned = true;
+            }
+            
+            if (!someDialogsShowned)
+                showAlert("Nothing to encrypt - all configs already encrypted.");
+        }
+        catch (Exception e)
+        {
+            showAlert(e.getMessage());
+        }
+    }
+
+    private void decryptLocalConfigs()
+    {
+        try
+        {
+            Collection<String> configSources = AppProperties.getConfigSources();
+
+            boolean someDialogsShowned = false;
+            for (String config : configSources)
+            {
+                String filePath = config.substring(FileResource.uriPrefix.length());
+                if (!config.startsWith(FileResource.uriPrefix) || !FileResource.isConfigEncrypted(config))
+                    continue;
+
+                someDialogsShowned = true;
+                InputStream stream = ConfigLoader.getConfigStream(config, shell);
+                if (stream == null)
+                    continue;
+                
+                String content = new Scanner(stream).useDelimiter("\\A").next();
+                stream.close();
+                FileOutputStream os = new FileOutputStream(filePath);
+                os.write(content.getBytes());
+                os.close();
+            }
+            
+            if (!someDialogsShowned)
+                showAlert("Nothing to decrypt - all configs already decrypted.");
+        }
+        catch (Exception e)
+        {
+            showAlert(e.getMessage());
         }
     }
 

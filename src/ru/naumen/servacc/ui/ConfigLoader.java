@@ -1,26 +1,22 @@
 package ru.naumen.servacc.ui;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Scanner;
 
 import org.eclipse.swt.widgets.Shell;
 
+import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.HTTPResource;
 import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigLoader;
 import ru.naumen.servacc.util.AppProperties;
-import ru.naumen.servacc.util.StringEncrypter;
-import ru.naumen.servacc.util.Util;
+import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
 
 public class ConfigLoader implements IConfigLoader
 {
@@ -67,13 +63,8 @@ public class ConfigLoader implements IConfigLoader
         {
             return loadConfigViaHTTP(source);
         }
-        else if (source.startsWith("file://"))
+        else if (source.startsWith(FileResource.uriPrefix))
         {
-            File file = new File(source.substring("file://".length()));
-            if (!file.exists())
-            {
-                throw new IOException("File '" + file.getAbsolutePath() + "' does not exist.");
-            }
             return loadConfigFromFile(source);
         }
         else
@@ -121,43 +112,36 @@ public class ConfigLoader implements IConfigLoader
 
     private IConfig loadConfigFromFile(String source) throws Exception
     {
-        File file = new File(source.substring("file://".length()));
-        if (!file.exists())
+        InputStream stream = getConfigStream(source, shell);
+        try
         {
-            throw new IOException("File '" + file.getAbsolutePath() + "' does not exist.");
+            return stream==null?null:new Config(stream);
         }
-
-        InputStream input = new FileInputStream(file);
-        if (Util.isConfigEncrypted(source.substring("file://".length())))
+        catch(Exception e)
         {
-            input.skip(Util.header.length);
-            String content = new Scanner(input).useDelimiter("\\A").next();
-            String password = null;
-            while (true)
+            stream.close();
+            throw e;
+        }
+    }
+    
+    public static InputStream getConfigStream(String source, Shell shell) throws IOException
+    {
+        String password = null;
+        while(true)
+        {
+            try
             {
-                try
-                {
-                    ResourceDialog dialog = new ResourceDialog(shell, false);
-                    dialog.setURL(source);
-                    if (dialog.show())
-                    {
-                        password = dialog.getFieldValue("Password");
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                    content = new StringEncrypter("DESede", password).decrypt(content);
-                    break;
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+                return FileResource.getConfigStream(source, password);
             }
-            input = new ByteArrayInputStream(content.getBytes());
+            catch (EncryptionException e)
+            {
+                ResourceDialog dialog = new ResourceDialog(shell, false);
+                dialog.setURL(source);
+                if (dialog.show())
+                    password = dialog.getFieldValue("Password");
+                else
+                    return null;
+            }
         }
-
-        return new Config(input);
     }
 }

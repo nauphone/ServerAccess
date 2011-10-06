@@ -151,5 +151,10 @@ public class StringEncrypter
         {
             super(t);
         }
+
+        public EncryptionException(String message)
+        {
+            super(message);
+        }
     }
 }

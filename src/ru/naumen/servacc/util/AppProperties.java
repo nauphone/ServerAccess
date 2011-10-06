@@ -13,6 +13,8 @@ import java.util.InvalidPropertiesFormatException;
 import java.util.List;
 import java.util.Properties;
 
+import ru.naumen.servacc.FileResource;
+
 public class AppProperties extends Properties
 {
     private static final long serialVersionUID = 8932887805597715912L;
@@ -93,7 +95,7 @@ public class AppProperties extends Properties
                         + System.getProperty("line.separator") + "<Accounts version=\"2\"></Accounts>";
                 new FileOutputStream(accountsFile).write(data.getBytes());
             }
-            data = "source=file://" + accountsFile.getPath();
+            data = "source=" + FileResource.uriPrefix + accountsFile.getPath();
             new FileOutputStream(configFile).write(data.getBytes());
         }
         return configFile;
