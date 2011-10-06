@@ -9,7 +9,7 @@ ServerAccess is a tool to provide easy and seamless access to multiple servers. 
 * Support for all major operating systems (Windows, Linux, Mac OS X).
 * Accounts can be stored either in a file on disk or on a remote web server.
 * Local port forwarding on demand or by predefined settings.
-* Connections can be made through several tunnels.
+* Connections can be made through several intermediate hosts (automatically, using tunnels).
 * Outstanding search feature.
 
 .. image:: https://github.com/w31rd0/ServerAccess/raw/master/screenshot-2-search.png
