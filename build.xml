@@ -103,6 +103,7 @@
             classpathref="saclient.class.path"
             debug="${debug}"
             debuglevel="${debuglevel}"
+            includeantruntime="false"
             optimize="true">
             <src
                 path="${src}" />
