@@ -43,7 +43,7 @@
 
     <target
         name="jar"
-        depends="init"
+        depends="java-build"
         description="--> build jar">
         <jar
             destfile="${distr}/servacc.jar"
@@ -64,7 +64,7 @@
 
     <target
         name="win32"
-        depends="clean, init, java-build, jar"
+        depends="clean, jar"
         description="--> build win32-x86 installer">
 
         <mkdir dir="${build}/swt" />
@@ -103,6 +103,7 @@
             classpathref="saclient.class.path"
             debug="${debug}"
             debuglevel="${debuglevel}"
+            includeantruntime="false"
             optimize="true">
             <src
                 path="${src}" />
@@ -120,7 +121,7 @@
 
     <target
         name="macosx-common"
-        depends="clean, init, java-build, jar"
+        depends="clean, jar"
         description="--> Mac OS X app template">
 
         <exec executable="unzip" dir="${distr}">
@@ -137,7 +138,7 @@
 
     <target
         name="macosx-cocoa"
-        depends="clean, init, java-build, jar, macosx-common"
+        depends="clean, jar, macosx-common"
         description="--> build Mac OS X + Cocoa app">
 
         <copy
@@ -159,7 +160,7 @@
 
     <target
         name="macosx-cocoa-x86_64"
-        depends="clean, init, java-build, jar, macosx-common"
+        depends="clean, jar, macosx-common"
         description="--> build Mac OS X + Cocoa x86_64 app">
 
         <copy
@@ -181,7 +182,7 @@
 
     <target
         name="macosx-carbon"
-        depends="clean, init, java-build, jar, macosx-common"
+        depends="clean, jar, macosx-common"
         description="--> build Mac OS X + Carbon app">
 
         <copy
