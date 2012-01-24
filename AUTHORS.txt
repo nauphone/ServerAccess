@@ -5,3 +5,4 @@ Aleksandr Likulin <alikulin@naumen.ru>
 Vasiliy Kuznetsov <kvas@naumen.ru>
 Nikita Vetoshkin <nvetoshkin@naumen.ru>
 Sergey Panov <spanov@naumen.ru>
+Andrey Hitrin <andrey.hitrin@gmail.com>
