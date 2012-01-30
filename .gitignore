@@ -1,3 +1,7 @@
+# Intellij IDEA
+.idea
+*.iml
+
 # auto-generated
 build
 distr
