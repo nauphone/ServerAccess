@@ -8,8 +8,17 @@
         name="src"
         location="src" />
     <property
+        name="testsrc"
+        location="test" />
+    <property
         name="build"
         location="build" />
+    <property
+        name="buildt"
+        location="buildt" />
+    <property
+        name="junit.reports"
+        location="${buildt}/reports" />
     <property
         name="distr"
         location="distr" />
@@ -41,6 +50,10 @@
         <pathelement location="lib/mindterm.jar"/>
     </path>
 
+    <path id="test.class.path">
+        <pathelement location="lib/junit-4.10.jar"/>
+    </path>
+
     <target
         name="jar"
         depends="java-build"
@@ -59,6 +72,8 @@
     <target
         name="init">
         <mkdir dir="${build}" />
+        <mkdir dir="${buildt}" />
+        <mkdir dir="${junit.reports}" />
         <mkdir dir="${distr}" />
     </target>
 
@@ -110,13 +125,41 @@
         </javac>
     </target>
 
+    <target name="test-build" depends="java-build">
+        <javac srcdir="${testsrc}" destdir="${buildt}" encoding="UTF-8" debug="${debug}" includeantruntime="false">
+            <classpath>
+                <path refid="saclient.class.path" />
+                <path refid="test.class.path" />
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="test" depends="java-build,test-build">
+        <junit showoutput="true" failureproperty="junit.failure">
+            <classpath>
+                <path refid="saclient.class.path" />
+                <path refid="test.class.path" />
+                <pathelement location="${buildt}" />
+                <pathelement location="${build}" />
+            </classpath>
+            <batchtest todir="${junit.reports}">
+                <fileset dir="${testsrc}">
+                    <include name="**/*Test.java" />
+                </fileset>
+            </batchtest>
+            <formatter type="plain" usefile="false" />
+            <formatter type="xml" />
+        </junit>
+        <fail if="junit.failure" message="Unit test(s) failed" />
+    </target>
+
     <target
         name="clean"
         description="--> remove stuff">
-        <delete
-            dir="${build}" />
-        <delete
-            dir="${distr}" />
+        <delete dir="${build}" />
+        <delete dir="${buildt}" />
+        <delete dir="${junit.reports}" />
+        <delete dir="${distr}" />
     </target>
 
     <target
