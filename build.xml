@@ -134,11 +134,15 @@
         </javac>
     </target>
 
-    <target name="test" depends="java-build,test-build">
+    <target name="copy-test-resources" depends="init">
+        <copy file="test/test-config.xml" todir="${buildt}"/>
+    </target>
+
+    <target name="test" depends="java-build,test-build,copy-test-resources">
         <junit showoutput="true" failureproperty="junit.failure">
             <classpath>
-                <path refid="saclient.class.path" />
                 <path refid="test.class.path" />
+                <path refid="saclient.class.path" />
                 <pathelement location="${buildt}" />
                 <pathelement location="${build}" />
             </classpath>
