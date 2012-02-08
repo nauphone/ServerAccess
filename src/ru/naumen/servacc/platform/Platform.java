@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 /**
- * Hides platorm-specific code behind abstraction.
+ * Hides platform-specific code behind abstraction.
  * @author Andrey Hitrin
  * @since 08.02.2012
  */
