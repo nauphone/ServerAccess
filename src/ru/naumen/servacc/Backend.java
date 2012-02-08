@@ -13,18 +13,15 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
-import java.text.MessageFormat;
 import java.util.HashMap;
 
-import org.eclipse.swt.program.Program;
+import com.mindbright.ssh2.SSH2SessionChannel;
+import com.mindbright.ssh2.SSH2SimpleClient;
 
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
-
-import com.mindbright.ssh2.SSH2SessionChannel;
-import com.mindbright.ssh2.SSH2SimpleClient;
 
 /**
  * @author tosha
@@ -39,18 +36,7 @@ public class Backend extends SSH2Backend
         {
             server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
             Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort(), options};
-            if (Util.isLinux())
-            {
-                Runtime.getRuntime().exec(MessageFormat.format("putty {2} -telnet {0} -P {1,number,#}", params));
-            }
-            else if (Util.isMacOSX())
-            {
-                Runtime.getRuntime().exec(MessageFormat.format("open telnet://{0}:{1,number,#}", params));
-            }
-            else
-            {
-                Runtime.getRuntime().exec(MessageFormat.format("cmd /C start putty {2} -telnet {0} -P {1,number,#}", params));
-            }
+            Util.platform().openTerminal(params);
             // FIXME: collect children and kill it on
             Socket socket = server.accept();
             return socket;
@@ -68,18 +54,7 @@ public class Backend extends SSH2Backend
         {
             server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
             Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort()};
-            if (Util.isLinux())
-            {
-                Runtime.getRuntime().exec(MessageFormat.format("gftp ftp://anonymous@{0}:{1,number,#}", params));
-            }
-            else if (Util.isMacOSX())
-            {
-                Runtime.getRuntime().exec(MessageFormat.format("open ftp://anonymous@{0}:{1,number,#}", params));
-            }
-            else
-            {
-                Runtime.getRuntime().exec(MessageFormat.format("cmd /C explorer /n,ftp://{0}:{1,number,#}", params));
-            }
+            Util.platform().openFTPBrowser(params);
             Socket socket = server.accept();
             return socket;
         }
@@ -91,19 +66,7 @@ public class Backend extends SSH2Backend
 
     private static void openURLInBrowser(String url) throws Exception
     {
-        if (Util.isLinux())
-        {
-            Runtime.getRuntime().exec("firefox " + url);
-        }
-        else if (Util.isMacOSX())
-        {
-            // open URL in default browser
-            Program.launch(url);
-        }
-        else
-        {
-            Runtime.getRuntime().exec("cmd /C start " + url);
-        }
+        Util.platform().openInBrowser(url);
     }
 
     public void openSSHAccount(SSHAccount account) throws Exception
@@ -132,7 +95,7 @@ public class Backend extends SSH2Backend
             }
             Socket term = openTerminal(puttyOptions);
             ConsoleManager console = new ConsoleManager(term, session, (HashMap) account.params);
-            if (Util.isMacOSX())
+            if (Util.platform().needToNegotiateProtocolOptions())
             {
                 // TODO: probably this should be done regardless of the TELNET
                 // client being used, but this was not tested with PuTTY yet

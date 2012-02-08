@@ -44,7 +44,7 @@ public class FilteredTree extends Composite
         layout.marginHeight = layout.marginWidth = 0;
         setLayout(layout);
         // Filter
-        if (Util.isMacOSX())
+        if (Util.platform().useSystemSearchWidget())
         {
             filter = new Text(this, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
         }

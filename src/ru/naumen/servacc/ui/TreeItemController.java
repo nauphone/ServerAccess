@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.Vector;
 
 import org.eclipse.swt.graphics.Image;
-
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
@@ -127,7 +126,7 @@ public class TreeItemController
         {
             return UIController.getImage("/icons/card.png");
         }
-        else if (data instanceof Group && !Util.isMacOSX())
+        else if (data instanceof Group && Util.platform().displayFolderIcon())
         {
             return UIController.getImage("/icons/folder-horizontal.png");
         }

@@ -71,26 +71,7 @@ public class AppProperties extends Properties
     public static File getConfigFile() throws IOException
     {
         final String userHome = System.getProperty("user.home");
-        File appDirectory = null;
-        if (Util.isMacOSX())
-        {
-            appDirectory = new File(userHome, "Library/Application Support");
-            appDirectory = new File(appDirectory, "Server Access");
-        }
-        else if (Util.isWindows())
-        {
-            String appData = System.getenv("APPDATA");
-            if (!Util.isEmptyOrNull(appData))
-            {
-                appDirectory = new File(appData);
-                appDirectory = new File(appDirectory, "Server Access");
-            }
-        }
-        // Linux and everything else
-        if (appDirectory == null)
-        {
-            appDirectory = new File(userHome, ".serveraccess");
-        }
+        File appDirectory = Util.platform().getConfigFile();
         appDirectory.mkdirs();
         File configFile = new File(appDirectory, "serveraccess.properties");
         if (configFile.createNewFile())

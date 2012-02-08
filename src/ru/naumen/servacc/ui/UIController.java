@@ -113,7 +113,7 @@ public class UIController
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
-        if (Util.isWindows())
+        if (Util.platform().isTraySupported())
         {
             createTrayItem();
         }

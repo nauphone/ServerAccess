@@ -9,12 +9,16 @@
  */
 package ru.naumen.servacc.util;
 
+import com.mindbright.util.Base64;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Pattern;
 
-
-import com.mindbright.util.Base64;
+import ru.naumen.servacc.platform.Linux;
+import ru.naumen.servacc.platform.MacOsX;
+import ru.naumen.servacc.platform.Platform;
+import ru.naumen.servacc.platform.Windows;
 
 public class Util
 {
@@ -29,17 +33,25 @@ public class Util
         return string.matches(regexp);
     }
 
-    public static boolean isMacOSX()
+    public static Platform platform()
+    {
+        if( isMacOSX() )
+        {
+            return new MacOsX();
+        }
+        else if( isWindows() )
+        {
+            return new Windows();
+        }
+        return new Linux();
+    }
+
+    private static boolean isMacOSX()
     {
         return "Mac OS X".equalsIgnoreCase(System.getProperty("os.name"));
     }
 
-    public static boolean isLinux()
-    {
-        return "Linux".equalsIgnoreCase(System.getProperty("os.name"));
-    }
-
-    public static boolean isWindows()
+    private static boolean isWindows()
     {
         return System.getProperty("os.name").startsWith("Windows");
     }
