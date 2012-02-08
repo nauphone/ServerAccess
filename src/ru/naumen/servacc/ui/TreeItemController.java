@@ -19,10 +19,11 @@ import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfigItem;
-import ru.naumen.servacc.util.Util;
+import ru.naumen.servacc.platform.Platform;
 
 public class TreeItemController
 {
+    private final Platform platform;
     private TreeItemController parent;
     private Object data;
     private List<TreeItemController> children;
@@ -30,14 +31,15 @@ public class TreeItemController
     private boolean visible = true;
     private boolean expanded = false;
 
-    public TreeItemController()
+    public TreeItemController(Platform platform)
     {
-        this(null);
+        this(null, platform);
     }
 
-    public TreeItemController(TreeItemController parent)
+    public TreeItemController(TreeItemController parent, Platform platform)
     {
         this.parent = parent;
+        this.platform = platform;
         children = new Vector<TreeItemController>();
     }
 
@@ -126,7 +128,7 @@ public class TreeItemController
         {
             return UIController.getImage("/icons/card.png");
         }
-        else if (data instanceof Group && Util.platform().displayFolderIcon())
+        else if (data instanceof Group && platform.displayFolderIcon())
         {
             return UIController.getImage("/icons/folder-horizontal.png");
         }
