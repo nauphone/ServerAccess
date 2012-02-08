@@ -20,6 +20,7 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
+import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
 
@@ -29,6 +30,13 @@ import ru.naumen.servacc.util.Util;
  */
 public class Backend extends SSH2Backend
 {
+    private final Platform platform;
+
+    public Backend(Platform platform)
+    {
+        this.platform = platform;
+    }
+
     public void openSSHAccount(SSHAccount account) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
@@ -55,7 +63,7 @@ public class Backend extends SSH2Backend
             }
             Socket term = openTerminal(puttyOptions);
             ConsoleManager console = new ConsoleManager(term, session, (HashMap) account.params);
-            if (Util.platform().needToNegotiateProtocolOptions())
+            if (platform.needToNegotiateProtocolOptions())
             {
                 // TODO: probably this should be done regardless of the TELNET
                 // client being used, but this was not tested with PuTTY yet
@@ -85,7 +93,7 @@ public class Backend extends SSH2Backend
         {
             server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
             Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort(), options};
-            Util.platform().openTerminal(params);
+            platform.openTerminal(params);
             // FIXME: collect children and kill it on
             Socket socket = server.accept();
             return socket;
@@ -144,7 +152,7 @@ public class Backend extends SSH2Backend
 
     private void openURLInBrowser(String url) throws Exception
     {
-        Util.platform().openInBrowser(url);
+        platform.openInBrowser(url);
     }
 
     public void localPortForward(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
@@ -171,7 +179,7 @@ public class Backend extends SSH2Backend
         {
             server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
             Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort()};
-            Util.platform().openFTPBrowser(params);
+            platform.openFTPBrowser(params);
             Socket socket = server.accept();
             return socket;
         }
