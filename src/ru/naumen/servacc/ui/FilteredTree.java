@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import ru.naumen.servacc.util.Util;
+import ru.naumen.servacc.platform.Platform;
 
 public class FilteredTree extends Composite
 {
@@ -36,7 +36,7 @@ public class FilteredTree extends Composite
         return tree;
     }
 
-    public FilteredTree(Composite parent, int style)
+    public FilteredTree(Composite parent, Platform platform, int style)
     {
         super(parent, style);
         // Setup layout
@@ -44,7 +44,7 @@ public class FilteredTree extends Composite
         layout.marginHeight = layout.marginWidth = 0;
         setLayout(layout);
         // Filter
-        if (Util.platform().useSystemSearchWidget())
+        if (platform.useSystemSearchWidget())
         {
             filter = new Text(this, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
         }

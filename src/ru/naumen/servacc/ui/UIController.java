@@ -282,7 +282,7 @@ public class UIController
 
     private void createFilteredTree()
     {
-        filteredTree = new FilteredTree(shell, SWT.NONE);
+        filteredTree = new FilteredTree(shell, platform, SWT.NONE);
         filteredTree.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL | GridData.FILL_VERTICAL | GridData.GRAB_VERTICAL));
         // Selection handling
         filteredTree.getTree().addSelectionListener(new SelectionListener()
