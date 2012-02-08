@@ -29,46 +29,6 @@ import ru.naumen.servacc.util.Util;
  */
 public class Backend extends SSH2Backend
 {
-    private static Socket openTerminal(String options) throws Exception
-    {
-        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
-        try
-        {
-            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
-            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort(), options};
-            Util.platform().openTerminal(params);
-            // FIXME: collect children and kill it on
-            Socket socket = server.accept();
-            return socket;
-        }
-        finally
-        {
-            server.close();
-        }
-    }
-
-    private static Socket openFTPBrowser() throws Exception
-    {
-        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
-        try
-        {
-            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
-            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort()};
-            Util.platform().openFTPBrowser(params);
-            Socket socket = server.accept();
-            return socket;
-        }
-        finally
-        {
-            server.close();
-        }
-    }
-
-    private static void openURLInBrowser(String url) throws Exception
-    {
-        Util.platform().openInBrowser(url);
-    }
-
     public void openSSHAccount(SSHAccount account) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
@@ -118,6 +78,24 @@ public class Backend extends SSH2Backend
         }
     }
 
+    private Socket openTerminal(String options) throws Exception
+    {
+        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
+        try
+        {
+            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
+            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort(), options};
+            Util.platform().openTerminal(params);
+            // FIXME: collect children and kill it on
+            Socket socket = server.accept();
+            return socket;
+        }
+        finally
+        {
+            server.close();
+        }
+    }
+
     public void openHTTPAccount(HTTPAccount account) throws Exception
     {
         URL url = new URL(account.getURL());
@@ -164,6 +142,11 @@ public class Backend extends SSH2Backend
         openURLInBrowser(targetURL.toString());
     }
 
+    private void openURLInBrowser(String url) throws Exception
+    {
+        Util.platform().openInBrowser(url);
+    }
+
     public void localPortForward(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
@@ -179,5 +162,22 @@ public class Backend extends SSH2Backend
             socket.getInputStream(),
             socket.getOutputStream(),
             "FTP Server");
+    }
+
+    private Socket openFTPBrowser() throws Exception
+    {
+        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
+        try
+        {
+            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
+            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort()};
+            Util.platform().openFTPBrowser(params);
+            Socket socket = server.accept();
+            return socket;
+        }
+        finally
+        {
+            server.close();
+        }
     }
 }
