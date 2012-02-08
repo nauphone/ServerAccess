@@ -74,6 +74,7 @@ import ru.naumen.servacc.config2.i.IConfigLoader;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
+import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.util.AppProperties;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
@@ -81,6 +82,7 @@ import ru.naumen.servacc.util.Util;
 public class UIController
 {
     private final Shell shell;
+    private final Platform platform;
     private Clipboard clipboard;
     private Backend backend;
     private IConfigLoader configLoader;
@@ -104,16 +106,17 @@ public class UIController
 
     private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
 
-    public UIController(Shell shell, Backend backend)
+    public UIController(Shell shell, Platform platform, Backend backend)
     {
         this.shell = shell;
+        this.platform = platform;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
         this.configLoader = new ConfigLoader(this, shell);
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
-        if (Util.platform().isTraySupported())
+        if (platform.isTraySupported())
         {
             createTrayItem();
         }

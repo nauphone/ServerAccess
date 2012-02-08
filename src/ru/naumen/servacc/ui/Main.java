@@ -18,6 +18,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
 import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.util.AppProperties;
 import ru.naumen.servacc.util.Util;
 
@@ -46,7 +47,8 @@ public class Main implements Runnable
             // Create GUI
             Display display = new Display();
             shell = createShell(display);
-            controller = new UIController(shell, new Backend(Util.platform()));
+            Platform platform = Util.platform();
+            controller = new UIController(shell, platform, new Backend(platform));
             shell.open();
             // Load accounts
             controller.reloadConfig();
