@@ -51,19 +51,23 @@ public class PropertiesFactory
         File configFile = new File(appDirectory, "serveraccess.properties");
         if (configFile.createNewFile())
         {
-            // generate default configuration
-            String data;
-            File accountsFile = new File(appDirectory, "accounts.xml");
-            if (accountsFile.createNewFile())
-            {
-                data = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>"
-                        + System.getProperty("line.separator") + "<Accounts version=\"2\"></Accounts>";
-                new FileOutputStream(accountsFile).write(data.getBytes());
-            }
-            data = "source=" + FileResource.uriPrefix + accountsFile.getPath();
-            new FileOutputStream(configFile).write(data.getBytes());
+            writeDefaultConfiguration(appDirectory, configFile);
         }
         return configFile;
+    }
+
+    private void writeDefaultConfiguration(File appDirectory, File configFile) throws IOException
+    {
+        String data;
+        File accountsFile = new File(appDirectory, "accounts.xml");
+        if (accountsFile.createNewFile())
+        {
+            data = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>"
+                    + System.getProperty("line.separator") + "<Accounts version=\"2\"></Accounts>";
+            new FileOutputStream(accountsFile).write(data.getBytes());
+        }
+        data = "source=" + FileResource.uriPrefix + accountsFile.getPath();
+        new FileOutputStream(configFile).write(data.getBytes());
     }
 
     public Collection<String> getConfigSources() throws Exception
