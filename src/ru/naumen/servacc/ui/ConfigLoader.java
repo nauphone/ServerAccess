@@ -24,7 +24,6 @@ import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigLoader;
-import ru.naumen.servacc.util.AppProperties;
 import ru.naumen.servacc.util.PropertiesFactory;
 import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
 
@@ -135,7 +134,7 @@ public class ConfigLoader implements IConfigLoader
             throw e;
         }
     }
-    
+
     public static InputStream getConfigStream(String source, Shell shell) throws IOException
     {
         String password = null;

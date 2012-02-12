@@ -36,11 +36,11 @@ public class PropertiesFactory
         this.platform = platform;
     }
 
-    public AppProperties getAppProperties() throws Exception
+    public PropertiesFile getAppProperties() throws Exception
     {
-        AppProperties properties = new AppProperties();
-        properties.load(getConfigFile());
-        return properties;
+        PropertiesFile propertiesFile = new PropertiesFile();
+        propertiesFile.load(getConfigFile());
+        return propertiesFile;
     }
 
     public File getConfigFile() throws IOException

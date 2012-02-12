@@ -18,7 +18,7 @@ import java.io.OutputStream;
 import java.util.InvalidPropertiesFormatException;
 import java.util.Properties;
 
-public class AppProperties extends Properties
+public class PropertiesFile extends Properties
 {
     private static final long serialVersionUID = 8932887805597715912L;
     private Boolean isXML = false;

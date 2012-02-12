@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Shell;
 
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.util.AppProperties;
+import ru.naumen.servacc.util.PropertiesFile;
 import ru.naumen.servacc.util.PropertiesFactory;
 import ru.naumen.servacc.util.Util;
 
@@ -99,24 +99,24 @@ public class Main implements Runnable
 
     private void storeShellPosition(Shell shell) throws Exception
     {
-        AppProperties properties = propertiesFactory.getAppProperties();
+        PropertiesFile propertiesFile = propertiesFactory.getAppProperties();
         Rectangle bounds = shell.getBounds();
-        properties.setProperty(WINDOW_X, String.valueOf(bounds.x));
-        properties.setProperty(WINDOW_Y, String.valueOf(bounds.y));
-        properties.setProperty(WINDOW_WIDTH, String.valueOf(bounds.width));
-        properties.setProperty(WINDOW_HEIGHT, String.valueOf(bounds.height));
-        properties.store(propertiesFactory.getConfigFile());
+        propertiesFile.setProperty(WINDOW_X, String.valueOf(bounds.x));
+        propertiesFile.setProperty(WINDOW_Y, String.valueOf(bounds.y));
+        propertiesFile.setProperty(WINDOW_WIDTH, String.valueOf(bounds.width));
+        propertiesFile.setProperty(WINDOW_HEIGHT, String.valueOf(bounds.height));
+        propertiesFile.store(propertiesFactory.getConfigFile());
     }
 
     private void restoreShellPosition(Shell shell) throws Exception
     {
-        AppProperties properties = propertiesFactory.getAppProperties();
+        PropertiesFile propertiesFile = propertiesFactory.getAppProperties();
         Rectangle bounds = shell.getBounds();
         shell.setBounds(
-            Integer.parseInt(properties.getProperty(WINDOW_X, String.valueOf(bounds.x))),
-            Integer.parseInt(properties.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
-            Integer.parseInt(properties.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
-            Integer.parseInt(properties.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
+            Integer.parseInt( propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
+            Integer.parseInt( propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
+            Integer.parseInt( propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
+            Integer.parseInt( propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
         );
     }
 }
