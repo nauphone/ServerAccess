@@ -53,7 +53,7 @@ Use the following command to build .jar:
 
 Then launch it (you will probably need to download SWT binaries for your platform and add them to Java class path):
 
-    ``java -jar distr/servacc.jar``
+    ``./resource/server-access``
 
 
 Configuration
