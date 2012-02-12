@@ -27,11 +27,11 @@ import ru.naumen.servacc.platform.Platform;
  * @author Andrey Hitrin
  * @since 12.02.2012
  */
-public class PropertiesFactory
+public class ApplicationProperties
 {
     private final Platform platform;
 
-    public PropertiesFactory(Platform platform)
+    public ApplicationProperties( Platform platform )
     {
         this.platform = platform;
     }
@@ -45,7 +45,6 @@ public class PropertiesFactory
 
     public File getConfigFile() throws IOException
     {
-        final String userHome = System.getProperty("user.home");
         File appDirectory = platform.getConfigFile();
         appDirectory.mkdirs();
         File configFile = new File(appDirectory, "serveraccess.properties");

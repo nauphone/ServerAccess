@@ -75,7 +75,7 @@ import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.util.PropertiesFactory;
+import ru.naumen.servacc.util.ApplicationProperties;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
@@ -83,7 +83,7 @@ public class UIController
 {
     private final Shell shell;
     private final Platform platform;
-    private final PropertiesFactory propertiesFactory;
+    private final ApplicationProperties applicationProperties;
 
     private Clipboard clipboard;
     private Backend backend;
@@ -108,14 +108,14 @@ public class UIController
 
     private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
 
-    public UIController(Shell shell, Platform platform, Backend backend, PropertiesFactory propertiesFactory)
+    public UIController(Shell shell, Platform platform, Backend backend, ApplicationProperties applicationProperties )
     {
         this.shell = shell;
         this.platform = platform;
-        this.propertiesFactory = propertiesFactory;
+        this.applicationProperties = applicationProperties;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
-        this.configLoader = new ConfigLoader(this, shell, propertiesFactory);
+        this.configLoader = new ConfigLoader(this, shell, applicationProperties );
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
@@ -662,14 +662,14 @@ public class UIController
     {
         try
         {
-            Collection<String> configSources = propertiesFactory.getConfigSources();
+            Collection<String> configSources = applicationProperties.getConfigSources();
 
             boolean someDialogsShowned = false;
             for (String config : configSources)
             {
                 if (!config.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(config))
                     continue;
-                
+
                 String content = new Scanner(ConfigLoader.getConfigStream(config, shell)).useDelimiter("\\A").next();
                 String password;
                 while(true)
@@ -679,14 +679,14 @@ public class UIController
                     dialog.setURL(config);
                     if (!dialog.show())
                         break;
-                    
+
                     password = dialog.getFieldValue("Password");
                     String second = dialog.getFieldValue("Again");
-                    
+
                     if (password.equals(second))
                         break;
                 }
-                
+
                 if (password == null)
                     continue;
 
@@ -698,7 +698,7 @@ public class UIController
 
                 someDialogsShowned = true;
             }
-            
+
             if (!someDialogsShowned)
                 showAlert("Nothing to encrypt - all configs already encrypted.");
         }
@@ -712,7 +712,7 @@ public class UIController
     {
         try
         {
-            Collection<String> configSources = propertiesFactory.getConfigSources();
+            Collection<String> configSources = applicationProperties.getConfigSources();
 
             boolean someDialogsShowned = false;
             for (String config : configSources)
@@ -725,14 +725,14 @@ public class UIController
                 InputStream stream = ConfigLoader.getConfigStream(config, shell);
                 if (stream == null)
                     continue;
-                
+
                 String content = new Scanner(stream).useDelimiter("\\A").next();
                 stream.close();
                 FileOutputStream os = new FileOutputStream(filePath);
                 os.write(content.getBytes());
                 os.close();
             }
-            
+
             if (!someDialogsShowned)
                 showAlert("Nothing to decrypt - all configs already decrypted.");
         }

@@ -19,8 +19,8 @@ import org.eclipse.swt.widgets.Shell;
 
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.platform.Platform;
+import ru.naumen.servacc.util.ApplicationProperties;
 import ru.naumen.servacc.util.PropertiesFile;
-import ru.naumen.servacc.util.PropertiesFactory;
 import ru.naumen.servacc.util.Util;
 
 public class Main implements Runnable
@@ -38,7 +38,7 @@ public class Main implements Runnable
         new Main().run();
     }
 
-    private PropertiesFactory propertiesFactory;
+    private ApplicationProperties applicationProperties;
     private Shell shell;
     private UIController controller;
 
@@ -50,8 +50,8 @@ public class Main implements Runnable
             Display display = new Display();
             shell = createShell(display);
             Platform platform = Util.platform();
-            propertiesFactory = new PropertiesFactory(platform);
-            controller = new UIController(shell, platform, new Backend(platform), propertiesFactory);
+            applicationProperties = new ApplicationProperties(platform);
+            controller = new UIController(shell, platform, new Backend(platform), applicationProperties );
             shell.open();
             // Load accounts
             controller.reloadConfig();
@@ -99,18 +99,18 @@ public class Main implements Runnable
 
     private void storeShellPosition(Shell shell) throws Exception
     {
-        PropertiesFile propertiesFile = propertiesFactory.getAppProperties();
+        PropertiesFile propertiesFile = applicationProperties.getAppProperties();
         Rectangle bounds = shell.getBounds();
         propertiesFile.setProperty(WINDOW_X, String.valueOf(bounds.x));
         propertiesFile.setProperty(WINDOW_Y, String.valueOf(bounds.y));
         propertiesFile.setProperty(WINDOW_WIDTH, String.valueOf(bounds.width));
         propertiesFile.setProperty(WINDOW_HEIGHT, String.valueOf(bounds.height));
-        propertiesFile.store(propertiesFactory.getConfigFile());
+        propertiesFile.store( applicationProperties.getConfigFile());
     }
 
     private void restoreShellPosition(Shell shell) throws Exception
     {
-        PropertiesFile propertiesFile = propertiesFactory.getAppProperties();
+        PropertiesFile propertiesFile = applicationProperties.getAppProperties();
         Rectangle bounds = shell.getBounds();
         shell.setBounds(
             Integer.parseInt( propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
