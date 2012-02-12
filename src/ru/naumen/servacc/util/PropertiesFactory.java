@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Properties;
 
 import ru.naumen.servacc.FileResource;
+import ru.naumen.servacc.platform.Platform;
 
 /**
  * Creates and manages application properties.
@@ -28,6 +29,13 @@ import ru.naumen.servacc.FileResource;
  */
 public class PropertiesFactory
 {
+    private final Platform platform;
+
+    public PropertiesFactory(Platform platform)
+    {
+        this.platform = platform;
+    }
+
     public AppProperties getAppProperties() throws Exception
     {
         AppProperties properties = new AppProperties();
@@ -38,7 +46,7 @@ public class PropertiesFactory
     public File getConfigFile() throws IOException
     {
         final String userHome = System.getProperty("user.home");
-        File appDirectory = Util.platform().getConfigFile();
+        File appDirectory = platform.getConfigFile();
         appDirectory.mkdirs();
         File configFile = new File(appDirectory, "serveraccess.properties");
         if (configFile.createNewFile())

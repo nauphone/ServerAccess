@@ -38,7 +38,7 @@ public class Main implements Runnable
         new Main().run();
     }
 
-    private PropertiesFactory propertiesFactory = new PropertiesFactory();
+    private PropertiesFactory propertiesFactory;
     private Shell shell;
     private UIController controller;
 
@@ -50,6 +50,7 @@ public class Main implements Runnable
             Display display = new Display();
             shell = createShell(display);
             Platform platform = Util.platform();
+            propertiesFactory = new PropertiesFactory(platform);
             controller = new UIController(shell, platform, new Backend(platform), propertiesFactory);
             shell.open();
             // Load accounts
