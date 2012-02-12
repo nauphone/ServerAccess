@@ -47,10 +47,10 @@ public class Main implements Runnable
         try
         {
             // Create GUI
-            Display display = new Display();
-            shell = createShell(display);
             Platform platform = Util.platform();
             applicationProperties = new ApplicationProperties(platform);
+            Display display = new Display();
+            shell = createShell(display);
             controller = new UIController(shell, platform, new Backend(platform), applicationProperties );
             shell.open();
             // Load accounts
