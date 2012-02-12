@@ -75,7 +75,7 @@ import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.util.AppProperties;
+import ru.naumen.servacc.util.PropertiesFactory;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
@@ -83,6 +83,8 @@ public class UIController
 {
     private final Shell shell;
     private final Platform platform;
+    private final PropertiesFactory propertiesFactory;
+
     private Clipboard clipboard;
     private Backend backend;
     private IConfigLoader configLoader;
@@ -106,13 +108,14 @@ public class UIController
 
     private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
 
-    public UIController(Shell shell, Platform platform, Backend backend)
+    public UIController(Shell shell, Platform platform, Backend backend, PropertiesFactory propertiesFactory)
     {
         this.shell = shell;
         this.platform = platform;
+        this.propertiesFactory = propertiesFactory;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
-        this.configLoader = new ConfigLoader(this, shell);
+        this.configLoader = new ConfigLoader(this, shell, propertiesFactory);
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
@@ -659,7 +662,7 @@ public class UIController
     {
         try
         {
-            Collection<String> configSources = AppProperties.getConfigSources();
+            Collection<String> configSources = propertiesFactory.getConfigSources();
 
             boolean someDialogsShowned = false;
             for (String config : configSources)
@@ -709,7 +712,7 @@ public class UIController
     {
         try
         {
-            Collection<String> configSources = AppProperties.getConfigSources();
+            Collection<String> configSources = propertiesFactory.getConfigSources();
 
             boolean someDialogsShowned = false;
             for (String config : configSources)

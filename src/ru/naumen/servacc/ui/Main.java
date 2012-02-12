@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.util.AppProperties;
+import ru.naumen.servacc.util.PropertiesFactory;
 import ru.naumen.servacc.util.Util;
 
 public class Main implements Runnable
@@ -37,6 +38,7 @@ public class Main implements Runnable
         new Main().run();
     }
 
+    private PropertiesFactory propertiesFactory = new PropertiesFactory();
     private Shell shell;
     private UIController controller;
 
@@ -48,7 +50,7 @@ public class Main implements Runnable
             Display display = new Display();
             shell = createShell(display);
             Platform platform = Util.platform();
-            controller = new UIController(shell, platform, new Backend(platform));
+            controller = new UIController(shell, platform, new Backend(platform), propertiesFactory);
             shell.open();
             // Load accounts
             controller.reloadConfig();
@@ -96,18 +98,18 @@ public class Main implements Runnable
 
     private void storeShellPosition(Shell shell) throws Exception
     {
-        AppProperties properties = AppProperties.getAppProperties();
+        AppProperties properties = propertiesFactory.getAppProperties();
         Rectangle bounds = shell.getBounds();
         properties.setProperty(WINDOW_X, String.valueOf(bounds.x));
         properties.setProperty(WINDOW_Y, String.valueOf(bounds.y));
         properties.setProperty(WINDOW_WIDTH, String.valueOf(bounds.width));
         properties.setProperty(WINDOW_HEIGHT, String.valueOf(bounds.height));
-        properties.store(AppProperties.getConfigFile());
+        properties.store(propertiesFactory.getConfigFile());
     }
 
     private void restoreShellPosition(Shell shell) throws Exception
     {
-        AppProperties properties = AppProperties.getAppProperties();
+        AppProperties properties = propertiesFactory.getAppProperties();
         Rectangle bounds = shell.getBounds();
         shell.setBounds(
             Integer.parseInt(properties.getProperty(WINDOW_X, String.valueOf(bounds.x))),
