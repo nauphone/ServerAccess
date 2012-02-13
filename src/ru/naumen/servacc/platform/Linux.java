@@ -33,7 +33,7 @@ public class Linux implements Platform
 
     @Override
     public boolean isTraySupported() {
-        return false;
+        return true;
     }
 
     @Override
