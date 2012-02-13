@@ -1,5 +1,9 @@
 #!/bin/bash
 
+unset CDPATH
+
+cd "$(dirname "${BASH_SOURCE[0]}")"/..
+
 SWT=/usr/lib/java/swt-gtk-3.7.jar
 FLAGS="-Dswt.library.path=/usr/lib/jni -cp distr/servacc.jar:lib/mindterm.jar:$SWT"
 ARCH=`uname -i`
