@@ -1,10 +1,19 @@
 #!/bin/bash
 
+function try_path() {
+    path=`ls $1 | head -n1`
+    if [ -e $path ]; then echo $path; fi
+}
+
+function detect_swt() {
+    echo `try_path /usr/lib/java/swt*`
+}
+
 unset CDPATH
 
 cd "$(dirname "${BASH_SOURCE[0]}")"/..
 
-SWT=/usr/lib/java/swt-gtk-3.7.jar
+SWT=`detect_swt`
 FLAGS="-Dswt.library.path=/usr/lib/jni -cp distr/servacc.jar:lib/mindterm.jar:$SWT"
 ARCH=`uname -i`
 
