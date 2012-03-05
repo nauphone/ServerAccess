@@ -1,12 +1,18 @@
 #!/bin/bash
 
 function try_path() {
-    path=`ls $1 | head -n1`
+    path=`ls $1 2>/dev/null | head -n1 || echo .`
     if [ -e $path ]; then echo $path; fi
 }
 
 function detect_swt() {
-    echo `try_path /usr/lib/java/swt*`
+    # Try to find swt binaries in several paths, and return the first found jar
+    # sed is used to filter out empty lines that emerge from non-existing paths
+    (
+        echo `try_path /usr/lib/java/swt*.jar`
+        echo `try_path /usr/share/java/swt*.jar`
+        echo `try_path /etc/alternatives/swt*.jar`
+    ) | sed -e /^$/d | head -n1
 }
 
 unset CDPATH
