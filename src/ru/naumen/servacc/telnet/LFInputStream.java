@@ -43,7 +43,9 @@ public class LFInputStream extends PushbackInputStream
             else
             {
                 if (ch != -1)
+                {
                     unread(ch);
+                }
                 return '\r';
             }
         }
@@ -66,7 +68,9 @@ public class LFInputStream extends PushbackInputStream
         int ch, off;
 
         if (length < 1)
+        {
             return 0;
+        }
 
         ch = available();
 
@@ -74,10 +78,14 @@ public class LFInputStream extends PushbackInputStream
 
         // If nothing is available, block to read only one character
         if (__length < 1)
+        {
             __length = 1;
+        }
 
         if ((ch = __read()) == -1)
+        {
             return -1;
+        }
 
         off = offset;
 
@@ -95,5 +103,4 @@ public class LFInputStream extends PushbackInputStream
     {
         return (buf.length - pos) + in.available();
     }
-    
 }

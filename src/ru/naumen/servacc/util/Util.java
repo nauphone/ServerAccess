@@ -35,11 +35,11 @@ public class Util
 
     public static Platform platform()
     {
-        if( isMacOSX() )
+        if (isMacOSX())
         {
             return new MacOsX();
         }
-        else if( isWindows() )
+        else if (isWindows())
         {
             return new Windows();
         }
@@ -65,7 +65,7 @@ public class Util
     {
         return new String(Base64.encode(bytes));
     }
-    
+
     public static byte[] base64decode(String encryptedString)
     {
         return base64decode(encryptedString.getBytes());
@@ -74,7 +74,7 @@ public class Util
     {
         return Base64.decode(bytes);
     }
-    
+
     public static <T> Collection<T> filter(Collection<T> target, Predicate<T> predicate)
     {
         Collection<T> result = new ArrayList<T>();

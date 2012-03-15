@@ -34,40 +34,40 @@ public class SSH2Backend
     {
         private List<SSH2SimpleClient> connections;
         private HashMap<String, SSH2SimpleClient> cache;
-    
+
         public ConnectionsManager()
         {
             cache = new HashMap<String, SSH2SimpleClient>();
             connections = new ArrayList<SSH2SimpleClient>();
         }
-    
+
         public void put(String key, SSH2SimpleClient client)
         {
             cache.put(key, client);
         }
-    
+
         public void remove(String key)
         {
             cache.remove(key);
         }
-    
+
         public SSH2SimpleClient get(String key)
         {
             return cache.get(key);
         }
-    
+
         public boolean containsKey(String key)
         {
             return cache.containsKey(key);
         }
-    
+
         public void clearCache()
         {
             // keep track of all open connections so we can close them on exit
             connections.addAll(cache.values());
             cache.clear();
         }
-    
+
         public void cleanup()
         {
             clearCache();
@@ -110,7 +110,7 @@ public class SSH2Backend
      * Retrieve SSH2 connection described by account using through connection (if not null) as tunnel.
      * Simple function creating exactly 1 (one) SSH2 connection.
      * Do not use this function - it is only extension of another getSSH2Client.
-     * 
+     *
      * @param account
      * @param through
      * @return
@@ -142,7 +142,7 @@ public class SSH2Backend
     /**
      * Retrieve SSH2 connection described by account (follow "through chain").
      * Complex function, creating 0...n SSH2 connection.
-     * 
+     *
      * @param account
      * @return
      * @throws Exception

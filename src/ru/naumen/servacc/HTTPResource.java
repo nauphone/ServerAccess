@@ -95,7 +95,7 @@ public class HTTPResource
             {
                 String encoding = connection.getContentEncoding();
                 InputStream inputStream = null;
-                
+
                 if (encoding != null && encoding.equalsIgnoreCase("gzip"))
                 {
                     inputStream = new GZIPInputStream(connection.getInputStream());
@@ -108,7 +108,7 @@ public class HTTPResource
                 {
                     inputStream = connection.getInputStream();
                 }
-                
+
                 return inputStream;
             }
             else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED)

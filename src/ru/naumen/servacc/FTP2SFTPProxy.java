@@ -70,7 +70,9 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         catch (SSH2SFTP.SFTPException e)
         {
             if (ftp != null)
+            {
                 ftp.terminate();
+            }
             throw e;
         }
     }

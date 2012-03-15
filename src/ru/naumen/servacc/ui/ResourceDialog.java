@@ -45,13 +45,23 @@ public class ResourceDialog extends DialogBase
         }
     };
 
-    public static final FieldDescriptor[] defaultFields = { new FieldDescriptor("Login", false), new FieldDescriptor("Password", true) };
-    public static final FieldDescriptor[] passwordFields = { new FieldDescriptor("Password", true) };
-    public static final FieldDescriptor[] passwordChangeFields = { new FieldDescriptor("Password", true), new FieldDescriptor("Again", true) };
+    public static final FieldDescriptor[] defaultFields = {
+        new FieldDescriptor("Login", false),
+        new FieldDescriptor("Password", true)
+    };
+
+    public static final FieldDescriptor[] passwordFields = {
+        new FieldDescriptor("Password", true)
+    };
+
+    public static final FieldDescriptor[] changePasswordFields = {
+        new FieldDescriptor("Password", true),
+        new FieldDescriptor("Confirm", true)
+    };
 
     public ResourceDialog(Shell parent, boolean loginNeeded)
     {
-        this(parent, loginNeeded, "Your authentication is required to access the following resource.");
+        this(parent, loginNeeded, "Your authentication is required to access the following resource");
     }
 
     public ResourceDialog(Shell parent, FieldDescriptor[] fields, String descriptionText)

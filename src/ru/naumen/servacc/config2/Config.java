@@ -91,7 +91,9 @@ public class Config implements IConfig
                 Node node = nodes.item(i);
                 String name = node.getNodeName();
                 if (node.getNodeType() != Node.ELEMENT_NODE)
+                {
                     continue;
+                }
                 if (GROUP_NODE_NAME.equals(name))
                 {
                     Group subGroup = parseGroup(node);

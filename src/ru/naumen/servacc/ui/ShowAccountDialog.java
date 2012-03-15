@@ -87,7 +87,9 @@ public class ShowAccountDialog {
         while (!shell.isDisposed())
         {
             if (!display.readAndDispatch())
+            {
                 display.sleep();
+            }
         }
         return result;
     }

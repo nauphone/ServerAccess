@@ -237,12 +237,14 @@ public class ConsoleManager
             }
             out.write(b, off, len);
             //TODO: auto password enter
-//            if (unreadPassword)
-//            {
-//                manager.in.unread(((String) manager.params.get("password") + "\n").getBytes());
-//                manager.inSudoLogin = false;
-//                unreadPassword = false;
-//            }
+            /*
+            if (unreadPassword)
+            {
+                manager.in.unread(((String) manager.params.get("password") + "\n").getBytes());
+                manager.inSudoLogin = false;
+                unreadPassword = false;
+            }
+            */
             if (manager.inSudoLogin && b[0] != 27 && b[1] != 97)
             {
                 manager.in.unread("sudo su -\n".getBytes());

@@ -126,7 +126,7 @@ public class ConfigLoader implements IConfigLoader
         InputStream stream = getConfigStream(source, shell);
         try
         {
-            return stream==null?null:new Config(stream);
+            return stream == null ? null : new Config(stream);
         }
         catch(Exception e)
         {
@@ -138,7 +138,7 @@ public class ConfigLoader implements IConfigLoader
     public static InputStream getConfigStream(String source, Shell shell) throws IOException
     {
         String password = null;
-        while(true)
+        while (true)
         {
             try
             {
@@ -149,9 +149,13 @@ public class ConfigLoader implements IConfigLoader
                 ResourceDialog dialog = new ResourceDialog(shell, false);
                 dialog.setURL(source);
                 if (dialog.show())
+                {
                     password = dialog.getFieldValue("Password");
+                }
                 else
+                {
                     return null;
+                }
             }
         }
     }
