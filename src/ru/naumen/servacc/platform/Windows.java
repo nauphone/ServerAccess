@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 
+import ru.naumen.servacc.util.Util;
+
 /**
  * @author Andrey Hitrin
  * @since 08.02.12
@@ -32,16 +34,11 @@ public class Windows implements Platform
     public File getConfigFile() throws IOException
     {
         String appData = System.getenv("APPDATA");
-        if (isEmptyOrNull(appData))
+        if (Util.isEmptyOrNull(appData))
         {
              return new File(new File(appData), "Server Access");
         }
         return null;
-    }
-
-    private boolean isEmptyOrNull(String str)
-    {
-        return str == null || str.trim().length() == 0;
     }
 
     @Override

@@ -23,17 +23,16 @@ import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
 
-
 public class StringEncrypter
 {
     public static final String DESEDE_ENCRYPTION_SCHEME = "DESede";
     public static final String DES_ENCRYPTION_SCHEME = "DES";
 
+    private static final String UTF8 = "UTF-8";
+
     private KeySpec keySpec;
     private SecretKeyFactory keyFactory;
     private Cipher cipher;
-
-    private static final String UNICODE_FORMAT = "UTF8";
 
     public StringEncrypter(String encryptionScheme, String encryptionKey) throws EncryptionException
     {
@@ -62,7 +61,7 @@ public class StringEncrypter
 
         try
         {
-            byte[] keyAsBytes = encryptionKey.getBytes(UNICODE_FORMAT);
+            byte[] keyAsBytes = encryptionKey.getBytes(UTF8);
 
             if (encryptionScheme.equals(DESEDE_ENCRYPTION_SCHEME))
             {
@@ -100,18 +99,17 @@ public class StringEncrypter
 
     public String encrypt(String unencryptedString) throws EncryptionException
     {
-        if (unencryptedString == null || unencryptedString.trim().length() == 0)
+        if (Util.isEmptyOrNull(unencryptedString))
         {
-            throw new IllegalArgumentException("unencrypted string was null or empty");
+            throw new IllegalArgumentException("unencrypted string is empty");
         }
 
         try
         {
             SecretKey key = keyFactory.generateSecret(keySpec);
             cipher.init(Cipher.ENCRYPT_MODE, key);
-            byte[] cleartext = unencryptedString.getBytes(UNICODE_FORMAT);
+            byte[] cleartext = unencryptedString.getBytes(UTF8);
             byte[] ciphertext = cipher.doFinal(cleartext);
-
             return Util.base64encode(ciphertext);
         }
         catch (Exception e)
@@ -122,34 +120,22 @@ public class StringEncrypter
 
     public String decrypt(String encryptedString) throws EncryptionException
     {
-        if (encryptedString == null || encryptedString.trim().length() <= 0)
+        if (Util.isEmptyOrNull(encryptedString))
         {
-            throw new IllegalArgumentException("encrypted string was null or empty");
+            throw new IllegalArgumentException("encrypted string is empty");
         }
-
         try
         {
             SecretKey key = keyFactory.generateSecret(keySpec);
             cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] cleartext = Util.base64decode(encryptedString);
             byte[] ciphertext = cipher.doFinal(cleartext);
-
-            return bytes2String(ciphertext);
+            return new String(ciphertext, UTF8);
         }
         catch (Exception e)
         {
             throw new EncryptionException(e);
         }
-    }
-
-    private static String bytes2String(byte[] bytes)
-    {
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < bytes.length; i++)
-        {
-            stringBuffer.append((char) bytes[i]);
-        }
-        return stringBuffer.toString();
     }
 
     public static class EncryptionException extends Exception

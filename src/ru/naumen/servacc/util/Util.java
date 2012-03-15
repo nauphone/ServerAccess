@@ -9,16 +9,14 @@
  */
 package ru.naumen.servacc.util;
 
-import com.mindbright.util.Base64;
-
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.regex.Pattern;
 
 import ru.naumen.servacc.platform.Linux;
 import ru.naumen.servacc.platform.MacOsX;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.platform.Windows;
+
+import com.mindbright.util.Base64;
 
 public class Util
 {
@@ -70,21 +68,9 @@ public class Util
     {
         return base64decode(encryptedString.getBytes());
     }
+
     public static byte[] base64decode(byte[] bytes)
     {
         return Base64.decode(bytes);
-    }
-
-    public static <T> Collection<T> filter(Collection<T> target, Predicate<T> predicate)
-    {
-        Collection<T> result = new ArrayList<T>();
-        for (T element : target)
-        {
-            if (predicate.apply(element))
-            {
-                result.add(element);
-            }
-        }
-        return result;
     }
 }
