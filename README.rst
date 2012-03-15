@@ -156,3 +156,16 @@ Sample ``serveraccess.properties`` contents::
     source1=https://example.com/1/accounts.xml
     source2=https://example.com/2/accounts.xml
 
+
+Encryption
+==========
+
+Local configuration files can be encrypted with a password. In order to do that you need to pick ``File`` → ``Encrypt Local Accounts`` from the application menu in Mac OS X or ``Encrypt Local Accounts`` from notification area menu in other OS's.
+
+.. image:: https://github.com/w31rd0/ServerAccess/raw/master/screenshot-3-menu.png
+
+A popup will then prompt you for a new password for each local configuration file to be encrypted.
+
+.. image:: https://github.com/w31rd0/ServerAccess/raw/master/screenshot-4-encrypt.png
+
+After that you will be prompted to enter your password to decrypt local configuration files each the application is started. You can consider it a "master password" to protect your accounts. In case you need to make changes, for example when you need to add a new account, your configuration files can be decrypted using ``File`` → ``Decrypt Local Accounts`` command. This will result in your configuration files written to disk in unencrypted way so you can edit them.
