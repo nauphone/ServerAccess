@@ -43,7 +43,7 @@ public class ConfigTest
         Assert.assertTrue("First one is SSHAccount", group.getChildren().get(0) instanceof SSHAccount);
         SSHAccount sshAccount = (SSHAccount)group.getChildren().get(0);
         String NONAME = "*** empty ***";
-        Assert.assertFalse("Account must have name", NONAME.equals(sshAccount.toString()));
+        Assert.assertFalse("Account must have a name", NONAME.equals(sshAccount.toString()));
         Assert.assertEquals("SSHAccount: attribute host", "127.0.0.1", sshAccount.getHost());
         Assert.assertEquals("SSHAccount: attribute port", Integer.valueOf(23), sshAccount.getPort());
         Assert.assertEquals("SSHAccount: attribute login", "foo", sshAccount.getLogin());

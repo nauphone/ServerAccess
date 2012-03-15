@@ -13,10 +13,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
-import java.util.HashMap;
-
-import com.mindbright.ssh2.SSH2SessionChannel;
-import com.mindbright.ssh2.SSH2SimpleClient;
 
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
@@ -24,10 +20,13 @@ import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
 
+import com.mindbright.ssh2.SSH2SessionChannel;
+import com.mindbright.ssh2.SSH2SimpleClient;
+
 /**
  * @author tosha
- *
  */
+
 public class Backend extends SSH2Backend
 {
     private final Platform platform;
@@ -62,7 +61,7 @@ public class Backend extends SSH2Backend
                 puttyOptions = account.params.get("putty_options");
             }
             Socket term = openTerminal(puttyOptions);
-            ConsoleManager console = new ConsoleManager(term, session, (HashMap) account.params);
+            ConsoleManager console = new ConsoleManager(term, session, account.params);
             if (platform.needToNegotiateProtocolOptions())
             {
                 // TODO: probably this should be done regardless of the TELNET

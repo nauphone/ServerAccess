@@ -43,7 +43,7 @@ public class SSH2PasswordInteractor implements SSH2Interactor
         }
         else if (prompts.length == 1 && prompts[0].startsWith("Password"))
         {
-            return new String[] { password };
+            return new String[] {password};
         }
         else
         {

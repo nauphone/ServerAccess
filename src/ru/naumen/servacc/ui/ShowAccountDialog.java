@@ -20,7 +20,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-public class ShowAccountDialog {
+public class ShowAccountDialog
+{
     private Shell shell;
     private Text passwordText;
 

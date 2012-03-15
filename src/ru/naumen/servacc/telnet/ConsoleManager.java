@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.net.Socket;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Logger;
 
@@ -106,7 +106,7 @@ public class ConsoleManager
         {
             int command = super.read();
             int val = super.read();
-            Vector lst = new Vector();
+            Vector<Integer> lst = new Vector<Integer>();
             while (val != IAC)
             {
                 lst.add(new Integer(val));
@@ -160,7 +160,7 @@ public class ConsoleManager
                     processIAC();
                     break;
                 case 17:
-                    unread(((String) params.get("password") + "\n").getBytes());
+                    unread((params.get("password") + "\n").getBytes());
                     break;
                 }
                 val = super.read();
@@ -240,7 +240,7 @@ public class ConsoleManager
             /*
             if (unreadPassword)
             {
-                manager.in.unread(((String) manager.params.get("password") + "\n").getBytes());
+                manager.in.unread((manager.params.get("password") + "\n").getBytes());
                 manager.inSudoLogin = false;
                 unreadPassword = false;
             }
@@ -262,10 +262,10 @@ public class ConsoleManager
     private ConsoleManagerInputStream in = null;
     private ConsoleManagerOutputStream out = null;
     private SSH2SessionChannel session;
-    private HashMap params;
+    private Map<String, String> params;
     private boolean inSudoLogin;
 
-    public ConsoleManager(Socket client, SSH2SessionChannel session, HashMap params)
+    public ConsoleManager(Socket client, SSH2SessionChannel session, Map<String, String> params)
     {
         this.client = client;
         this.session = session;

@@ -182,7 +182,8 @@ public class UIController
     {
         Display.getDefault().asyncExec(new Runnable() {
             @Override
-            public void run() {
+            public void run()
+            {
                 showAlert(message);
             }
         });

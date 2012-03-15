@@ -11,22 +11,26 @@ import java.text.MessageFormat;
 public class Windows implements Platform
 {
     @Override
-    public void openTerminal(Object[] params) throws IOException {
+    public void openTerminal(Object[] params) throws IOException
+    {
         Runtime.getRuntime().exec(MessageFormat.format("cmd /C start putty {2} -telnet {0} -P {1,number,#}", params));
     }
 
     @Override
-    public void openFTPBrowser(Object[] params) throws IOException {
+    public void openFTPBrowser(Object[] params) throws IOException
+    {
         Runtime.getRuntime().exec(MessageFormat.format("cmd /C explorer /n,ftp://{0}:{1,number,#}", params));
     }
 
     @Override
-    public void openInBrowser(String url) throws IOException {
+    public void openInBrowser(String url) throws IOException
+    {
         Runtime.getRuntime().exec("cmd /C start " + url);
     }
 
     @Override
-    public File getConfigFile() throws IOException {
+    public File getConfigFile() throws IOException
+    {
         String appData = System.getenv("APPDATA");
         if (isEmptyOrNull(appData))
         {
@@ -41,22 +45,26 @@ public class Windows implements Platform
     }
 
     @Override
-    public boolean isTraySupported() {
+    public boolean isTraySupported()
+    {
         return true;
     }
 
     @Override
-    public boolean needToNegotiateProtocolOptions() {
+    public boolean needToNegotiateProtocolOptions()
+    {
         return false;
     }
 
     @Override
-    public boolean useSystemSearchWidget() {
+    public boolean useSystemSearchWidget()
+    {
         return false;
     }
 
     @Override
-    public boolean displayFolderIcon() {
+    public boolean displayFolderIcon()
+    {
         return true;
     }
 }
