@@ -48,6 +48,12 @@ public class Windows implements Platform
     }
 
     @Override
+    public boolean isAppMenuSupported()
+    {
+        return false;
+    }
+
+    @Override
     public boolean needToNegotiateProtocolOptions()
     {
         return false;

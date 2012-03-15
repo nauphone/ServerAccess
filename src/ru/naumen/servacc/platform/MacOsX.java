@@ -47,6 +47,12 @@ public class MacOsX implements Platform
     }
 
     @Override
+    public boolean isAppMenuSupported()
+    {
+        return true;
+    }
+
+    @Override
     public boolean needToNegotiateProtocolOptions()
     {
         return true;

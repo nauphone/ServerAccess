@@ -70,7 +70,6 @@ import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigItem;
-import ru.naumen.servacc.config2.i.IConfigLoader;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
@@ -87,7 +86,7 @@ public class UIController
 
     private Clipboard clipboard;
     private Backend backend;
-    private IConfigLoader configLoader;
+    private ConfigLoader configLoader;
     private IConfig config;
 
     private FilteredTree filteredTree;
@@ -123,6 +122,12 @@ public class UIController
         {
             createTrayItem();
         }
+        else if (platform.isAppMenuSupported())
+        {
+            createAppMenu();
+        }
+        // set focus to search widget on startup
+        filteredTree.getFilter().setFocus();
     }
 
     public void reloadConfig()
@@ -180,7 +185,8 @@ public class UIController
 
     protected void showAlertFromThread(final String message)
     {
-        Display.getDefault().asyncExec(new Runnable() {
+        Display.getDefault().asyncExec(new Runnable()
+        {
             @Override
             public void run()
             {
@@ -488,24 +494,11 @@ public class UIController
             {
             }
         });
+
         final Menu menu = new Menu(shell, SWT.POP_UP);
         // tray menu items to encrypt/decrypt local accounts
-        MenuItem itemEncrypt = new MenuItem(menu, SWT.NULL);
-        itemEncrypt.setText("Encrypt local accounts");
-        itemEncrypt.addListener(SWT.Selection, new Listener() {
-            public void handleEvent(Event event)
-            {
-                encryptLocalConfigs();
-            }
-        });
-        MenuItem itemDecrypt = new MenuItem(menu, SWT.NULL);
-        itemDecrypt.setText("Decrypt local accounts");
-        itemDecrypt.addListener(SWT.Selection, new Listener() {
-            public void handleEvent(Event event)
-            {
-                decryptLocalConfigs();
-            }
-        });
+        createEncryptMenuItem(menu);
+        createDecryptMenuItem(menu);
         new MenuItem(menu, SWT.SEPARATOR);
         // tray menu item which is the only way to quit on windows
         MenuItem itemQuit = new MenuItem(menu, SWT.NULL);
@@ -522,6 +515,44 @@ public class UIController
             public void handleEvent(Event arg0)
             {
                 menu.setVisible(true);
+            }
+        });
+    }
+
+    private void createAppMenu()
+    {
+        final Menu menuBar = Display.getCurrent().getMenuBar();
+        if (menuBar != null)
+        {
+            final MenuItem file = new MenuItem(menuBar, SWT.CASCADE);
+            final Menu dropdown = new Menu(menuBar);
+            file.setText("File");
+            file.setMenu(dropdown);
+            createEncryptMenuItem(dropdown);
+            createDecryptMenuItem(dropdown);
+        }
+    }
+
+    private void createEncryptMenuItem(final Menu menu) {
+        final MenuItem itemEncrypt = new MenuItem(menu, SWT.NULL);
+        itemEncrypt.setText("Encrypt Local Accounts");
+        itemEncrypt.addListener(SWT.Selection, new Listener()
+        {
+            public void handleEvent(Event event)
+            {
+                encryptLocalAccounts();
+            }
+        });
+    }
+
+    private void createDecryptMenuItem(final Menu menu) {
+        final MenuItem itemDecrypt = new MenuItem(menu, SWT.NULL);
+        itemDecrypt.setText("Decrypt Local Accounts");
+        itemDecrypt.addListener(SWT.Selection, new Listener()
+        {
+            public void handleEvent(Event event)
+            {
+                decryptLocalAccounts();
             }
         });
     }
@@ -548,7 +579,8 @@ public class UIController
         {
             if (tic.getData() instanceof SSHAccount)
             {
-                Thread thread = new Thread(new Runnable() {
+                Thread thread = new Thread(new Runnable()
+                {
                     @Override
                     public void run()
                     {
@@ -568,7 +600,8 @@ public class UIController
             }
             else if (tic.getData() instanceof HTTPAccount)
             {
-                Thread thread = new Thread(new Runnable() {
+                Thread thread = new Thread(new Runnable()
+                {
                     @Override
                     public void run()
                     {
@@ -660,58 +693,44 @@ public class UIController
         }
     }
 
-    private void encryptLocalConfigs()
+    private void encryptLocalAccounts()
     {
         try
         {
             Collection<String> configSources = applicationProperties.getConfigSources();
 
-            boolean someDialogsShown = false;
+            int encryptableFiles = 0;
             for (String config : configSources)
             {
                 if (!config.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(config))
                 {
                     continue;
                 }
+                encryptableFiles++;
 
-                String content = new Scanner(ConfigLoader.getConfigStream(config, shell)).useDelimiter("\\A").next();
-                String password;
-                while (true)
-                {
-                    password = null;
-                    ResourceDialog dialog = new ResourceDialog(shell, ResourceDialog.changePasswordFields, "Please enter new password for following resource twice.");
-                    dialog.setURL(config);
-                    if (!dialog.show())
-                    {
-                        break;
-                    }
+                EncryptDialog dialog = new EncryptDialog(shell);
+                dialog.setURL(config);
+                dialog.show();
+                String password = dialog.getPassword();
 
-                    password = dialog.getFieldValue("Password");
-                    String second = dialog.getFieldValue("Confirm");
-
-                    if (password.equals(second))
-                    {
-                        break;
-                    }
-                }
-
-                if (password == null)
+                if (Util.isEmptyOrNull(password))
                 {
                     continue;
                 }
 
+                String content = new Scanner(configLoader.getConfigStream(config, shell)).useDelimiter("\\A").next();
+                byte[] encryptedContent = new StringEncrypter("DESede", password).encrypt(content).getBytes();
+
                 OutputStream os = new FileOutputStream(config.substring(FileResource.uriPrefix.length()));
                 os.write(FileResource.encryptedHeader);
                 os.write(System.getProperty("line.separator").getBytes());
-                os.write(new StringEncrypter("DESede", password).encrypt(content).getBytes());
+                os.write(encryptedContent);
                 os.close();
-
-                someDialogsShown = true;
             }
 
-            if (!someDialogsShown)
+            if (encryptableFiles < 1)
             {
-                showAlert("Nothing to encrypt - all accounts are already encrypted");
+                showAlert("All accounts are already encrypted");
             }
         }
         catch (Exception e)
@@ -720,13 +739,13 @@ public class UIController
         }
     }
 
-    private void decryptLocalConfigs()
+    private void decryptLocalAccounts()
     {
         try
         {
             Collection<String> configSources = applicationProperties.getConfigSources();
 
-            boolean someDialogsShown = false;
+            int decryptableFiles = 0;
             for (String config : configSources)
             {
                 String filePath = config.substring(FileResource.uriPrefix.length());
@@ -735,13 +754,13 @@ public class UIController
                     continue;
                 }
 
-                someDialogsShown = true;
-                InputStream stream = ConfigLoader.getConfigStream(config, shell);
+                decryptableFiles++;
+
+                InputStream stream = configLoader.getConfigStream(config, shell);
                 if (stream == null)
                 {
                     continue;
                 }
-
                 String content = new Scanner(stream).useDelimiter("\\A").next();
                 stream.close();
                 FileOutputStream os = new FileOutputStream(filePath);
@@ -749,9 +768,9 @@ public class UIController
                 os.close();
             }
 
-            if (!someDialogsShown)
+            if (decryptableFiles < 1)
             {
-                showAlert("Nothing to decrypt - all accounts are already decrypted");
+                showAlert("All accounts are already decrypted");
             }
         }
         catch (Exception e)

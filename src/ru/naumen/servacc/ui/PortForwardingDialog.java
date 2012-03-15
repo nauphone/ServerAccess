@@ -10,12 +10,8 @@
 package ru.naumen.servacc.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
@@ -38,45 +34,19 @@ public class PortForwardingDialog extends DialogBase
 
     public PortForwardingDialog(Shell parent)
     {
-        this(parent, 0);
-    }
-
-    public PortForwardingDialog(Shell parent, int style)
-    {
-        super(parent, style);
-        shell.setLayout(new GridLayout(3, false));
+        super(parent, 0, 3);
 
         localPortLabel = createLabel("Local Port");
         remoteHostLabel = createLabel("Remote Host");
         remotePortLabel = createLabel("Remote Port");
 
-        localPortText = new Text(shell, SWT.BORDER);
-        localPortText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
-
-        remoteHostText = new Text(shell, SWT.BORDER);
-        remoteHostText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
-
-        remotePortText = new Text(shell, SWT.BORDER);
-        remotePortText.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+        localPortText = createTextField();
+        remoteHostText = createTextField();
+        remotePortText = createTextField();
         remotePortText.setFocus();
 
-        Button button = new Button(shell, SWT.PUSH);
-        button.setText("OK");
-        GridData gridData;
-        gridData = new GridData(GridData.HORIZONTAL_ALIGN_END);
-        gridData.horizontalSpan = 3;
-        gridData.widthHint = 80;
-        button.setLayoutData(gridData);
-        button.addSelectionListener(new SelectionAdapter()
-        {
-            public void widgetSelected(SelectionEvent e)
-            {
-                close(true);
-            }
-        });
-        shell.setDefaultButton(button);
-        shell.pack();
-        shell.setSize(Math.max(shell.getSize().x, 400), shell.getSize().y);
+        createDefaultButton();
+        pack();
     }
 
     public void setLocalPort(int port)
@@ -85,6 +55,7 @@ public class PortForwardingDialog extends DialogBase
         localPortText.setText(String.valueOf(port));
     }
 
+    // XXX: unused
     public void setRemotePort(int port)
     {
         remotePort = port;

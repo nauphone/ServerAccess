@@ -30,16 +30,16 @@
         value="lines,vars,source" />
     <property
         name="swt-version"
-        value="3.5.1" />
+        value="3.7.2" />
     <property
         environment="env"/>
     <condition
         property="nsis_cmd"
-    	value="${env.ProgramFiles}\NSIS\makensis.exe"
-    	else="makensis">
+        value="${env.ProgramFiles}\NSIS\makensis.exe"
+        else="makensis">
         <os family="windows"/>
     </condition>
-    
+
     <path
         id="saclient.class.path">
         <pathelement
@@ -100,7 +100,7 @@
         <delete dir="${build}/swt" />
         <move file="nsis/sa_install.exe" todir="build" failonerror="false"/>
 
-    	<fail message="NSIS build failed">
+        <fail message="NSIS build failed">
             <condition>
                 <not>
                     <equals arg1="${nsis_exec_result}" arg2="0"/>
@@ -227,10 +227,11 @@
         <delete dir="${build}/swt" />
     </target>
 
+    <!-- // unsupported
     <target
         name="macosx-carbon"
         depends="clean, jar, macosx-common"
-        description="--> build Mac OS X + Carbon app">
+        description="- -> build Mac OS X + Carbon app">
 
         <copy
             file="resource/scripts/serveraccess"
@@ -248,5 +249,6 @@
             todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
         <delete dir="${build}/swt" />
     </target>
+    -->
 
 </project>

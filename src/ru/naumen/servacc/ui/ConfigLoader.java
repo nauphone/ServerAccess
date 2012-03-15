@@ -23,11 +23,10 @@ import ru.naumen.servacc.HTTPResource;
 import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
-import ru.naumen.servacc.config2.i.IConfigLoader;
 import ru.naumen.servacc.util.ApplicationProperties;
 import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
 
-public class ConfigLoader implements IConfigLoader
+public class ConfigLoader
 {
     private Map<String, String[]> authCache = new HashMap<String, String[]>();
     private final UIController controller;
@@ -100,12 +99,12 @@ public class ConfigLoader implements IConfigLoader
             }
             catch (HTTPResource.NotAuthenticatedError e)
             {
-                ResourceDialog dialog = new ResourceDialog(shell, true);
+                AuthenticationDialog dialog = new AuthenticationDialog(shell);
                 dialog.setURL(url);
                 if (dialog.show())
                 {
-                    String login = dialog.getFieldValue("Login");
-                    String password = dialog.getFieldValue("Password");
+                    String login = dialog.getLogin();
+                    String password = dialog.getPassword();
                     resource.setAuthentication(login, password);
                     authCache.put(url, new String[] {login, password});
                 }
@@ -135,9 +134,14 @@ public class ConfigLoader implements IConfigLoader
         }
     }
 
-    public static InputStream getConfigStream(String source, Shell shell) throws IOException
+    public InputStream getConfigStream(String source, Shell shell) throws IOException
     {
         String password = null;
+        String[] auth = authCache.get(source);
+        if (auth != null && auth.length == 2)
+        {
+            password = auth[1];
+        }
         while (true)
         {
             try
@@ -146,11 +150,12 @@ public class ConfigLoader implements IConfigLoader
             }
             catch (EncryptionException e)
             {
-                ResourceDialog dialog = new ResourceDialog(shell, false);
+                AuthenticationDialog dialog = new AuthenticationDialog(shell, true);
                 dialog.setURL(source);
                 if (dialog.show())
                 {
-                    password = dialog.getFieldValue("Password");
+                    password = dialog.getPassword();
+                    authCache.put(source, new String[] {null, password});
                 }
                 else
                 {

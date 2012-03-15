@@ -20,6 +20,8 @@ public interface Platform
 
     boolean isTraySupported();
 
+    boolean isAppMenuSupported();
+
     boolean needToNegotiateProtocolOptions();
 
     boolean useSystemSearchWidget();

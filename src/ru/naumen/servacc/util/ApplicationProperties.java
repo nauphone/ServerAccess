@@ -31,7 +31,7 @@ public class ApplicationProperties
 {
     private final Platform platform;
 
-    public ApplicationProperties( Platform platform )
+    public ApplicationProperties(Platform platform)
     {
         this.platform = platform;
     }

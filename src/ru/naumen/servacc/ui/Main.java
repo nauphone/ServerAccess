@@ -51,7 +51,7 @@ public class Main implements Runnable
             applicationProperties = new ApplicationProperties(platform);
             Display display = new Display();
             shell = createShell(display);
-            controller = new UIController(shell, platform, new Backend(platform), applicationProperties );
+            controller = new UIController(shell, platform, new Backend(platform), applicationProperties);
             shell.open();
             // Load accounts
             controller.reloadConfig();
@@ -105,7 +105,7 @@ public class Main implements Runnable
         propertiesFile.setProperty(WINDOW_Y, String.valueOf(bounds.y));
         propertiesFile.setProperty(WINDOW_WIDTH, String.valueOf(bounds.width));
         propertiesFile.setProperty(WINDOW_HEIGHT, String.valueOf(bounds.height));
-        propertiesFile.store( applicationProperties.getConfigFile());
+        propertiesFile.store(applicationProperties.getConfigFile());
     }
 
     private void restoreShellPosition(Shell shell) throws Exception
@@ -113,10 +113,10 @@ public class Main implements Runnable
         PropertiesFile propertiesFile = applicationProperties.getAppProperties();
         Rectangle bounds = shell.getBounds();
         shell.setBounds(
-            Integer.parseInt( propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
-            Integer.parseInt( propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
-            Integer.parseInt( propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
-            Integer.parseInt( propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
         );
     }
 }
