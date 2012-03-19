@@ -55,13 +55,6 @@ public class PortForwardingDialog extends DialogBase
         localPortText.setText(String.valueOf(port));
     }
 
-    // XXX: unused
-    public void setRemotePort(int port)
-    {
-        remotePort = port;
-        remotePortText.setText(String.valueOf(port));
-    }
-
     public void setRemoteHost(String host)
     {
         if (!Util.isEmptyOrNull(host))

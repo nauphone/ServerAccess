@@ -15,7 +15,8 @@ import java.net.ServerSocket;
 public class SocketUtils
 {
     public static final String LOCALHOST = "127.0.0.1";
-    public static final int DEFAULT_TIMEOUT = 30000;
+    public static final int COLD_TIMEOUT = 15000;
+    public static final int WARM_TIMEOUT = 1000;
     private static int PORTBASE = 12000;
     private static int PORTMAX = 13000;
     private static int port = PORTBASE;

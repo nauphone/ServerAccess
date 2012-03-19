@@ -97,7 +97,7 @@ public class SSH2Backend
             secureRandom = new SecureRandomAndPad(new SecureRandom(seed.getBytesBlocking(20, false)));
         }
         Socket sock = new Socket();
-        sock.connect(new InetSocketAddress(host, port), SocketUtils.DEFAULT_TIMEOUT);
+        sock.connect(new InetSocketAddress(host, port), SocketUtils.COLD_TIMEOUT);
         SSH2Transport transport = new SSH2Transport(sock, secureRandom);
         SSH2Authenticator auth = new SSH2Authenticator(login);
         auth.addModule(new SSH2AuthPassword(password));

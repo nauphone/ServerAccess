@@ -13,6 +13,13 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
@@ -30,38 +37,75 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 public class Backend extends SSH2Backend
 {
     private final Platform platform;
+    private final ExecutorService executor;
 
     public Backend(Platform platform)
     {
         this.platform = platform;
+        this.executor = Executors.newCachedThreadPool(new ThreadFactory()
+        {
+            @Override
+            public Thread newThread(Runnable runnable)
+            {
+                final Thread thread = new Thread(runnable);
+                thread.setDaemon(true);
+                return thread;
+            }
+        });
     }
 
-    public void openSSHAccount(SSHAccount account) throws Exception
+    public void execute(Runnable runnable)
     {
-        SSH2SimpleClient client = getSSH2Client(account);
-        if (!client.getTransport().isConnected())
+        this.executor.execute(runnable);
+    }
+
+    public void openSSHAccount(final SSHAccount account) throws Exception
+    {
+        SSH2SimpleClient client;
+        if (connections.containsKey(account.getUniqueIdentity()))
         {
-            connections.remove(account.getUniqueIdentity());
-            System.err.println("Connection broken, trying again");
-            openSSHAccount(account);
-            return;
+            client = getSSH2Client(account);
+            // this is to force timeout when reusing a cached connection
+            // in order to detect if a connection is hung more quickly
+            try
+            {
+                final SSH2SimpleClient clientCopy = client;
+                Future<Object> f = this.executor.submit(new Callable<Object>()
+                {
+                    @Override
+                    public Object call() throws Exception
+                    {
+                        openSSHAccount(account, clientCopy);
+                        return null;
+                    }
+                });
+                f.get(SocketUtils.WARM_TIMEOUT, TimeUnit.MILLISECONDS);
+                return;
+            }
+            catch (TimeoutException e)
+            {
+                connections.remove(account.getUniqueIdentity());
+                System.err.println("Connection is broken, retrying");
+            }
         }
-        SSH2SessionChannel session = client.getConnection().newSession();
+        // try with "cold" timeout
+        client = getSSH2Client(account);
+        openSSHAccount(account, client);
+    }
+
+    private void openSSHAccount(final SSHAccount account, final SSH2SimpleClient client) throws Exception
+    {
+        final SSH2SessionChannel session = client.getConnection().newSession();
         try
         {
             if (!session.requestPTY("xterm", 24, 80, new byte[] {12, 0, 0, 0, 0, 0}))
             {
                 client.getTransport().normalDisconnect("bye bye");
                 connections.remove(account.getUniqueIdentity());
-                throw new IOException("Failed to get PTY on the remote server");
+                throw new IOException("Failed to get PTY on remote side");
             }
-            String puttyOptions = new String();
-            if (account.params.containsKey("putty_options"))
-            {
-                puttyOptions = account.params.get("putty_options");
-            }
-            Socket term = openTerminal(puttyOptions);
-            ConsoleManager console = new ConsoleManager(term, session, account.params);
+            final Socket term = openTerminal(account);
+            final ConsoleManager console = new ConsoleManager(term, session, account.params);
             if (platform.needToNegotiateProtocolOptions())
             {
                 // TODO: probably this should be done regardless of the TELNET
@@ -72,7 +116,7 @@ public class Backend extends SSH2Backend
             session.changeStdOut(console.getOutputStream());
             if (!session.doShell())
             {
-                throw new IOException("Failed to start shell on the remote server");
+                throw new IOException("Failed to start shell on remote side");
             }
         }
         catch (Exception e)
@@ -85,17 +129,20 @@ public class Backend extends SSH2Backend
         }
     }
 
-    private Socket openTerminal(String options) throws Exception
+    private Socket openTerminal(SSHAccount account) throws Exception
     {
+        String options = new String();
+        if (account.params.containsKey("putty_options"))
+        {
+            options = account.params.get("putty_options");
+        }
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
         {
-            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
-            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort(), options};
-            platform.openTerminal(params);
-            // FIXME: collect children and kill it on
-            Socket socket = server.accept();
-            return socket;
+            server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
+            platform.openTerminal(new Object[] {SocketUtils.LOCALHOST, server.getLocalPort(), options});
+            // FIXME: collect children and kill it on (on?)
+            return server.accept();
         }
         finally
         {
@@ -146,12 +193,7 @@ public class Backend extends SSH2Backend
         {
             targetURL.append("?" + url.getQuery());
         }
-        openURLInBrowser(targetURL.toString());
-    }
-
-    private void openURLInBrowser(String url) throws Exception
-    {
-        platform.openInBrowser(url);
+        platform.openInBrowser(targetURL.toString());
     }
 
     public void localPortForward(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
@@ -176,8 +218,8 @@ public class Backend extends SSH2Backend
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
         {
-            server.setSoTimeout(SocketUtils.DEFAULT_TIMEOUT);
-            Object[] params = new Object[]{SocketUtils.LOCALHOST, server.getLocalPort()};
+            server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
+            Object[] params = new Object[] {SocketUtils.LOCALHOST, server.getLocalPort()};
             platform.openFTPBrowser(params);
             Socket socket = server.accept();
             return socket;

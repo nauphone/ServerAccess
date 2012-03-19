@@ -33,8 +33,7 @@ public class SSH2PasswordInteractor implements SSH2Interactor
         return null;
     }
 
-    public String[] promptMultiFull(String name, String instruction,
-                                    String[] prompts, boolean[] echos)
+    public String[] promptMultiFull(String name, String instruction, String[] prompts, boolean[] echos)
         throws SSH2UserCancelException
     {
         if (prompts.length == 0)
@@ -47,8 +46,7 @@ public class SSH2PasswordInteractor implements SSH2Interactor
         }
         else
         {
-            throw new SSH2UserCancelException(
-                "Unknown prompt for keyboard interaction");
+            throw new SSH2UserCancelException("Unknown prompt for keyboard interaction");
         }
     }
 
