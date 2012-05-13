@@ -1,6 +1,7 @@
 # Intellij IDEA
 .idea
 *.iml
+out
 
 # auto-generated
 build
