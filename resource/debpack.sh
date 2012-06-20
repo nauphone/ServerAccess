@@ -42,7 +42,7 @@ cp -R "./resource/icons/" "$tmpdir/usr/share/pixmaps/naumen-server-access"
 cp "./resource/naumen-server-access.desktop" "$tmpdir/usr/share/applications"
 cp "./resource/naumen-server-access.png" "$tmpdir/usr/share/pixmaps/naumen-server-access"
 cp "./lib/mindterm.jar" "$tmpdir/opt/naumen/server-access/lib"
-cp "./lib/swt.jar" "$tmpdir/opt/naumen/server-access/lib"
+cp "LICENSE.GPL" "$tmpdir/opt/naumen/server-access/"
 
 md5deep -rl "$tmpdir/" > "$tmpdir/DEBIAN/md5sums"
 
