@@ -47,13 +47,15 @@ Copy ``ServerAccess.app`` (from ``distr`` subdirectory) to your ``/Applications`
 
 GNU Linux/Other
 ---------------
-Use the following command to build .jar:
-
-    ``ant jar``
+Use ``ant`` command to build application distribution.
 
 Then launch it (you will probably need to download SWT binaries for your platform and add them to Java class path):
 
-    ``./resource/server-access``
+    ``./distr/server-access``
+
+To create deb-package for Debian/Ubuntu distributive, use following script:
+
+    ``./resource/debpack.sh``
 
 
 Configuration

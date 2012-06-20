@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="servacc" default="jar" basedir=".">
+<project name="servacc" default="prepare-release" basedir=".">
     <property
         name="version"
         value="0.9.9" />
@@ -53,6 +53,23 @@
     <path id="test.class.path">
         <pathelement location="lib/junit-4.10.jar"/>
     </path>
+
+    <target
+        name="prepare-release"
+        depends="jar"
+        description="--> collect ready-to-use app distribution">
+        <copy
+            file="lib/mindterm.jar"
+            todir="${distr}/lib/"/>
+        <copy
+            file="resource/server-access"
+            todir="${distr}"/>
+        <chmod perm="a+x">
+            <fileset dir="${distr}">
+                <include name="server-access"/>
+            </fileset>
+        </chmod>
+    </target>
 
     <target
         name="jar"

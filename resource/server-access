@@ -17,10 +17,10 @@ function detect_swt() {
 
 unset CDPATH
 
-cd "$(dirname "${BASH_SOURCE[0]}")"/..
+cd "$(dirname "${BASH_SOURCE[0]}")"
 
 SWT=`detect_swt`
-FLAGS="-Dswt.library.path=/usr/lib/jni -cp distr/servacc.jar:lib/mindterm.jar:$SWT"
+FLAGS="-Dswt.library.path=/usr/lib/jni -cp servacc.jar:lib/mindterm.jar:$SWT"
 ARCH=`uname -i`
 
 if [ "$ARCH" == "x86_64" ] ;then
