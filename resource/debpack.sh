@@ -60,9 +60,9 @@ cat <<-EOF > "$tmpdir/DEBIAN/control"
 Package: $NAME
 Version: $VERSION
 Provides: $NAME
-Maintainer: gfrolov <gfrolov@naumen.ru>
+Maintainer: Grigori Frolov <gfrolov@naumen.ru>
 Architecture: all
-Section: misc
+Section: net
 Source: https://github.com/w31rd0/ServerAccess
 Description: An SSH,FTP and HTTP client.
  A tool for getting servers info from db and connecting to selected servers by ssh
