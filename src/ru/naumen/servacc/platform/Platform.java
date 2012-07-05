@@ -16,7 +16,7 @@ public interface Platform
 
     void openInBrowser(String url) throws IOException;
 
-    File getConfigFile() throws IOException;
+    File getConfigDirectory() throws IOException;
 
     boolean isTraySupported();
 

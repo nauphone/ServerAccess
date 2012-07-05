@@ -32,7 +32,7 @@ public class MacOsX implements Platform
     }
 
     @Override
-    public File getConfigFile() throws IOException
+    public File getConfigDirectory() throws IOException
     {
         final String userHome = System.getProperty("user.home");
         File appDirectory = new File(userHome, "Library/Application Support");

@@ -28,7 +28,7 @@ public class Linux implements Platform
     }
 
     @Override
-    public File getConfigFile() throws IOException
+    public File getConfigDirectory() throws IOException
     {
         final String userHome = System.getProperty("user.home");
         return new File(userHome, ".serveraccess");

@@ -48,7 +48,7 @@ public class Main implements Runnable
         {
             // Create GUI
             Platform platform = Util.platform();
-            applicationProperties = new ApplicationProperties(platform);
+            applicationProperties = new ApplicationProperties( platform.getConfigDirectory() );
             Display display = new Display();
             shell = createShell(display);
             controller = new UIController(shell, platform, new Backend(platform), applicationProperties);

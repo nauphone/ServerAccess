@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Properties;
 
 import ru.naumen.servacc.FileResource;
-import ru.naumen.servacc.platform.Platform;
 
 /**
  * Creates and manages application properties.
@@ -29,44 +28,12 @@ import ru.naumen.servacc.platform.Platform;
  */
 public class ApplicationProperties
 {
-    private final Platform platform;
+    public final File appDirectory;
 
-    public ApplicationProperties(Platform platform)
+    public ApplicationProperties( File configDirectory ) throws IOException
     {
-        this.platform = platform;
-    }
-
-    public PropertiesFile getAppProperties() throws Exception
-    {
-        PropertiesFile propertiesFile = new PropertiesFile();
-        propertiesFile.load(getConfigFile());
-        return propertiesFile;
-    }
-
-    public File getConfigFile() throws IOException
-    {
-        File appDirectory = platform.getConfigFile();
+        appDirectory = configDirectory;
         appDirectory.mkdirs();
-        File configFile = new File(appDirectory, "serveraccess.properties");
-        if (configFile.createNewFile())
-        {
-            writeDefaultConfiguration(appDirectory, configFile);
-        }
-        return configFile;
-    }
-
-    private void writeDefaultConfiguration(File appDirectory, File configFile) throws IOException
-    {
-        String data;
-        File accountsFile = new File(appDirectory, "accounts.xml");
-        if (accountsFile.createNewFile())
-        {
-            data = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>"
-                    + System.getProperty("line.separator") + "<Accounts version=\"2\"></Accounts>";
-            new FileOutputStream(accountsFile).write(data.getBytes());
-        }
-        data = "source=" + FileResource.uriPrefix + accountsFile.getPath();
-        new FileOutputStream(configFile).write(data.getBytes());
     }
 
     public Collection<String> getConfigSources() throws Exception
@@ -83,5 +50,39 @@ public class ApplicationProperties
             }
         }
         return result;
+    }
+
+    public PropertiesFile getAppProperties() throws Exception
+    {
+        PropertiesFile propertiesFile = new PropertiesFile();
+        propertiesFile.load(getConfigFile());
+        return propertiesFile;
+    }
+
+    public File getConfigFile() throws IOException
+    {
+        File configFile = new File(appDirectory, "serveraccess.properties" );
+        if (configFile.createNewFile())
+        {
+            writeDefaultConfiguration(configFile);
+        }
+        return configFile;
+    }
+
+    private void writeDefaultConfiguration( File configFile ) throws IOException
+    {
+        File accountsFile = new File(appDirectory, "accounts.xml" );
+        if (accountsFile.createNewFile())
+        {
+            write( accountsFile, String.format(
+                    "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>%s<Accounts version=\"2\"></Accounts>",
+                    System.getProperty( "line.separator" ) ) );
+        }
+        write( configFile, "source=" + FileResource.uriPrefix + accountsFile.getPath() );
+    }
+
+    private void write( File file, String content ) throws IOException
+    {
+        new FileOutputStream(file).write( content.getBytes() );
     }
 }

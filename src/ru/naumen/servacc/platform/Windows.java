@@ -31,7 +31,7 @@ public class Windows implements Platform
     }
 
     @Override
-    public File getConfigFile() throws IOException
+    public File getConfigDirectory() throws IOException
     {
         String appData = System.getenv("APPDATA");
         if (Util.isEmptyOrNull(appData))
