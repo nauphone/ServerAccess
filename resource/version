@@ -1,0 +1,26 @@
+#!/bin/bash
+# KISS version control
+
+function usage() {
+    echo usage: version old_value new_value
+}
+
+old_version=$1
+new_version=$2
+
+if [[ "$old_version" == "" || "$new_version" == "" ]]; then
+    usage
+    exit 1
+fi
+
+# add here files to change
+files_to_change=( build.xml VERSION.TXT resource/naumen-server-access.spec )
+
+# move to the project root dir
+unset CDPATH
+cd "$(dirname "${BASH_SOURCE[0]}")"/..
+
+for a_file in "${files_to_change[@]}"
+do
+    sed -i "s/$old_version/$new_version/" $a_file
+done
