@@ -21,7 +21,7 @@ import ru.naumen.servacc.HTTPResource;
 import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
-import ru.naumen.servacc.util.ApplicationProperties;
+import ru.naumen.servacc.settings.SourceListProvider;
 import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
 
 public class ConfigLoader
@@ -29,19 +29,19 @@ public class ConfigLoader
     private Map<String, String[]> authCache = new HashMap<String, String[]>();
     private final UIController controller;
     private final Shell shell;
-    private final ApplicationProperties applicationProperties;
+    private final SourceListProvider sourceListProvider;
 
-    public ConfigLoader(UIController controller, Shell shell, ApplicationProperties applicationProperties )
+    public ConfigLoader(UIController controller, Shell shell, SourceListProvider sourceListProvider)
     {
         this.controller = controller;
         this.shell = shell;
-        this.applicationProperties = applicationProperties;
+        this.sourceListProvider = sourceListProvider;
     }
 
     public IConfig loadConfig() throws Exception
     {
         CompositeConfig compositeConfig = new CompositeConfig();
-        Collection<String> sources = applicationProperties.getConfigSources();
+        Collection<String> sources = sourceListProvider.list();
         for (String source : sources)
         {
             try

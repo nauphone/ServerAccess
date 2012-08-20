@@ -10,11 +10,11 @@
 package ru.naumen.servacc.ui;
 
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
@@ -57,6 +57,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.SocketUtils;
@@ -70,7 +71,7 @@ import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.util.ApplicationProperties;
+import ru.naumen.servacc.settings.SourceListProvider;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
@@ -78,7 +79,7 @@ public class UIController
 {
     private final Shell shell;
     private final Platform platform;
-    private final ApplicationProperties applicationProperties;
+    private final SourceListProvider sourceListProvider;
 
     private Clipboard clipboard;
     private Backend backend;
@@ -101,14 +102,14 @@ public class UIController
 
     private Timer refreshTimer;
 
-    public UIController(Shell shell, Platform platform, Backend backend, ApplicationProperties applicationProperties)
+    public UIController(Shell shell, Platform platform, Backend backend, SourceListProvider sourceListProvider)
     {
         this.shell = shell;
         this.platform = platform;
-        this.applicationProperties = applicationProperties;
+        this.sourceListProvider = sourceListProvider;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
-        this.configLoader = new ConfigLoader(this, shell, applicationProperties);
+        this.configLoader = new ConfigLoader(this, shell, sourceListProvider);
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
@@ -666,7 +667,7 @@ public class UIController
     {
         try
         {
-            Collection<String> configSources = applicationProperties.getConfigSources();
+            Collection<String> configSources = sourceListProvider.list();
 
             int encryptableFiles = 0;
             for (String config : configSources)
@@ -712,7 +713,7 @@ public class UIController
     {
         try
         {
-            Collection<String> configSources = applicationProperties.getConfigSources();
+            Collection<String> configSources = sourceListProvider.list();
 
             int decryptableFiles = 0;
             for (String config : configSources)
@@ -742,7 +743,7 @@ public class UIController
                 showAlert("All accounts are already decrypted");
             }
         }
-        catch (Exception e)
+        catch (IOException e)
         {
             showAlert(e.getMessage());
         }

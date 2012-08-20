@@ -7,7 +7,7 @@
  * packaging of this file.
  *
  */
-package ru.naumen.servacc.util;
+package ru.naumen.servacc.settings;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,8 +22,14 @@ public class PropertiesFile extends Properties
 {
     private static final long serialVersionUID = 8932887805597715912L;
     private Boolean isXML = false;
+    private File file;
 
-    public void load(File file) throws IOException
+    public PropertiesFile(File file)
+    {
+        this.file = file;
+    }
+
+    public void load() throws IOException
     {
         try
         {
@@ -41,10 +47,10 @@ public class PropertiesFile extends Properties
         isXML = true;
     }
 
-    public void store(File file) throws IOException
+    public void store() throws IOException
     {
         OutputStream os = new FileOutputStream(file);
-        String comment = "";
+        String comment = "This file is auto-generated. DO NOT EDIT IT MANUALLY";
         if (isXML)
         {
             super.storeToXML(os, comment);

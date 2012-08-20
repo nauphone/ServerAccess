@@ -82,6 +82,7 @@
             <fileset dir="resource">
                 <include name="*.ico" />
                 <include name="icons/**" />
+                <include name="defaults/**" />
             </fileset>
         </jar>
     </target>

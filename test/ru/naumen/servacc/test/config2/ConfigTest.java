@@ -7,13 +7,17 @@
  * packaging of this file.
  *
  */
-package ru.naumen.servacc.config2;
+package ru.naumen.servacc.test.config2;
 
 import java.io.InputStream;
 
 import org.junit.Assert;
 import org.junit.Test;
-
+import ru.naumen.servacc.config2.Account;
+import ru.naumen.servacc.config2.Config;
+import ru.naumen.servacc.config2.Group;
+import ru.naumen.servacc.config2.HTTPAccount;
+import ru.naumen.servacc.config2.SSHAccount;
 
 public class ConfigTest
 {

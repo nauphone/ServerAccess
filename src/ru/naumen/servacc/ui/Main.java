@@ -10,7 +10,6 @@
 package ru.naumen.servacc.ui;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -19,8 +18,9 @@ import org.eclipse.swt.widgets.Shell;
 
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.util.ApplicationProperties;
-import ru.naumen.servacc.util.PropertiesFile;
+import ru.naumen.servacc.settings.ApplicationProperties;
+import ru.naumen.servacc.settings.DefaultConfiguration;
+import ru.naumen.servacc.settings.ShellConfiguration;
 import ru.naumen.servacc.util.Util;
 
 public class Main implements Runnable
@@ -28,95 +28,52 @@ public class Main implements Runnable
     private static final String WINDOW_HEADER = "Server Access";
     private static final String WINDOW_ICON = "/prog.ico";
 
-    private static final String WINDOW_X = "window.x";
-    private static final String WINDOW_Y = "window.y";
-    private static final String WINDOW_WIDTH = "window.width";
-    private static final String WINDOW_HEIGHT = "window.height";
-
     public static void main(String[] args) throws Exception
     {
         new Main().run();
     }
 
-    private ApplicationProperties applicationProperties;
-    private Shell shell;
-    private UIController controller;
-
     public void run()
     {
-        try
-        {
-            // Create GUI
-            Platform platform = Util.platform();
-            applicationProperties = new ApplicationProperties( platform.getConfigDirectory() );
-            Display display = new Display();
-            shell = createShell(display);
-            controller = new UIController(shell, platform, new Backend(platform), applicationProperties);
-            shell.open();
-            // Load accounts
-            controller.reloadConfig();
+        // Create GUI
+        Platform platform = Util.platform();
+        DefaultConfiguration configuration = DefaultConfiguration.create(platform);
 
-            while (!shell.isDisposed())
-            {
-                if (!display.readAndDispatch())
-                {
-                    display.sleep();
-                }
-            }
-            display.dispose();
-            controller.cleanup();
-        }
-        catch (Exception e)
+        Display display = new Display();
+        Shell shell = createShell(display, configuration.getWindowProperties());
+        UIController controller = new UIController(shell, platform, new Backend(platform), configuration.sourceListProvider());
+        shell.open();
+        // Load accounts
+        controller.reloadConfig();
+
+        while (!shell.isDisposed())
         {
-            e.printStackTrace();
+            if (!display.readAndDispatch())
+            {
+                display.sleep();
+            }
         }
+        display.dispose();
+        controller.cleanup();
     }
 
-    private Shell createShell(Display display) throws Exception
+    private Shell createShell(Display display, ApplicationProperties windowProperties)
     {
-        final Shell shell = new Shell(display);
+        Shell shell = new Shell(display);
         shell.setText(WINDOW_HEADER);
         shell.setImage(ImageCache.getImage(WINDOW_ICON, 1));
         shell.setLayout(new GridLayout());
+        final ShellConfiguration config = new ShellConfiguration(shell, windowProperties);
         // dispose handler
         shell.addListener(SWT.Dispose, new Listener()
         {
             @Override
             public void handleEvent(Event event)
             {
-                try
-                {
-                    storeShellPosition(shell);
-                }
-                catch (Exception e)
-                {
-                }
+                config.storePosition();
             }
         });
-        restoreShellPosition(shell);
+        config.restorePosition();
         return shell;
-    }
-
-    private void storeShellPosition(Shell shell) throws Exception
-    {
-        PropertiesFile propertiesFile = applicationProperties.getAppProperties();
-        Rectangle bounds = shell.getBounds();
-        propertiesFile.setProperty(WINDOW_X, String.valueOf(bounds.x));
-        propertiesFile.setProperty(WINDOW_Y, String.valueOf(bounds.y));
-        propertiesFile.setProperty(WINDOW_WIDTH, String.valueOf(bounds.width));
-        propertiesFile.setProperty(WINDOW_HEIGHT, String.valueOf(bounds.height));
-        propertiesFile.store(applicationProperties.getConfigFile());
-    }
-
-    private void restoreShellPosition(Shell shell) throws Exception
-    {
-        PropertiesFile propertiesFile = applicationProperties.getAppProperties();
-        Rectangle bounds = shell.getBounds();
-        shell.setBounds(
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
-        );
     }
 }
