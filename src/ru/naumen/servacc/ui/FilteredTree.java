@@ -57,7 +57,7 @@ public class FilteredTree extends Composite
             composite.setLayout(compositeLayout);
             composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
             Label magnifier = new Label(composite, SWT.NONE);
-            magnifier.setImage(UIController.getImage("/icons/magnifier-left.png"));
+            magnifier.setImage(ImageCache.getImage("/icons/magnifier-left.png"));
             magnifier.addMouseListener(new MouseAdapter()
             {
                 public void mouseDown(MouseEvent e)

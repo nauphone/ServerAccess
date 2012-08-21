@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -40,8 +39,6 @@ import org.eclipse.swt.events.ShellEvent;
 import org.eclipse.swt.events.ShellListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
-import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -104,16 +101,14 @@ public class UIController
 
     private Timer refreshTimer;
 
-    private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
-
-    public UIController(Shell shell, Platform platform, Backend backend, ApplicationProperties applicationProperties )
+    public UIController(Shell shell, Platform platform, Backend backend, ApplicationProperties applicationProperties)
     {
         this.shell = shell;
         this.platform = platform;
         this.applicationProperties = applicationProperties;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
-        this.configLoader = new ConfigLoader(this, shell, applicationProperties );
+        this.configLoader = new ConfigLoader(this, shell, applicationProperties);
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
@@ -152,29 +147,6 @@ public class UIController
         }
     }
 
-    public static Image getImage(String name)
-    {
-        return getImage(name, 0);
-    }
-
-    public static Image getImage(String name, int index)
-    {
-        ImageKey key = new ImageKey(name, index);
-        if (images.containsKey(key))
-        {
-            return images.get(key);
-        }
-        else
-        {
-            ImageLoader imageLoader = new ImageLoader();
-            InputStream is = UIController.class.getResourceAsStream(name);
-            ImageData[] data = imageLoader.load(is);
-            Image image = new Image(Display.getCurrent(), data[index]);
-            images.put(key, image);
-            return image;
-        }
-    }
-
     public void showAlert(String text)
     {
         MessageBox mb = new MessageBox(shell, SWT.SHEET);
@@ -205,29 +177,29 @@ public class UIController
 
         toolitemConnect = new ToolItem(toolbar, SWT.PUSH);
         toolitemConnect.setText("Connect");
-        toolitemConnect.setImage(getImage("/icons/lightning.png"));
+        toolitemConnect.setImage(ImageCache.getImage("/icons/lightning.png"));
         toolitemConnect.setEnabled(false);
 
         toolitemPortForwarding = new ToolItem(toolbar, SWT.PUSH);
         toolitemPortForwarding.setText("Port Forwarding");
-        toolitemPortForwarding.setImage(getImage("/icons/arrow-curve.png"));
+        toolitemPortForwarding.setImage(ImageCache.getImage("/icons/arrow-curve.png"));
         toolitemPortForwarding.setEnabled(false);
 
         toolitemFTP = new ToolItem(toolbar, SWT.PUSH);
         toolitemFTP.setText("FTP");
-        toolitemFTP.setImage(getImage("/icons/drive-network.png"));
+        toolitemFTP.setImage(ImageCache.getImage("/icons/drive-network.png"));
         toolitemFTP.setEnabled(false);
 
         toolitemCopy = new ToolItem(toolbar, SWT.PUSH);
         toolitemCopy.setText("Copy Password");
-        toolitemCopy.setImage(getImage("/icons/document-copy.png"));
+        toolitemCopy.setImage(ImageCache.getImage("/icons/document-copy.png"));
         toolitemCopy.setEnabled(false);
 
         new ToolItem(toolbar, SWT.SEPARATOR);
 
         toolitemReloadConfig = new ToolItem(toolbar, SWT.PUSH);
         toolitemReloadConfig.setText("Reload Accounts");
-        toolitemReloadConfig.setImage(getImage("/icons/arrow-circle-double.png"));
+        toolitemReloadConfig.setImage(ImageCache.getImage("/icons/arrow-circle-double.png"));
 
         toolbar.pack();
 
@@ -454,7 +426,7 @@ public class UIController
     private void createTrayItem()
     {
         TrayItem trayItem = new TrayItem(shell.getDisplay().getSystemTray(), SWT.NULL);
-        trayItem.setImage(getImage("/prog.ico", 1));
+        trayItem.setImage(ImageCache.getImage("/prog.ico", 1));
         trayItem.setVisible(true);
         // set up hide-to-tray behavior
         trayItem.addSelectionListener(new SelectionListener()
@@ -532,7 +504,8 @@ public class UIController
         }
     }
 
-    private void createEncryptMenuItem(final Menu menu) {
+    private void createEncryptMenuItem(final Menu menu)
+    {
         final MenuItem itemEncrypt = new MenuItem(menu, SWT.NULL);
         itemEncrypt.setText("Encrypt Local Accounts");
         itemEncrypt.addListener(SWT.Selection, new Listener()
@@ -544,7 +517,8 @@ public class UIController
         });
     }
 
-    private void createDecryptMenuItem(final Menu menu) {
+    private void createDecryptMenuItem(final Menu menu)
+    {
         final MenuItem itemDecrypt = new MenuItem(menu, SWT.NULL);
         itemDecrypt.setText("Decrypt Local Accounts");
         itemDecrypt.addListener(SWT.Selection, new Listener()
@@ -998,46 +972,5 @@ public class UIController
         };
         refreshTimer = new Timer();
         refreshTimer.schedule(refreshTask, delay);
-    }
-
-    private final static class ImageKey implements Comparable<ImageKey>
-    {
-        private final String name;
-        private final int index;
-
-        public ImageKey(String name, int index)
-        {
-            this.name = name;
-            this.index = index;
-        }
-
-        public int compareTo(ImageKey other)
-        {
-            int result = name.compareTo(other.name);
-            if (result == 0)
-            {
-                result = Integer.valueOf(index).compareTo(other.index);
-            }
-            return result;
-        }
-
-        public boolean equals(Object other)
-        {
-            if (other instanceof ImageKey)
-            {
-                return compareTo((ImageKey) other) == 0;
-            }
-            return false;
-        }
-
-        public int hashCode()
-        {
-            return toString().hashCode();
-        }
-
-        public String toString()
-        {
-            return name + ", " + index;
-        }
     }
 }

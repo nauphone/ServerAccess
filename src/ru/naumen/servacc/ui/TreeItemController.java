@@ -118,19 +118,19 @@ public class TreeItemController
     {
         if (data instanceof SSHAccount)
         {
-            return UIController.getImage("/icons/application-terminal.png");
+            return ImageCache.getImage("/icons/application-terminal.png");
         }
         else if (data instanceof HTTPAccount)
         {
-            return UIController.getImage("/icons/application-browser.png");
+            return ImageCache.getImage("/icons/application-browser.png");
         }
         else if (data instanceof Account)
         {
-            return UIController.getImage("/icons/card.png");
+            return ImageCache.getImage("/icons/card.png");
         }
         else if (data instanceof Group && platform.displayFolderIcon())
         {
-            return UIController.getImage("/icons/folder-horizontal.png");
+            return ImageCache.getImage("/icons/folder-horizontal.png");
         }
         else
         {

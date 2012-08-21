@@ -76,7 +76,7 @@ public class Main implements Runnable
     {
         final Shell shell = new Shell(display);
         shell.setText(WINDOW_HEADER);
-        shell.setImage(UIController.getImage(WINDOW_ICON, 1));
+        shell.setImage(ImageCache.getImage(WINDOW_ICON, 1));
         shell.setLayout(new GridLayout());
         // dispose handler
         shell.addListener(SWT.Dispose, new Listener()
@@ -113,10 +113,10 @@ public class Main implements Runnable
         PropertiesFile propertiesFile = applicationProperties.getAppProperties();
         Rectangle bounds = shell.getBounds();
         shell.setBounds(
-            Integer.parseInt(propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
-            Integer.parseInt(propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
-            Integer.parseInt(propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
-            Integer.parseInt(propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
+                Integer.parseInt(propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
+                Integer.parseInt(propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
+                Integer.parseInt(propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
+                Integer.parseInt(propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
         );
     }
 }
