@@ -29,16 +29,6 @@ public class DialogBase
     protected boolean result = false;
     protected int cols;
 
-    public DialogBase(Shell parent)
-    {
-        this(parent, 0, 0);
-    }
-
-    public DialogBase(Shell parent, int style)
-    {
-        this(parent, style, 0);
-    }
-
     public DialogBase(Shell parent, int style, int cols)
     {
         this.cols = cols;
