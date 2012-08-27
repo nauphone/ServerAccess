@@ -17,9 +17,9 @@ import ru.naumen.servacc.util.Util;
 
 public class Account implements IConfigItem
 {
-    public static String ACCOUNT_PARAM_ADDRESS = "address";
-    public static String ACCOUNT_PARAM_LOGIN = "login";
-    public static String ACCOUNT_PARAM_PASSWORD = "password";
+    public static final String ACCOUNT_PARAM_ADDRESS = "address";
+    public static final String ACCOUNT_PARAM_LOGIN = "login";
+    public static final String ACCOUNT_PARAM_PASSWORD = "password";
 
     public String type;
     public String id;

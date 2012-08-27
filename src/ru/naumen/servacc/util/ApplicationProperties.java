@@ -28,7 +28,7 @@ import ru.naumen.servacc.FileResource;
  */
 public class ApplicationProperties
 {
-    public final File appDirectory;
+    private final File appDirectory;
 
     public ApplicationProperties( File configDirectory ) throws IOException
     {

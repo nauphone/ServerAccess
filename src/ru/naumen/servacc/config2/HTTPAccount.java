@@ -14,8 +14,8 @@ import ru.naumen.servacc.util.Util;
 
 public class HTTPAccount extends Account implements IConnectable
 {
-    public static String HTTPACCOUNT_TYPE = "http";
-    public static String HTTPACCOUNT_PARAM_URL = "url";
+    public static final String HTTPACCOUNT_TYPE = "http";
+    public static final String HTTPACCOUNT_PARAM_URL = "url";
 
     public String getURL()
     {

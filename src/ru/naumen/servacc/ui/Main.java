@@ -25,8 +25,8 @@ import ru.naumen.servacc.util.Util;
 
 public class Main implements Runnable
 {
-    private final static String WINDOW_HEADER = "Server Access";
-    private final static String WINDOW_ICON = "/prog.ico";
+    private static final String WINDOW_HEADER = "Server Access";
+    private static final String WINDOW_ICON = "/prog.ico";
 
     private static final String WINDOW_X = "window.x";
     private static final String WINDOW_Y = "window.y";

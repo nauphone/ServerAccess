@@ -11,5 +11,5 @@ package ru.naumen.servacc.config2.i;
 
 public interface IConfigItem
 {
-    public boolean matches(String filter);
+    boolean matches(String filter);
 }

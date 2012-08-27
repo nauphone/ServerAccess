@@ -9,38 +9,36 @@
  */
 package ru.naumen.servacc.config2;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigItem;
 import ru.naumen.servacc.util.Util;
 
 public class Config implements IConfig
 {
-    public static String GROUP_NODE_NAME = "Group";
-    public static String GROUP_ATTR_NAME = "name";
-    public static String GROUP_ATTR_COMMENT = "comment";
+    public static final String GROUP_NODE_NAME = "Group";
+    public static final String GROUP_ATTR_NAME = "name";
+    public static final String GROUP_ATTR_COMMENT = "comment";
 
-    public static String ACCOUNT_NODE_NAME = "Account";
-    public static String ACCOUNT_ATTR_ID = "id";
-    public static String ACCOUNT_ATTR_TYPE = "type";
-    public static String ACCOUNT_ATTR_NAME = "name";
-    public static String ACCOUNT_ATTR_COMMENT = "comment";
-    public static String ACCOUNT_PARAM_THROUGH = "through";
+    public static final String ACCOUNT_NODE_NAME = "Account";
+    public static final String ACCOUNT_ATTR_ID = "id";
+    public static final String ACCOUNT_ATTR_TYPE = "type";
+    public static final String ACCOUNT_ATTR_NAME = "name";
+    public static final String ACCOUNT_ATTR_COMMENT = "comment";
+    public static final String ACCOUNT_PARAM_THROUGH = "through";
 
-    public static String PARAM_NODE_NAME = "Param";
-    public static String PARAM_ATTR_NAME = "name";
-    public static String PARAM_ATTR_VALUE = "value";
+    public static final String PARAM_NODE_NAME = "Param";
+    public static final String PARAM_ATTR_NAME = "name";
+    public static final String PARAM_ATTR_VALUE = "value";
 
     private Group root;
 

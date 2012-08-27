@@ -13,5 +13,5 @@ import java.util.List;
 
 public interface IConfig
 {
-    public List<IConfigItem> getChildren();
+    List<IConfigItem> getChildren();
 }

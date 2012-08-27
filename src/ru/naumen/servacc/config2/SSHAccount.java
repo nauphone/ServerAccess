@@ -19,9 +19,9 @@ import ru.naumen.servacc.util.Util;
 
 public class SSHAccount extends Account implements IConnectable, IPortForwarder, IFTPBrowseable
 {
-    public static String SSHACCOUNT_TYPE = "ssh";
-    public static String EMPTY_NAME = "*** empty ***";
-    public static int DEFAULT_SSH_PORT = 22;
+    public static final String SSHACCOUNT_TYPE = "ssh";
+    public static final String EMPTY_NAME = "*** empty ***";
+    public static final int DEFAULT_SSH_PORT = 22;
 
     private String host;
     private Integer port;
