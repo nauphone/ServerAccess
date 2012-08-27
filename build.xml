@@ -73,7 +73,7 @@
 
     <target
         name="jar"
-        depends="java-build"
+        depends="java-build,test"
         description="--> build jar">
         <jar
             destfile="${distr}/servacc.jar"
