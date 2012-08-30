@@ -156,7 +156,7 @@
     </target>
 
     <target name="test" depends="java-build,test-build,copy-test-resources">
-        <junit showoutput="true" failureproperty="junit.failure">
+        <junit showoutput="true" failureproperty="junit.failure" fork="yes">
             <classpath>
                 <path refid="test.class.path" />
                 <path refid="saclient.class.path" />
