@@ -11,13 +11,11 @@ package ru.naumen.servacc.ui;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 import org.eclipse.swt.widgets.Shell;
-
 import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.HTTPResource;
 import ru.naumen.servacc.config2.CompositeConfig;
@@ -42,26 +40,21 @@ public class ConfigLoader
 
     public IConfig loadConfig() throws Exception
     {
-        Properties properties = applicationProperties.getAppProperties();
         CompositeConfig compositeConfig = new CompositeConfig();
-        String[] keys = properties.keySet().toArray(new String[] {});
-        Arrays.sort(keys);
-        for (String key : keys)
+        Collection<String> sources = applicationProperties.getConfigSources();
+        for (String source : sources)
         {
-            if (key.matches("source[0-9]*"))
+            try
             {
-                try
+                IConfig config = loadConfig(source);
+                if (config != null)
                 {
-                    IConfig config = loadConfig((String) properties.get(key));
-                    if (config != null)
-                    {
-                        compositeConfig.add(config);
-                    }
+                    compositeConfig.add(config);
                 }
-                catch (Exception e)
-                {
-                    controller.showAlert(e.getLocalizedMessage());
-                }
+            }
+            catch (Exception e)
+            {
+                controller.showAlert(e.getLocalizedMessage());
             }
         }
         return compositeConfig;
