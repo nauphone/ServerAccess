@@ -95,12 +95,12 @@ public class Config implements IConfig
                 if (GROUP_NODE_NAME.equals(name))
                 {
                     Group subGroup = parseGroup(node);
-                    group.children.add(subGroup);
+                    group.getChildren().add(subGroup);
                     recursiveParseGroup(subGroup, node);
                 }
                 else if (ACCOUNT_NODE_NAME.equals(name))
                 {
-                    group.children.add(parseAccount(node));
+                    group.getChildren().add(parseAccount(node));
                 }
             }
         }

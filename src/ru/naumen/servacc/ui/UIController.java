@@ -429,7 +429,7 @@ public class UIController
         {
             for (IConfigItem i : ((Group) object).getChildren())
             {
-                String newPrefix = ((Group) object).name;
+                String newPrefix = ((Group) object).getName();
                 if (!Util.isEmptyOrNull(prefix))
                 {
                     newPrefix = prefix + " > " + newPrefix;

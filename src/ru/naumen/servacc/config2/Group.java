@@ -17,9 +17,9 @@ import ru.naumen.servacc.util.Util;
 
 public class Group implements IConfigItem
 {
-    public String name;
-    public String comment;
-    public List<IConfigItem> children;
+    private String name;
+    private String comment;
+    private List<IConfigItem> children;
 
     public Group()
     {
@@ -36,6 +36,16 @@ public class Group implements IConfigItem
     {
         this(name);
         this.comment = comment;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public String getComment()
+    {
+        return comment;
     }
 
     public List<IConfigItem> getChildren()
