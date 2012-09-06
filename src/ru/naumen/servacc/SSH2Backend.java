@@ -195,9 +195,9 @@ public class SSH2Backend
     protected SSHAccount getThrough(Account account)
     {
         SSHAccount throughAccount = null;
-        if (account.through instanceof SSHAccount)
+        if (account.getThrough() instanceof SSHAccount)
         {
-            throughAccount = (SSHAccount) account.through;
+            throughAccount = (SSHAccount) account.getThrough();
         }
         else if (globalThrough instanceof SSHAccount)
         {

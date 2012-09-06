@@ -29,7 +29,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
 
     private void parseHostAndPort()
     {
-        String host = params.get(ACCOUNT_PARAM_ADDRESS);
+        String host = getParams().get(ACCOUNT_PARAM_ADDRESS);
         Integer port = Integer.valueOf(DEFAULT_SSH_PORT);
         String[] parts = host.split(":", 2);
         if (parts.length > 1)
@@ -62,7 +62,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     public String toString()
     {
         String result = "";
-        String address = params.get(ACCOUNT_PARAM_ADDRESS);
+        String address = getParams().get(ACCOUNT_PARAM_ADDRESS);
         if (!Util.isEmptyOrNull(address))
         {
             if (!Util.isEmptyOrNull(getLogin()))
@@ -86,16 +86,16 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
             // follow 'through' links
             SSHAccount cur = this;
             List<String> ids = new ArrayList<String>();
-            while (cur.through instanceof SSHAccount)
+            while (cur.getThrough() instanceof SSHAccount)
             {
-                cur = (SSHAccount) cur.through;
-                if (ids.contains(cur.id))
+                cur = (SSHAccount) cur.getThrough();
+                if (ids.contains(cur.getId()))
                 {
                     // circular reference detected
                     System.err.println("Circular reference detected: " + uniqueIdentity);
                     break;
                 }
-                ids.add(cur.id);
+                ids.add(cur.getId());
                 uniqueIdentity += " via " + getSignature(cur);
             }
         }
@@ -104,7 +104,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
 
     private static String getSignature(SSHAccount account)
     {
-        String address = account.params.get(ACCOUNT_PARAM_ADDRESS);
+        String address = account.getParams().get(ACCOUNT_PARAM_ADDRESS);
         String login = account.getLogin();
         return "ssh://" + login + "@" + address;
     }

@@ -76,7 +76,7 @@ public class Config implements IConfig
             // update 'through' references
             for (Entry<Account, String> e : needsThrough.entrySet())
             {
-                e.getKey().through = accounts.get(e.getValue());
+                e.getKey().setThrough(accounts.get(e.getValue()));
             }
             return rootGroup;
         }
@@ -150,13 +150,13 @@ public class Config implements IConfig
             {
                 account = new Account();
             }
-            account.id = id;
-            account.type = type;
-            account.name = name;
-            account.comment = comment;
-            account.params = params;
-            accounts.put(account.id, account);
-            String through = account.params.get(ACCOUNT_PARAM_THROUGH);
+            account.setId(id);
+            account.setType(type);
+            account.setName(name);
+            account.setComment(comment);
+            account.setParams(params);
+            accounts.put(account.getId(), account);
+            String through = account.getParams().get(ACCOUNT_PARAM_THROUGH);
             if (!Util.isEmptyOrNull(through))
             {
                 needsThrough.put(account, through);

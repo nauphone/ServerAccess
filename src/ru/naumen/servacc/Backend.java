@@ -105,7 +105,7 @@ public class Backend extends SSH2Backend
                 throw new IOException("Failed to get PTY on remote side");
             }
             final Socket term = openTerminal(account);
-            final ConsoleManager console = new ConsoleManager(term, session, account.params);
+            final ConsoleManager console = new ConsoleManager(term, session, account.getParams());
             if (platform.needToNegotiateProtocolOptions())
             {
                 // TODO: probably this should be done regardless of the TELNET
@@ -132,9 +132,9 @@ public class Backend extends SSH2Backend
     private Socket openTerminal(SSHAccount account) throws Exception
     {
         String options = new String();
-        if (account.params.containsKey("putty_options"))
+        if (account.getParams().containsKey("putty_options"))
         {
-            options = account.params.get("putty_options");
+            options = account.getParams().get("putty_options");
         }
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try

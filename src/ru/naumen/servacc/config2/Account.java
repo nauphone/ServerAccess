@@ -21,16 +21,16 @@ public class Account implements IConfigItem
     public static final String ACCOUNT_PARAM_LOGIN = "login";
     public static final String ACCOUNT_PARAM_PASSWORD = "password";
 
-    public String type;
-    public String id;
-    public String name;
-    public String comment;
-    public Account through;
-    public Map<String, String> params;
+    private String type;
+    private String id;
+    private String name;
+    private String comment;
+    private Account through;
+    private Map<String, String> params;
 
     public Account()
     {
-        params = new HashMap<String, String>();
+        this.params = new HashMap<String, String>();
     }
 
     public String getLogin()
@@ -43,9 +43,69 @@ public class Account implements IConfigItem
         return params.get(ACCOUNT_PARAM_PASSWORD);
     }
 
+    public String getType()
+    {
+        return type;
+    }
+
+    public void setType(String type)
+    {
+        this.type = type;
+    }
+
+    public String getId()
+    {
+        return id;
+    }
+
+    public void setId(String id)
+    {
+        this.id = id;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public String getComment()
+    {
+        return comment;
+    }
+
+    public void setComment(String comment)
+    {
+        this.comment = comment;
+    }
+
+    public Account getThrough()
+    {
+        return through;
+    }
+
+    public void setThrough(Account through)
+    {
+        this.through = through;
+    }
+
+    public Map<String, String> getParams()
+    {
+        return params;
+    }
+
+    public void setParams(Map<String, String> params)
+    {
+        this.params = params;
+    }
+
     public String toString()
     {
-        String result = "(" + type + ")";
+        String result = "(" + getType() + ")";
         String login = params.get(ACCOUNT_PARAM_LOGIN);
         String address = params.get(ACCOUNT_PARAM_ADDRESS);
         if (!Util.isEmptyOrNull(address))
