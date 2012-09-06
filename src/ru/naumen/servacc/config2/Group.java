@@ -23,19 +23,14 @@ public class Group implements IConfigItem
 
     public Group()
     {
-        children = new Vector<IConfigItem>();
-    }
-
-    public Group(String name)
-    {
-        this();
-        this.name = name;
+        this("", "");
     }
 
     public Group(String name, String comment)
     {
-        this(name);
         this.comment = comment;
+        this.name = name;
+        children = new Vector<IConfigItem>();
     }
 
     public String getName()
