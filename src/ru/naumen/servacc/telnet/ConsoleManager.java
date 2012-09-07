@@ -109,7 +109,7 @@ public class ConsoleManager
             Vector<Integer> lst = new Vector<Integer>();
             while (val != IAC)
             {
-                lst.add(new Integer(val));
+                lst.add(Integer.valueOf(val));
                 val = super.read();
             }
             super.read();

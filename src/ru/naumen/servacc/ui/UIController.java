@@ -1018,7 +1018,7 @@ public class UIController
             int result = name.compareTo(other.name);
             if (result == 0)
             {
-                result = new Integer(index).compareTo(other.index);
+                result = Integer.valueOf(index).compareTo(other.index);
             }
             return result;
         }
