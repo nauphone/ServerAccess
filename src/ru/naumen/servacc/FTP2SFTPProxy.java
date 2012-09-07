@@ -40,15 +40,9 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
     private String user;
     private SSH2SFTP.FileAttributes attrs;
 
-    protected FTP2SFTPProxy(InputStream ftpInput, OutputStream ftpOutput, String identity, boolean needPassword)
-    {
-        initFTP(ftpInput, ftpOutput, identity, needPassword);
-    }
-
     public FTP2SFTPProxy(SSH2Connection connection, InputStream ftpInput, OutputStream ftpOutput, String identity) throws SSH2SFTP.SFTPException
     {
         initSFTP(connection);
-        // sftp.opendir("/");
         initFTP(ftpInput, ftpOutput, identity, false);
     }
 
@@ -86,7 +80,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
      *            The ftp command output stream.
      * @param identity
      *            Username to log in as
-     * @param needPassowrd
+     * @param needPassword
      *            Tells the instance if it should request a password or not from
      *            the user. The actual password the user then gives is ignored.
      */
@@ -119,7 +113,6 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
             return false;
         }
         remoteDir = "/";
-        // remoteDir = attrs.lname;
         this.user = user;
         return true;
     }
