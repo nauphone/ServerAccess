@@ -12,6 +12,7 @@ package ru.naumen.servacc.ui;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +20,6 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.Vector;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -60,7 +60,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.SocketUtils;
@@ -802,7 +801,7 @@ public class UIController
     // Fill tree with data
     private void updateTree(String filter)
     {
-        List<String> filters = new Vector<String>();
+        List<String> filters = new ArrayList<String>();
         if (!Util.isEmptyOrNull(filter))
         {
             for (String substr : filter.split(" "))

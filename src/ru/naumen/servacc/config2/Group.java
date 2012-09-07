@@ -9,8 +9,8 @@
  */
 package ru.naumen.servacc.config2;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
 import ru.naumen.servacc.config2.i.IConfigItem;
 import ru.naumen.servacc.util.Util;
@@ -30,7 +30,7 @@ public class Group implements IConfigItem
     {
         this.comment = comment;
         this.name = name;
-        children = new Vector<IConfigItem>();
+        children = new ArrayList<IConfigItem>();
     }
 
     public String getName()

@@ -15,8 +15,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PushbackInputStream;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.logging.Logger;
 
 import com.mindbright.ssh2.SSH2SessionChannel;
@@ -106,14 +107,14 @@ public class ConsoleManager
         {
             int command = super.read();
             int val = super.read();
-            Vector<Integer> lst = new Vector<Integer>();
+            List<Integer> lst = new ArrayList<Integer>();
             while (val != IAC)
             {
                 lst.add(Integer.valueOf(val));
                 val = super.read();
             }
             super.read();
-            Integer[] arr = (Integer[]) lst.toArray(new Integer[] {});
+            Integer[] arr = lst.toArray(new Integer[lst.size()]);
             StringBuffer buffer = new StringBuffer();
             switch (command)
             {

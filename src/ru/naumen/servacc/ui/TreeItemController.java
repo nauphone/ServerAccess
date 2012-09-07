@@ -9,9 +9,9 @@
  */
 package ru.naumen.servacc.ui;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Vector;
 
 import org.eclipse.swt.graphics.Image;
 import ru.naumen.servacc.config2.Account;
@@ -40,7 +40,7 @@ public class TreeItemController
     {
         this.parent = parent;
         this.platform = platform;
-        children = new Vector<TreeItemController>();
+        children = new ArrayList<TreeItemController>();
     }
 
     public TreeItemController getParent()
