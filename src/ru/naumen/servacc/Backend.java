@@ -156,7 +156,7 @@ public class Backend extends SSH2Backend
         // Construct URL
         StringBuffer targetURL = new StringBuffer();
         // protocol
-        targetURL.append(url.getProtocol() + "://");
+        targetURL.append(url.getProtocol()).append("://");
         // user (authentication) info
         String userInfo;
         if (account.getLogin() != null)
@@ -171,7 +171,7 @@ public class Backend extends SSH2Backend
         }
         if (!Util.isEmptyOrNull(userInfo))
         {
-            targetURL.append(userInfo + "@");
+            targetURL.append(userInfo).append('@');
         }
         // host and port
         String host = url.getHost();
@@ -185,13 +185,13 @@ public class Backend extends SSH2Backend
             host = SocketUtils.LOCALHOST;
             port = localPort;
         }
-        targetURL.append(host + ":" + port);
+        targetURL.append(host).append(':').append(port);
         // path info
         targetURL.append(url.getPath());
         // query string
         if (url.getQuery() != null)
         {
-            targetURL.append("?" + url.getQuery());
+            targetURL.append('?').append(url.getQuery());
         }
         platform.openInBrowser(targetURL.toString());
     }

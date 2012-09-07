@@ -386,7 +386,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
                     str.append(" ");
                     str.append(rightJustify(Long.toString(list[i].size), 16));
                     str.append(" ");
-                    str.append("" + list[i].mtime);
+                    str.append(list[i].mtime);
                     str.append(" ");
                     str.append(list[i].name);
                     row = str.toString();
