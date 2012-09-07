@@ -814,8 +814,7 @@ public class UIController
                 }
             }
         }
-        HashMap<TreeItemController, Boolean> matchingMemory = new HashMap<TreeItemController, Boolean>();
-        updateBranch(root, filters, matchingMemory);
+        updateBranch(root, filters);
         Tree tree = filteredTree.getTree();
         tree.setRedraw(false);
         tree.removeAll();
@@ -831,7 +830,7 @@ public class UIController
         tree.setRedraw(true);
     }
 
-    private void updateBranch(TreeItemController item, Collection<String> filters, HashMap<TreeItemController, Boolean> matchingMemory)
+    private void updateBranch(TreeItemController item, Collection<String> filters)
     {
         if (filters.size() > 0)
         {
@@ -853,7 +852,7 @@ public class UIController
         }
         for (TreeItemController child : item.getChildren())
         {
-            updateBranch(child, filters, matchingMemory);
+            updateBranch(child, filters);
         }
     }
 
