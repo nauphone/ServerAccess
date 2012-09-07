@@ -375,22 +375,19 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
                 {
                     continue;
                 }
-                String row = list[i].lname;
-                {
-                    StringBuffer str = new StringBuffer();
-                    str.append(list[i].permString());
-                    str.append("    1 ");
-                    str.append(rightJustify(Integer.toString(list[i].uid), 8));
-                    str.append(" ");
-                    str.append(rightJustify(Integer.toString(list[i].gid), 8));
-                    str.append(" ");
-                    str.append(rightJustify(Long.toString(list[i].size), 16));
-                    str.append(" ");
-                    str.append(list[i].mtime);
-                    str.append(" ");
-                    str.append(list[i].name);
-                    row = str.toString();
-                }
+                StringBuffer str = new StringBuffer();
+                str.append(list[i].permString());
+                str.append("    1 ");
+                str.append(rightJustify(Integer.toString(list[i].uid), 8));
+                str.append(" ");
+                str.append(rightJustify(Integer.toString(list[i].gid), 8));
+                str.append(" ");
+                str.append(rightJustify(Long.toString(list[i].size), 16));
+                str.append(" ");
+                str.append(list[i].mtime);
+                str.append(" ");
+                str.append(list[i].name);
+                String row = str.toString();
                 if (row.endsWith("/"))
                 {
                     row = row.substring(0, row.length() - 1);
