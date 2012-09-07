@@ -102,8 +102,7 @@ public class SSH2Backend
         SSH2Authenticator auth = new SSH2Authenticator(login);
         auth.addModule(new SSH2AuthPassword(password));
         auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(password)));
-        SSH2SimpleClient client = new SSH2SimpleClient(transport, auth);
-        return client;
+        return new SSH2SimpleClient(transport, auth);
     }
 
     /**
@@ -129,8 +128,7 @@ public class SSH2Backend
         }
         String login = account.getLogin();
         String password = account.getPassword();
-        SSH2SimpleClient client = createSSH2Client(host, port, login, password);
-        return client;
+        return createSSH2Client(host, port, login, password);
     }
 
     protected SSH2Backend()
