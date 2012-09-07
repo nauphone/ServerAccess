@@ -131,7 +131,7 @@ public class Backend extends SSH2Backend
 
     private Socket openTerminal(SSHAccount account) throws Exception
     {
-        String options = new String();
+        String options = "";
         if (account.getParams().containsKey("putty_options"))
         {
             options = account.getParams().get("putty_options");
