@@ -15,9 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-
-import ru.naumen.servacc.config2.Account;
-import ru.naumen.servacc.config2.SSHAccount;
+import java.util.Map;
 
 import com.mindbright.jca.security.SecureRandom;
 import com.mindbright.ssh2.SSH2AuthKbdInteract;
@@ -27,13 +25,15 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
+import ru.naumen.servacc.config2.Account;
+import ru.naumen.servacc.config2.SSHAccount;
 
 public class SSH2Backend
 {
     protected class ConnectionsManager
     {
         private List<SSH2SimpleClient> connections;
-        private HashMap<String, SSH2SimpleClient> cache;
+        private Map<String, SSH2SimpleClient> cache;
 
         public ConnectionsManager()
         {

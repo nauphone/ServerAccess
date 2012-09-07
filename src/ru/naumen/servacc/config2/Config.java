@@ -14,6 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import org.w3c.dom.Document;
@@ -56,8 +57,8 @@ public class Config implements IConfig
     {
         InputStream stream;
         private Group rootGroup;
-        HashMap<String, Account> accounts;
-        HashMap<Account, String> needsThrough;
+        Map<String, Account> accounts;
+        Map<Account, String> needsThrough;
 
         Parser(InputStream stream)
         {
