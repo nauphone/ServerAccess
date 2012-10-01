@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ApplicationProperties;
-import ru.naumen.servacc.settings.DefaultConfiguration;
+import ru.naumen.servacc.settings.impl.DefaultConfiguration;
 import ru.naumen.servacc.settings.ShellConfiguration;
 import ru.naumen.servacc.util.Util;
 

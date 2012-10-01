@@ -7,16 +7,14 @@
  * packaging of this file.
  *
  */
-package ru.naumen.servacc.settings;
+package ru.naumen.servacc.settings.impl;
 
 import java.io.File;
 import java.io.IOException;
 
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.settings.impl.DefaultFile;
-import ru.naumen.servacc.settings.impl.DefaultPropertiesFile;
-import ru.naumen.servacc.settings.impl.FileCopy;
-import ru.naumen.servacc.settings.impl.FileSourceListProvider;
+import ru.naumen.servacc.settings.ApplicationProperties;
+import ru.naumen.servacc.settings.SourceListProvider;
 
 /**
  * @author Andrey Hitrin
