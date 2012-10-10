@@ -29,6 +29,7 @@ import ru.naumen.servacc.util.Util;
 
 import com.mindbright.ssh2.SSH2SessionChannel;
 import com.mindbright.ssh2.SSH2SimpleClient;
+import org.apache.log4j.Logger;
 
 /**
  * @author tosha
@@ -36,6 +37,7 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 
 public class Backend extends SSH2Backend
 {
+    private static final Logger LOGGER = Logger.getLogger(Backend.class);
     private final Platform platform;
     private final ExecutorService executor;
 
@@ -85,7 +87,7 @@ public class Backend extends SSH2Backend
             catch (TimeoutException e)
             {
                 connections.remove(account.getUniqueIdentity());
-                System.err.println("Connection is broken, retrying");
+                LOGGER.error("Connection is broken, retrying", e);
             }
         }
         // try with "cold" timeout

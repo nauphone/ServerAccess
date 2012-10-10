@@ -48,6 +48,7 @@
             path="build" />
         <pathelement location="lib/swt.jar"/>
         <pathelement location="lib/mindterm.jar"/>
+        <pathelement location="lib/log4j-1.2.17.jar"/>
     </path>
 
     <path id="test.class.path">
@@ -62,7 +63,13 @@
             file="lib/mindterm.jar"
             todir="${distr}/lib/"/>
         <copy
+            file="lib/log4j-1.2.17.jar"
+            todir="${distr}/lib/"/>
+        <copy
             file="resource/server-access"
+            todir="${distr}"/>
+        <copy
+            file="resource/log4j.properties"
             todir="${distr}"/>
         <chmod perm="a+x">
             <fileset dir="${distr}">

@@ -18,13 +18,14 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Logger;
 
 import com.mindbright.ssh2.SSH2SessionChannel;
 
+import org.apache.log4j.Logger;
+
 public class ConsoleManager
 {
-    private static Logger logger = Logger.getLogger("ru.naumen.servacc");
+    private static final Logger LOGGER = Logger.getLogger("ru.naumen.servacc");
 
     // Telnet protocol commands:
     public static final int ABORT = 238;    // Abort
@@ -70,15 +71,15 @@ public class ConsoleManager
             {
             case O_ECHO:
                 say(IAC, WILL, O_ECHO);
-                logger.info("IAC DO ECHO");
+                LOGGER.info("IAC DO ECHO");
                 break;
             case O_SUPPRESS_GA:
                 say(IAC, WILL, O_SUPPRESS_GA);
-                logger.info("IAC DO SUPPRESS GO AHEAD");
+                LOGGER.info("IAC DO SUPPRESS GO AHEAD");
                 break;
             default:
                 say(IAC, WONT, option);
-                logger.warning("IAC DO UNKNOWN(" + option + ")");
+                LOGGER.warn("IAC DO UNKNOWN(" + option + ")");
                 break;
             }
         }
@@ -98,7 +99,7 @@ public class ConsoleManager
                 processSB();
                 break;
             default:
-                logger.warning("IAC UNKNOWN(" + command + ")");
+                LOGGER.warn("IAC UNKNOWN(" + command + ")");
                 break;
             }
         }
@@ -122,10 +123,10 @@ public class ConsoleManager
                 session.sendWindowChange(
                     arr[2].intValue() * 256 + arr[3].intValue(),
                     arr[0].intValue() * 256 + arr[1].intValue());
-                logger.info("IAC SB WINDOW SIZE NEG: " + buffer);
+                LOGGER.info("IAC SB WINDOW SIZE NEG: " + buffer);
                 break;
             default:
-                logger.warning("IAC SB UNKNOWN(" + command + buffer + ")");
+                LOGGER.warn("IAC SB UNKNOWN(" + command + buffer + ")");
                 break;
             }
         }
@@ -137,15 +138,15 @@ public class ConsoleManager
             {
             case O_SUPPRESS_GA:
                 say(IAC, DO, O_SUPPRESS_GA);
-                logger.info("IAC WILL SUPPRESS GO AHEAD");
+                LOGGER.info("IAC WILL SUPPRESS GO AHEAD");
                 break;
             case O_WINDOW_SIZE_NEG:
                 say(IAC, DO, O_WINDOW_SIZE_NEG);
-                logger.info("IAC WILL WINDOW SIZE NEG");
+                LOGGER.info("IAC WILL WINDOW SIZE NEG");
                 break;
             default:
                 say(IAC, DONT, command);
-                logger.warning("IAC WILL UNKNOWN(" + command + ")");
+                LOGGER.warn("IAC WILL UNKNOWN(" + command + ")");
                 break;
             }
         }
@@ -186,7 +187,7 @@ public class ConsoleManager
                 {
                     res = super.read(b, off, len);
                 }
-                System.err.println(res);
+                LOGGER.trace(res);
                 if (res == -1)
                 {
                     return -1;

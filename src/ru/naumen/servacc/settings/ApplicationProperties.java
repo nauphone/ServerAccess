@@ -12,6 +12,8 @@ package ru.naumen.servacc.settings;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 /**
  * Reads application properties.
  *
@@ -20,6 +22,7 @@ import java.io.IOException;
  */
 public class ApplicationProperties
 {
+    private static final Logger LOGGER = Logger.getLogger(ApplicationProperties.class);
     private final File configFile;
 
     public ApplicationProperties(File configFile) throws IOException
@@ -36,7 +39,8 @@ public class ApplicationProperties
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);          // TODO use something better ;)
+            LOGGER.error("Cannot load properties file", e);
+            throw new RuntimeException(e);
         }
         return propertiesFile;
     }

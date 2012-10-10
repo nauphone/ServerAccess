@@ -12,6 +12,7 @@ package ru.naumen.servacc.config2;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
@@ -19,6 +20,7 @@ import ru.naumen.servacc.util.Util;
 
 public class SSHAccount extends Account implements IConnectable, IPortForwarder, IFTPBrowseable
 {
+    private static final Logger LOGGER = Logger.getLogger(SSHAccount.class);
     public static final String SSHACCOUNT_TYPE = "ssh";
     public static final String EMPTY_NAME = "*** empty ***";
     public static final int DEFAULT_SSH_PORT = 22;
@@ -92,7 +94,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
                 if (ids.contains(cur.getId()))
                 {
                     // circular reference detected
-                    System.err.println("Circular reference detected: " + uniqueIdentity);
+                    LOGGER.error("Circular reference detected: " + uniqueIdentity);
                     break;
                 }
                 ids.add(cur.getId());

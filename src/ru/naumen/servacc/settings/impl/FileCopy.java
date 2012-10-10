@@ -16,12 +16,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.apache.log4j.Logger;
+
 /**
  * @author Andrey Hitrin
  * @since 11.09.12
  */
 public class FileCopy implements DefaultFile
 {
+    private static final Logger LOGGER = Logger.getLogger(FileCopy.class);
     private String source;
 
     public FileCopy(String source)
@@ -48,12 +51,12 @@ public class FileCopy implements DefaultFile
         }
         finally
         {
-            silentlyClose(sourceStream);
-            silentlyClose(targetStream);
+            silentlyClose(sourceStream, "source");
+            silentlyClose(targetStream, "target");
         }
     }
 
-    private void silentlyClose(Closeable stream) throws IOException
+    private void silentlyClose(Closeable stream, String name) throws IOException
     {
         if (stream == null)
         {
@@ -63,9 +66,9 @@ public class FileCopy implements DefaultFile
         {
             stream.close();
         }
-        catch (IOException ignored)
+        catch (IOException e)
         {
-            // do nothing. TODO: log with warning
+            LOGGER.warn("Cannot silently close stream: " + name, e);
         }
     }
 }

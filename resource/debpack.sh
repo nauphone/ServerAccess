@@ -37,12 +37,16 @@ mkdir -p "$tmpdir/usr/share/pixmaps/naumen-server-access"
 echo "copying files"
 
 cp "./distr/servacc.jar" "$tmpdir/opt/naumen/server-access/"
+cp ./resource/log4j.properties $tmpdir/opt/naumen/server-access/
 cp "./resource/server-access" "$tmpdir/opt/naumen/server-access/"
 cp -R "./resource/icons/" "$tmpdir/usr/share/pixmaps/naumen-server-access"
 cp "./resource/naumen-server-access.desktop" "$tmpdir/usr/share/applications"
 cp "./resource/naumen-server-access.png" "$tmpdir/usr/share/pixmaps/naumen-server-access"
 cp "./lib/mindterm.jar" "$tmpdir/opt/naumen/server-access/lib"
+cp "./lib/log4j-1.2.17.jar" "$tmpdir/opt/naumen/server-access/lib"
 cp "LICENSE.GPL" "$tmpdir/opt/naumen/server-access/"
+touch $tmpdir/opt/naumen/server-access/serveraccess.log
+chmod a+rw $tmpdir/opt/naumen/server-access/serveraccess.log
 
 md5deep -rl "$tmpdir/" > "$tmpdir/DEBIAN/md5sums"
 
