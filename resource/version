@@ -1,16 +1,17 @@
 #!/bin/bash
 # KISS version control
 
-function usage() {
-    echo usage: version new_version_number
-}
-
 # move to the project root dir
 unset CDPATH
 cd "$(dirname "${BASH_SOURCE[0]}")"/..
 
 old_version=$(cat VERSION.TXT)
 new_version=$1
+
+function usage() {
+    echo usage: version new_version_number
+    echo '(current version is '$old_version')'
+}
 
 if [[ "$old_version" == "" || "$new_version" == "" ]]; then
     usage
@@ -24,3 +25,17 @@ for a_file in "${files_to_change[@]}"
 do
     sed -i "s/$old_version/$new_version/" $a_file
 done
+
+# create changelog
+changelog=CHANGELOG.TXT
+temp_changelog=`tempfile`
+
+echo "New in $new_version:
+-------
+" > $temp_changelog
+
+git log --pretty=oneline serveraccess-$old_version...HEAD | cut -c 42- >> $temp_changelog
+echo "
+" >> $temp_changelog
+cat $changelog >> $temp_changelog
+mv $temp_changelog $changelog
