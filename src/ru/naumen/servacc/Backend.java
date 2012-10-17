@@ -64,7 +64,7 @@ public class Backend extends SSH2Backend
     public void openSSHAccount(final SSHAccount account) throws Exception
     {
         SSH2SimpleClient client;
-        if (connections.containsKey(account.getUniqueIdentity()))
+        if (isConnected(account))
         {
             client = getSSH2Client(account);
             // this is to force timeout when reusing a cached connection
@@ -86,7 +86,7 @@ public class Backend extends SSH2Backend
             }
             catch (TimeoutException e)
             {
-                connections.remove(account.getUniqueIdentity());
+                removeConnection(account);
                 LOGGER.error("Connection is broken, retrying", e);
             }
         }
@@ -103,7 +103,7 @@ public class Backend extends SSH2Backend
             if (!session.requestPTY("xterm", 24, 80, new byte[] {12, 0, 0, 0, 0, 0}))
             {
                 client.getTransport().normalDisconnect("bye bye");
-                connections.remove(account.getUniqueIdentity());
+                removeConnection(account);
                 throw new IOException("Failed to get PTY on remote side");
             }
             final Socket term = openTerminal(account);

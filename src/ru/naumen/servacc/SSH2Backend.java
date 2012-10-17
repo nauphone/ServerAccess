@@ -81,8 +81,8 @@ public class SSH2Backend
         }
     }
 
-    protected ConnectionsManager connections;
-    protected SSHAccount globalThrough;
+    private ConnectionsManager connections;
+    private SSHAccount globalThrough;
     private static RandomSeed seed;
     private static SecureRandomAndPad secureRandom;
 
@@ -147,10 +147,9 @@ public class SSH2Backend
      */
     protected SSH2SimpleClient getSSH2Client(SSHAccount account) throws Exception
     {
-        String id = account.getUniqueIdentity();
-        if (connections.containsKey(id))
+        if (isConnected(account))
         {
-            return connections.get(id);
+            return getConnection(account);
         }
         // follow the 'through' chain
         List<SSHAccount> throughChain = new ArrayList<SSHAccount>();
@@ -163,7 +162,7 @@ public class SSH2Backend
                 break;
             }
             throughChain.add(cur);
-            if (connections.containsKey(cur.getUniqueIdentity()))
+            if (isConnected(cur))
             {
                 // account is found in the cache, no need to go further
                 break;
@@ -174,19 +173,18 @@ public class SSH2Backend
         SSH2SimpleClient last = null;
         for (SSHAccount through : throughChain)
         {
-            String throughId = through.getUniqueIdentity();
-            if (connections.containsKey(throughId))
+            if (isConnected(through))
             {
-                last = connections.get(throughId);
+                last = getConnection(through);
             }
             else
             {
                 last = getSSH2Client(through, last);
-                connections.put(throughId, last);
+                saveConnection(through, last);
             }
         }
         SSH2SimpleClient client = getSSH2Client(account, last);
-        connections.put(id, client);
+        saveConnection(account, client);
         return client;
     }
 
@@ -197,11 +195,34 @@ public class SSH2Backend
         {
             throughAccount = (SSHAccount) account.getThrough();
         }
-        else if (globalThrough instanceof SSHAccount)
+        else
         {
-            throughAccount = globalThrough;
+            if (globalThrough instanceof SSHAccount)
+            {
+                throughAccount = globalThrough;
+            }
         }
         return throughAccount;
+    }
+
+    private void saveConnection(SSHAccount account, SSH2SimpleClient client)
+    {
+        connections.put(account.getUniqueIdentity(), client);
+    }
+
+    private SSH2SimpleClient getConnection(SSHAccount account)
+    {
+        return connections.get(account.getUniqueIdentity());
+    }
+
+    protected boolean isConnected(SSHAccount account)
+    {
+        return connections.containsKey(account.getUniqueIdentity());
+    }
+
+    protected void removeConnection(SSHAccount account)
+    {
+        connections.remove(account.getUniqueIdentity());
     }
 
     public void cleanup()
