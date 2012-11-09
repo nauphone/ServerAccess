@@ -34,7 +34,7 @@ public class Windows implements Platform
     public File getConfigDirectory() throws IOException
     {
         String appData = System.getenv("APPDATA");
-        if (Util.isEmptyOrNull(appData))
+        if (!Util.isEmptyOrNull(appData))
         {
              return new File(new File(appData), "Server Access");
         }
