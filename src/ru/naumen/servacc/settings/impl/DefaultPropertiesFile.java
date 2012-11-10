@@ -27,7 +27,8 @@ public class DefaultPropertiesFile implements DefaultFile
         if (configFile.createNewFile())
         {
             File accountsFile = new File(configFile.getParentFile(), "accounts.xml");
-            new FileOutputStream(configFile).write(("source=" + FileResource.uriPrefix + accountsFile.getPath()).getBytes("UTF-8"));
+            String path = accountsFile.getCanonicalPath().replaceAll("\\\\", "/");
+            new FileOutputStream(configFile).write(("source=" + FileResource.uriPrefix + path).getBytes("UTF-8"));
         }
     }
 }
