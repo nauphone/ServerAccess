@@ -63,10 +63,4 @@ public class MacOsX implements Platform
     {
         return true;
     }
-
-    @Override
-    public boolean displayFolderIcon()
-    {
-        return false;
-    }
 }

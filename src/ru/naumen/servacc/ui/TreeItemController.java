@@ -23,7 +23,6 @@ import ru.naumen.servacc.platform.Platform;
 
 public class TreeItemController
 {
-    private final Platform platform;
     private TreeItemController parent;
     private Object data;
     private List<TreeItemController> children;
@@ -31,15 +30,14 @@ public class TreeItemController
     private boolean visible = true;
     private boolean expanded = false;
 
-    public TreeItemController(Platform platform)
+    public TreeItemController()
     {
-        this(null, platform);
+        this(null);
     }
 
-    public TreeItemController(TreeItemController parent, Platform platform)
+    public TreeItemController(TreeItemController parent)
     {
         this.parent = parent;
-        this.platform = platform;
         children = new ArrayList<TreeItemController>();
     }
 
@@ -128,7 +126,7 @@ public class TreeItemController
         {
             return ImageCache.getImage("/icons/card.png");
         }
-        else if (data instanceof Group && platform.displayFolderIcon())
+        else if (data instanceof Group)
         {
             return ImageCache.getImage("/icons/folder-horizontal.png");
         }

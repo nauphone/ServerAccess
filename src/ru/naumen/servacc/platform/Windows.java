@@ -64,10 +64,4 @@ public class Windows implements Platform
     {
         return false;
     }
-
-    @Override
-    public boolean displayFolderIcon()
-    {
-        return true;
-    }
 }

@@ -57,10 +57,4 @@ public class Linux implements Platform
     {
         return false;
     }
-
-    @Override
-    public boolean displayFolderIcon()
-    {
-        return true;
-    }
 }

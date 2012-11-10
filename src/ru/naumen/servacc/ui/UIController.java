@@ -752,7 +752,7 @@ public class UIController
     // Build tree structure data from config
     private void buildTree(IConfig config)
     {
-        root = new TreeItemController(platform);
+        root = new TreeItemController();
         for (IConfigItem item : config.getChildren())
         {
             buildBranch(root, item);
@@ -761,7 +761,7 @@ public class UIController
 
     private void buildBranch(TreeItemController parent, IConfigItem config)
     {
-        TreeItemController newTreeItem = new TreeItemController(parent, platform);
+        TreeItemController newTreeItem = new TreeItemController(parent);
         newTreeItem.setData(config);
         if (config instanceof Group)
         {

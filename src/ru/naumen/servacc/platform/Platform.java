@@ -25,6 +25,4 @@ public interface Platform
     boolean needToNegotiateProtocolOptions();
 
     boolean useSystemSearchWidget();
-
-    boolean displayFolderIcon();
 }
