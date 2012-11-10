@@ -18,5 +18,5 @@ import java.io.IOException;
  */
 public interface DefaultFile
 {
-    void fillWithDefaultContentIfNotExists(File configFile) throws IOException;
+    void fill(File configFile) throws IOException;
 }

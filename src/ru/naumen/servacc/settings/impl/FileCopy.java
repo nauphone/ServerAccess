@@ -30,29 +30,26 @@ public class FileCopy implements DefaultFile
     }
 
     @Override
-    public void fillWithDefaultContentIfNotExists(File configFile) throws IOException
+    public void fill(File configFile) throws IOException
     {
-        if (configFile.createNewFile())
+        InputStream sourceStream = null;
+        OutputStream targetStream = null;
+        try
         {
-            InputStream sourceStream = null;
-            OutputStream targetStream = null;
-            try
+            sourceStream = FileCopy.class.getResourceAsStream(source);
+            targetStream = new FileOutputStream(configFile);
+            int c;
+            final int bufferSize = 8192;
+            byte[] buffer = new byte[bufferSize];
+            while ((c = sourceStream.read(buffer)) != -1)
             {
-                sourceStream = FileCopy.class.getResourceAsStream(source);
-                targetStream = new FileOutputStream(configFile);
-                int c;
-                final int bufferSize = 8192;
-                byte[] buffer = new byte[bufferSize];
-                while ((c = sourceStream.read(buffer)) != -1)
-                {
-                    targetStream.write(buffer, 0, c);
-                }
+                targetStream.write(buffer, 0, c);
             }
-            finally
-            {
-                silentlyClose(sourceStream);
-                silentlyClose(targetStream);
-            }
+        }
+        finally
+        {
+            silentlyClose(sourceStream);
+            silentlyClose(targetStream);
         }
     }
 

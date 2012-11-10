@@ -22,13 +22,10 @@ import ru.naumen.servacc.FileResource;
 public class DefaultPropertiesFile implements DefaultFile
 {
     @Override
-    public void fillWithDefaultContentIfNotExists(File configFile) throws IOException
+    public void fill(File configFile) throws IOException
     {
-        if (configFile.createNewFile())
-        {
-            File accountsFile = new File(configFile.getParentFile(), "accounts.xml");
-            String path = accountsFile.getCanonicalPath().replaceAll("\\\\", "/");
-            new FileOutputStream(configFile).write(("source=" + FileResource.uriPrefix + path).getBytes("UTF-8"));
-        }
+        File accountsFile = new File(configFile.getParentFile(), "accounts.xml");
+        String path = accountsFile.getCanonicalPath().replaceAll("\\\\", "/");
+        new FileOutputStream(configFile).write(("source=" + FileResource.uriPrefix + path).getBytes("UTF-8"));
     }
 }

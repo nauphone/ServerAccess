@@ -62,7 +62,10 @@ public class DefaultConfiguration
     private static ApplicationProperties file(File rootDir, String name, DefaultFile defaultContent) throws IOException
     {
         File propertiesFile = new File(rootDir, name);
-        defaultContent.fillWithDefaultContentIfNotExists(propertiesFile);
+        if (propertiesFile.createNewFile())
+        {
+            defaultContent.fill(propertiesFile);
+        }
         return new ApplicationProperties(propertiesFile);
     }
 }
