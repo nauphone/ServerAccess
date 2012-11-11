@@ -30,6 +30,8 @@ import ru.naumen.servacc.config2.SSHAccount;
 
 public class SSH2Backend
 {
+    public static final int SSH_DEFAULT_PORT = 22;
+
     protected class ConnectionsManager
     {
         private List<SSH2SimpleClient> connections;
@@ -169,7 +171,7 @@ public class SSH2Backend
     private SSH2SimpleClient getSSH2Client(SSHAccount account, SSH2SimpleClient through) throws Exception
     {
         String host = account.getHost();
-        int port = account.getPort() >= 0 ? account.getPort() : 22;
+        int port = account.getPort() >= 0 ? account.getPort() : SSH_DEFAULT_PORT;
         if (through != null)
         {
             int localPort = SocketUtils.getFreePort();
