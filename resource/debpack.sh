@@ -26,33 +26,34 @@ fi;
 
 tmpdir="naumen-server-access_"$VERSION"_all"
 
-mkdir -p "$tmpdir/DEBIAN"
+mkdir -p $tmpdir/DEBIAN
 
-echo "creating directories..."
+echo creating directories...
 
-mkdir -p "$tmpdir/opt/naumen/server-access/lib"
-mkdir -p "$tmpdir/usr/share/applications"
-mkdir -p "$tmpdir/usr/share/pixmaps/naumen-server-access"
+TARGET=$tmpdir/opt/naumen/server-access
+mkdir -p $TARGET/lib
+mkdir -p $tmpdir/usr/share/applications
+mkdir -p $tmpdir/usr/share/pixmaps/naumen-server-access
 
-echo "copying files"
+echo copying files
 
-cp "./distr/servacc.jar" "$tmpdir/opt/naumen/server-access/"
-cp ./resource/log4j.properties $tmpdir/opt/naumen/server-access/
-cp "./resource/server-access" "$tmpdir/opt/naumen/server-access/"
-cp -R "./resource/icons/" "$tmpdir/usr/share/pixmaps/naumen-server-access"
-cp "./resource/naumen-server-access.desktop" "$tmpdir/usr/share/applications"
-cp "./resource/naumen-server-access.png" "$tmpdir/usr/share/pixmaps/naumen-server-access"
-cp "./lib/mindterm.jar" "$tmpdir/opt/naumen/server-access/lib"
-cp "./lib/log4j-1.2.17.jar" "$tmpdir/opt/naumen/server-access/lib"
-cp "LICENSE.GPL" "$tmpdir/opt/naumen/server-access/"
-touch $tmpdir/opt/naumen/server-access/serveraccess.log
-chmod a+rw $tmpdir/opt/naumen/server-access/serveraccess.log
+cp ./distr/servacc.jar $TARGET/
+cp ./resource/log4j.properties $TARGET/
+cp ./resource/server-access $TARGET/
+cp -R ./resource/icons/ $tmpdir/usr/share/pixmaps/naumen-server-access
+cp ./resource/naumen-server-access.desktop $tmpdir/usr/share/applications
+cp ./resource/naumen-server-access.png $tmpdir/usr/share/pixmaps/naumen-server-access
+cp ./lib/mindterm.jar $TARGET/lib
+cp ./lib/log4j-1.2.17.jar $TARGET/lib
+cp LICENSE.GPL $TARGET/
+touch $TARGET/serveraccess.log
+chmod a+rw $TARGET/serveraccess.log
 
-md5deep -rl "$tmpdir/" > "$tmpdir/DEBIAN/md5sums"
+md5deep -rl $tmpdir/ > $tmpdir/DEBIAN/md5sums
 
-touch "$tmpdir/conffiles"
+touch $tmpdir/conffiles
 
-echo "creating control file..."
+echo creating control file...
 
 let SIZE=0
 for l in 'opt' 'usr'
@@ -60,7 +61,7 @@ do
     let SIZE=$SIZE+`du -s "$tmpdir/$l" | awk '{print $1}'`
 done;
 
-cat <<-EOF > "$tmpdir/DEBIAN/control"
+cat <<-EOF > $tmpdir/DEBIAN/control
 Package: $NAME
 Version: $VERSION
 Provides: $NAME
@@ -77,8 +78,8 @@ Priority: optional
 Essential: no
 EOF
 
-fakeroot dpkg-deb --build "$tmpdir"
+fakeroot dpkg-deb --build $tmpdir
 
-echo "cleaning everything..."
-rm -rf "$tmpdir"
-echo "Success"
+echo cleaning everything...
+rm -rf $tmpdir
+echo success
