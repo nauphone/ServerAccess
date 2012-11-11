@@ -127,20 +127,26 @@ public class SSH2Backend
             host = SocketUtils.LOCALHOST;
             port = localPort;
         }
-        String login = account.getLogin();
-        String password = account.getPassword();
-        return createSSH2Client(host, port, login, password);
+        return createSSH2Client(host, port, account);
     }
 
-    private SSH2SimpleClient createSSH2Client(String host, Integer port, String login, String password) throws Exception
+    private SSH2SimpleClient createSSH2Client(String host, Integer port, final SSHAccount account) throws Exception
     {
         SecureRandomAndPad secureRandomAndPad = nextSecure();
         Socket sock = new Socket();
         sock.connect(new InetSocketAddress(host, port), SocketUtils.COLD_TIMEOUT);
-        SSH2Transport transport = new SSH2Transport(sock, secureRandomAndPad);
-        SSH2Authenticator auth = new SSH2Authenticator(login);
-        auth.addModule(new SSH2AuthPassword(password));
-        auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(password)));
+        SSH2Transport transport = new SSH2Transport(sock, secureRandomAndPad)
+        {
+            @Override
+            protected void disconnectInternal(int i, String s, String s1, boolean b)
+            {
+                super.disconnectInternal(i, s, s1, b);
+                removeConnection(account);
+            }
+        };
+        SSH2Authenticator auth = new SSH2Authenticator(account.getLogin());
+        auth.addModule(new SSH2AuthPassword(account.getPassword()));
+        auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(account.getPassword())));
         return new SSH2SimpleClient(transport, auth);
     }
 
