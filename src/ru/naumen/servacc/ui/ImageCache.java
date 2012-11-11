@@ -9,14 +9,16 @@
  */
 package ru.naumen.servacc.ui;
 
+import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
 
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import org.apache.log4j.Logger;
 
 /**
  * Load any image once and store it in cache.
@@ -28,6 +30,7 @@ import java.util.Map;
  */
 public class ImageCache
 {
+    private static final Logger LOGGER = Logger.getLogger(ImageCache.class);
     private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
 
     public static Image getImage(String name)
@@ -46,6 +49,11 @@ public class ImageCache
         {
             ImageLoader imageLoader = new ImageLoader();
             InputStream is = ImageCache.class.getResourceAsStream(name);
+            if (is == null)
+            {
+                LOGGER.error("Cannot load image " + name);
+                return null;
+            }
             ImageData[] data = imageLoader.load(is);
             Image image = new Image(Display.getCurrent(), data[index]);
             images.put(key, image);
