@@ -1,0 +1,10 @@
+New in 0.9.9.5:
+-------
+
+New features/changes:
+
+ * Split read-only and read-write properties (#15)
+ * Use Log4J for logging (#16)
+ * Simplify: always show folder icons, even on MacOs X
+
+Many small code cleanups.
