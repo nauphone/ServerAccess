@@ -86,7 +86,7 @@ public class SSH2Backend
     private static RandomSeed seed;
     private static SecureRandomAndPad secureRandom;
 
-    private static SSH2SimpleClient createSSH2Client(String host, Integer port, String login, String password) throws Exception
+    private static SecureRandomAndPad nextSecure()
     {
         if (seed == null)
         {
@@ -96,39 +96,7 @@ public class SSH2Backend
         {
             secureRandom = new SecureRandomAndPad(new SecureRandom(seed.getBytesBlocking(20, false)));
         }
-        Socket sock = new Socket();
-        sock.connect(new InetSocketAddress(host, port), SocketUtils.COLD_TIMEOUT);
-        SSH2Transport transport = new SSH2Transport(sock, secureRandom);
-        SSH2Authenticator auth = new SSH2Authenticator(login);
-        auth.addModule(new SSH2AuthPassword(password));
-        auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(password)));
-        return new SSH2SimpleClient(transport, auth);
-    }
-
-    /**
-     * Retrieve SSH2 connection described by account using through connection (if not null) as tunnel.
-     * Simple function creating exactly 1 (one) SSH2 connection.
-     * Do not use this function - it is only extension of another getSSH2Client.
-     *
-     * @param account
-     * @param through
-     * @return
-     * @throws Exception
-     */
-    private static SSH2SimpleClient getSSH2Client(SSHAccount account, SSH2SimpleClient through) throws Exception
-    {
-        String host = account.getHost();
-        int port = account.getPort() >= 0 ? account.getPort() : 22;
-        if (through != null)
-        {
-            int localPort = SocketUtils.getFreePort();
-            through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port); //FIXME: localize newLocalForward usage in localPortForward
-            host = SocketUtils.LOCALHOST;
-            port = localPort;
-        }
-        String login = account.getLogin();
-        String password = account.getPassword();
-        return createSSH2Client(host, port, login, password);
+        return secureRandom;
     }
 
     protected SSH2Backend()
@@ -186,6 +154,44 @@ public class SSH2Backend
         SSH2SimpleClient client = getSSH2Client(account, last);
         saveConnection(account, client);
         return client;
+    }
+
+    /**
+     * Retrieve SSH2 connection described by account using through connection (if not null) as tunnel.
+     * Simple function creating exactly 1 (one) SSH2 connection.
+     * Do not use this function - it is only extension of another getSSH2Client.
+     *
+     * @param account
+     * @param through
+     * @return
+     * @throws Exception
+     */
+    private SSH2SimpleClient getSSH2Client(SSHAccount account, SSH2SimpleClient through) throws Exception
+    {
+        String host = account.getHost();
+        int port = account.getPort() >= 0 ? account.getPort() : 22;
+        if (through != null)
+        {
+            int localPort = SocketUtils.getFreePort();
+            through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port); //FIXME: localize newLocalForward usage in localPortForward
+            host = SocketUtils.LOCALHOST;
+            port = localPort;
+        }
+        String login = account.getLogin();
+        String password = account.getPassword();
+        return createSSH2Client(host, port, login, password);
+    }
+
+    private SSH2SimpleClient createSSH2Client(String host, Integer port, String login, String password) throws Exception
+    {
+        SecureRandomAndPad secureRandomAndPad = nextSecure();
+        Socket sock = new Socket();
+        sock.connect(new InetSocketAddress(host, port), SocketUtils.COLD_TIMEOUT);
+        SSH2Transport transport = new SSH2Transport(sock, secureRandomAndPad);
+        SSH2Authenticator auth = new SSH2Authenticator(login);
+        auth.addModule(new SSH2AuthPassword(password));
+        auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(password)));
+        return new SSH2SimpleClient(transport, auth);
     }
 
     protected SSHAccount getThrough(Account account)
