@@ -20,6 +20,7 @@ import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
@@ -77,6 +78,7 @@ import ru.naumen.servacc.util.Util;
 
 public class UIController
 {
+    private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
     private final Platform platform;
     private final SourceListProvider sourceListProvider;
@@ -143,7 +145,7 @@ public class UIController
         }
         catch (Exception e)
         {
-            e.printStackTrace();
+            LOGGER.error("Cannot reload config", e);
             showAlert(e.getLocalizedMessage());
         }
     }
@@ -564,7 +566,7 @@ public class UIController
                         }
                         catch (Exception e)
                         {
-                            e.printStackTrace();
+                            LOGGER.error("Cannot open SSH account", e);
                             showAlertFromThread(e.getMessage());
                         }
                     }
@@ -583,7 +585,7 @@ public class UIController
                         }
                         catch (Exception e)
                         {
-                            e.printStackTrace();
+                            LOGGER.error("Cannot open HTTP account", e);
                             showAlertFromThread(e.getMessage());
                         }
                     }
@@ -596,7 +598,7 @@ public class UIController
         }
         catch (Exception ex)
         {
-            ex.printStackTrace();
+            LOGGER.error("Unexpected error", ex);
             showAlert(ex.getMessage());
         }
     }
@@ -621,7 +623,7 @@ public class UIController
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                LOGGER.error("Cannot forward port", e);
                 showAlert(e.getMessage());
             }
         }
@@ -638,7 +640,7 @@ public class UIController
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                LOGGER.error("Cannot open FTP connection", e);
                 showAlert(e.getMessage());
             }
         }
@@ -658,7 +660,7 @@ public class UIController
             }
             catch (Exception e)
             {
-                e.printStackTrace();
+                LOGGER.error("Cannot copy password", e);
             }
         }
     }
