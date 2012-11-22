@@ -9,14 +9,6 @@
  */
 package ru.naumen.servacc;
 
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.mindbright.jca.security.SecureRandom;
 import com.mindbright.ssh2.SSH2AuthKbdInteract;
 import com.mindbright.ssh2.SSH2AuthPassword;
@@ -25,63 +17,19 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
+
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.SSHAccount;
 
 public class SSH2Backend
 {
     public static final int SSH_DEFAULT_PORT = 22;
-
-    protected class ConnectionsManager
-    {
-        private List<SSH2SimpleClient> connections;
-        private Map<String, SSH2SimpleClient> cache;
-
-        public ConnectionsManager()
-        {
-            cache = new HashMap<String, SSH2SimpleClient>();
-            connections = new ArrayList<SSH2SimpleClient>();
-        }
-
-        public void put(String key, SSH2SimpleClient client)
-        {
-            cache.put(key, client);
-        }
-
-        public void remove(String key)
-        {
-            cache.remove(key);
-        }
-
-        public SSH2SimpleClient get(String key)
-        {
-            return cache.get(key);
-        }
-
-        public boolean containsKey(String key)
-        {
-            return cache.containsKey(key);
-        }
-
-        public void clearCache()
-        {
-            // keep track of all open connections so we can close them on exit
-            connections.addAll(cache.values());
-            cache.clear();
-        }
-
-        public void cleanup()
-        {
-            clearCache();
-            for (SSH2SimpleClient client : connections)
-            {
-                if (client.getTransport().isConnected())
-                {
-                    client.getTransport().normalDisconnect("quit");
-                }
-            }
-        }
-    }
 
     private ConnectionsManager connections;
     private SSHAccount globalThrough;
@@ -243,5 +191,4 @@ public class SSH2Backend
         globalThrough = account;
         connections.clearCache();
     }
-
 }
