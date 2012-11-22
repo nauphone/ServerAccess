@@ -3,9 +3,9 @@ package ru.naumen.servacc;
 import com.mindbright.ssh2.SSH2SimpleClient;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Stores list of connections.
@@ -20,7 +20,7 @@ public class ConnectionsManager
 
     public ConnectionsManager()
     {
-        cache = new HashMap<String, SSH2SimpleClient>();
+        cache = new ConcurrentHashMap<String, SSH2SimpleClient>();
         connections = new ArrayList<SSH2SimpleClient>();
     }
 
