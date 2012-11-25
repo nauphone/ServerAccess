@@ -163,11 +163,6 @@ public class UIController implements GlobalThroughView
         });
     }
 
-    public void cleanup()
-    {
-        backend.cleanup();
-    }
-
     private void createToolBar()
     {
         ToolBar toolbar = new ToolBar(shell, SWT.FLAT | SWT.RIGHT);

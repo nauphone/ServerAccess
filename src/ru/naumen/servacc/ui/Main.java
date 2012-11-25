@@ -41,7 +41,8 @@ public class Main implements Runnable
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
-        UIController controller = new UIController(shell, platform, new Backend(platform), configuration.sourceListProvider());
+        Backend backend = new Backend(platform);
+        UIController controller = new UIController(shell, platform, backend, configuration.sourceListProvider());
         shell.open();
         // Load accounts
         controller.reloadConfig();
@@ -54,7 +55,7 @@ public class Main implements Runnable
             }
         }
         display.dispose();
-        controller.cleanup();
+        backend.cleanup();
     }
 
     private Shell createShell(Display display, ApplicationProperties windowProperties)
