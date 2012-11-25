@@ -369,9 +369,9 @@ public class UIController
     }
 
     // TODO: these methods need refactoring
-    private boolean selectGlobalThrough(String uniqueIdentity)
+    private void selectGlobalThrough(String uniqueIdentity)
     {
-        return selectGlobalThrough(config, uniqueIdentity, "");
+        selectGlobalThrough(config, uniqueIdentity, "");
     }
 
     private boolean selectGlobalThrough(Object object, String uniqueIdentity, String prefix)
