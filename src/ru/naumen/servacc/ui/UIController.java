@@ -96,8 +96,8 @@ public class UIController implements GlobalThroughView
     private ToolItem toolitemReloadConfig;
 
     private Label globalThrough;
-    private String globalThroughUniqueIdentity;
     private Button clearGlobalThrough;
+    private GlobalThroughController globalThroughController;
 
     private TreeItemController root;
     private TreeItemController selection;
@@ -112,6 +112,7 @@ public class UIController implements GlobalThroughView
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
         this.configLoader = new ConfigLoader(this, shell, sourceListProvider);
+        this.globalThroughController = new GlobalThroughController(this, backend);
         createToolBar();
         createFilteredTree();
         createGlobalThroughWidget();
@@ -134,7 +135,7 @@ public class UIController implements GlobalThroughView
             config = configLoader.loadConfig();
             buildTree(config);
             updateTree(filteredTree.getFilter().getText());
-            refreshGlobalThrough();
+            globalThroughController.refresh(config);
         }
         catch (Exception e)
         {
@@ -336,14 +337,14 @@ public class UIController implements GlobalThroughView
         {
             public void widgetSelected(SelectionEvent e)
             {
-                doClearGlobalThrough();
+                globalThroughController.clear();
             }
 
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
         });
-        doClearGlobalThrough();
+        globalThroughController.clear();
 
         // Drop target
         DropTarget dt = new DropTarget(widget, DND.DROP_MOVE);
@@ -354,76 +355,10 @@ public class UIController implements GlobalThroughView
             {
                 if (event.data != null)
                 {
-                    globalThroughUniqueIdentity = (String) event.data;
-                    selectGlobalThrough(globalThroughUniqueIdentity);
+                    globalThroughController.select((String) event.data, config);
                 }
             }
         });
-    }
-
-    private void refreshGlobalThrough()
-    {
-        if (!Util.isEmptyOrNull(globalThroughUniqueIdentity))
-        {
-            selectGlobalThrough(globalThroughUniqueIdentity);
-        }
-        else
-        {
-            doClearGlobalThrough();
-        }
-    }
-
-    private void selectGlobalThrough(String uniqueIdentity)
-    {
-        selectGlobalThrough(config, uniqueIdentity, "");
-    }
-
-    private boolean selectGlobalThrough(Object object, String uniqueIdentity, String prefix)
-    {
-        if (object instanceof SSHAccount)
-        {
-            SSHAccount account = (SSHAccount) object;
-            if (uniqueIdentity.equals(account.getUniqueIdentity()))
-            {
-                String globalThroughText = prefix + " > " + account;
-                setGlobalThroughWidget(globalThroughText);
-                backend.setGlobalThrough(account);
-                return true;
-            }
-        }
-        else if (object instanceof IConfig)
-        {
-            for (IConfigItem i : ((IConfig) object).getChildren())
-            {
-                if (selectGlobalThrough(i, uniqueIdentity, prefix))
-                {
-                    return true;
-                }
-            }
-        }
-        else if (object instanceof Group)
-        {
-            for (IConfigItem i : ((Group) object).getChildren())
-            {
-                String newPrefix = ((Group) object).getName();
-                if (!Util.isEmptyOrNull(prefix))
-                {
-                    newPrefix = prefix + " > " + newPrefix;
-                }
-                if (selectGlobalThrough(i, uniqueIdentity, newPrefix))
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private void doClearGlobalThrough()
-    {
-        clearGlobalThroughWidget();
-        globalThroughUniqueIdentity = null;
-        backend.setGlobalThrough(null);
     }
 
     @Override
