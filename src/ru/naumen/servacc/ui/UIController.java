@@ -424,6 +424,7 @@ public class UIController
         globalThrough.setForeground(gray);
         clearGlobalThrough.setVisible(false);
         globalThroughUniqueIdentity = null;
+        backend.setGlobalThrough(null);
     }
 
     private void createTrayItem()
