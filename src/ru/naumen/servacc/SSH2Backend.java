@@ -9,6 +9,12 @@
  */
 package ru.naumen.servacc;
 
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import com.mindbright.jca.security.SecureRandom;
 import com.mindbright.ssh2.SSH2AuthKbdInteract;
 import com.mindbright.ssh2.SSH2AuthPassword;
@@ -17,13 +23,6 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
-
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.SSHAccount;
 
@@ -72,7 +71,7 @@ public class SSH2Backend
         // follow the 'through' chain
         List<SSHAccount> throughChain = new ArrayList<SSHAccount>();
         SSHAccount cur = getThrough(account);
-        while (cur instanceof SSHAccount)
+        while (cur != null)
         {
             if (throughChain.contains(cur))
             {
@@ -153,17 +152,15 @@ public class SSH2Backend
     protected SSHAccount getThrough(Account account)
     {
         SSHAccount throughAccount = null;
-        if (account.getThrough() instanceof SSHAccount)
+        if (account.getThrough() != null)
         {
             throughAccount = (SSHAccount) account.getThrough();
         }
-        else
+        else if (globalThrough != null)
         {
-            if (globalThrough instanceof SSHAccount)
-            {
-                throughAccount = globalThrough;
-            }
+            throughAccount = globalThrough;
         }
+
         return throughAccount;
     }
 
