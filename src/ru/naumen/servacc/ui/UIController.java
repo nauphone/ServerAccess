@@ -134,14 +134,7 @@ public class UIController
             config = configLoader.loadConfig();
             buildTree(config);
             updateTree(filteredTree.getFilter().getText());
-            if (!Util.isEmptyOrNull(globalThroughUniqueIdentity))
-            {
-                selectGlobalThrough(globalThroughUniqueIdentity);
-            }
-            else
-            {
-                doClearGlobalThrough();
-            }
+            refreshGlobalThrough();
         }
         catch (Exception e)
         {
@@ -368,7 +361,18 @@ public class UIController
         });
     }
 
-    // TODO: these methods need refactoring
+    private void refreshGlobalThrough()
+    {
+        if (!Util.isEmptyOrNull(globalThroughUniqueIdentity))
+        {
+            selectGlobalThrough(globalThroughUniqueIdentity);
+        }
+        else
+        {
+            doClearGlobalThrough();
+        }
+    }
+
     private void selectGlobalThrough(String uniqueIdentity)
     {
         selectGlobalThrough(config, uniqueIdentity, "");
@@ -381,10 +385,8 @@ public class UIController
             SSHAccount account = (SSHAccount) object;
             if (uniqueIdentity.equals(account.getUniqueIdentity()))
             {
-                final Color fg = shell.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
-                globalThrough.setText(prefix + " > " + account);
-                globalThrough.setForeground(fg);
-                clearGlobalThrough.setVisible(true);
+                String globalThroughText = prefix + " > " + account;
+                setGlobalThroughWidget(globalThroughText);
                 backend.setGlobalThrough(account);
                 return true;
             }
@@ -417,14 +419,27 @@ public class UIController
         return false;
     }
 
+    private void setGlobalThroughWidget(String globalThroughText)
+    {
+        final Color fg = shell.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
+        globalThrough.setText(globalThroughText);
+        globalThrough.setForeground(fg);
+        clearGlobalThrough.setVisible(true);
+    }
+
     private void doClearGlobalThrough()
+    {
+        clearGlobalThroughWidget();
+        globalThroughUniqueIdentity = null;
+        backend.setGlobalThrough(null);
+    }
+
+    private void clearGlobalThroughWidget()
     {
         final Color gray = shell.getDisplay().getSystemColor(SWT.COLOR_GRAY);
         globalThrough.setText("(drop an account here)");
         globalThrough.setForeground(gray);
         clearGlobalThrough.setVisible(false);
-        globalThroughUniqueIdentity = null;
-        backend.setGlobalThrough(null);
     }
 
     private void createTrayItem()
