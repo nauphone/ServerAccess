@@ -76,7 +76,7 @@ import ru.naumen.servacc.settings.SourceListProvider;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
-public class UIController
+public class UIController implements GlobalThroughView
 {
     private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
@@ -419,14 +419,6 @@ public class UIController
         return false;
     }
 
-    private void setGlobalThroughWidget(String globalThroughText)
-    {
-        final Color fg = shell.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
-        globalThrough.setText(globalThroughText);
-        globalThrough.setForeground(fg);
-        clearGlobalThrough.setVisible(true);
-    }
-
     private void doClearGlobalThrough()
     {
         clearGlobalThroughWidget();
@@ -434,7 +426,17 @@ public class UIController
         backend.setGlobalThrough(null);
     }
 
-    private void clearGlobalThroughWidget()
+    @Override
+    public void setGlobalThroughWidget(String globalThroughText)
+    {
+        final Color fg = shell.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
+        globalThrough.setText(globalThroughText);
+        globalThrough.setForeground(fg);
+        clearGlobalThrough.setVisible(true);
+    }
+
+    @Override
+    public void clearGlobalThroughWidget()
     {
         final Color gray = shell.getDisplay().getSystemColor(SWT.COLOR_GRAY);
         globalThrough.setText("(drop an account here)");
