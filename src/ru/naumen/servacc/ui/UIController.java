@@ -71,6 +71,8 @@ import ru.naumen.servacc.config2.i.IConfigItem;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
+import ru.naumen.servacc.globalthrough.GlobalThroughController;
+import ru.naumen.servacc.globalthrough.GlobalThroughView;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.SourceListProvider;
 import ru.naumen.servacc.util.StringEncrypter;

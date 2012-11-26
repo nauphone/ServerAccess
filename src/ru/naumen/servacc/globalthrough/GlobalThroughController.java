@@ -7,7 +7,7 @@
  * packaging of this file.
  */
 
-package ru.naumen.servacc.ui;
+package ru.naumen.servacc.globalthrough;
 
 import ru.naumen.servacc.SSH2Backend;
 import ru.naumen.servacc.config2.Group;
@@ -18,7 +18,7 @@ import ru.naumen.servacc.util.Util;
 
 /**
  * Contains all logic around management of Global Through account.
- * Extracted from {@link UIController} in order to make this logic testable.
+ * Extracted from {@link ru.naumen.servacc.ui.UIController} in order to make this logic testable.
  *
  * @author Andrey Hitrin
  * @since 25.11.12
