@@ -19,12 +19,11 @@ import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfigItem;
-import ru.naumen.servacc.platform.Platform;
 
 public class TreeItemController
 {
     private TreeItemController parent;
-    private Object data;
+    private IConfigItem data;
     private List<TreeItemController> children;
 
     private boolean visible = true;
@@ -46,12 +45,12 @@ public class TreeItemController
         return parent;
     }
 
-    public Object getData()
+    public IConfigItem getData()
     {
         return data;
     }
 
-    public void setData(Object data)
+    public void setData(IConfigItem data)
     {
         this.data = data;
     }
@@ -95,7 +94,7 @@ public class TreeItemController
 
     public boolean matches(String filter)
     {
-        return data instanceof IConfigItem && ((IConfigItem) data).matches(filter);
+        return data.matches(filter);
     }
 
     private boolean uprisingMatches(String filter)
