@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import org.eclipse.swt.graphics.Image;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
@@ -111,27 +110,24 @@ public class TreeItemController
         return " " + data.toString();
     }
 
-    public Image getImage()
+    public String getImageName()
     {
         if (data instanceof SSHAccount)
         {
-            return ImageCache.getImage("/icons/application-terminal.png");
+            return "/icons/application-terminal.png";
         }
         else if (data instanceof HTTPAccount)
         {
-            return ImageCache.getImage("/icons/application-browser.png");
+            return "/icons/application-browser.png";
         }
         else if (data instanceof Account)
         {
-            return ImageCache.getImage("/icons/card.png");
+            return "/icons/card.png";
         }
         else if (data instanceof Group)
         {
-            return ImageCache.getImage("/icons/folder-horizontal.png");
+            return "/icons/folder-horizontal.png";
         }
-        else
-        {
-            return null;
-        }
+        return null;
     }
 }

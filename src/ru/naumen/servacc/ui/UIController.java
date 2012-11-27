@@ -825,10 +825,10 @@ public class UIController implements GlobalThroughView
     {
         treeItem.setData(tic);
         treeItem.setText(tic.toString());
-        Image image = tic.getImage();
-        if (image != null)
+        String imageName = tic.getImageName();
+        if (imageName != null)
         {
-            treeItem.setImage(image);
+            treeItem.setImage(ImageCache.getImage(imageName));
         }
         for (TreeItemController child : tic.getChildren())
         {
