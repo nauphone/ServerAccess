@@ -13,10 +13,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import ru.naumen.servacc.config2.Account;
-import ru.naumen.servacc.config2.Group;
-import ru.naumen.servacc.config2.HTTPAccount;
-import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfigItem;
 
 public class TreeItemController
@@ -112,22 +108,6 @@ public class TreeItemController
 
     public String getImageName()
     {
-        if (data instanceof SSHAccount)
-        {
-            return "/icons/application-terminal.png";
-        }
-        else if (data instanceof HTTPAccount)
-        {
-            return "/icons/application-browser.png";
-        }
-        else if (data instanceof Account)
-        {
-            return "/icons/card.png";
-        }
-        else if (data instanceof Group)
-        {
-            return "/icons/folder-horizontal.png";
-        }
-        return null;
+        return data.getIconName();
     }
 }

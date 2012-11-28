@@ -12,11 +12,12 @@ package ru.naumen.servacc.config2;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.log4j.Logger;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.util.Util;
+
+import org.apache.log4j.Logger;
 
 public class SSHAccount extends Account implements IConnectable, IPortForwarder, IFTPBrowseable
 {
@@ -109,5 +110,11 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
         String address = account.getParams().get(ACCOUNT_PARAM_ADDRESS);
         String login = account.getLogin();
         return "ssh://" + login + "@" + address;
+    }
+
+    @Override
+    public String getIconName()
+    {
+        return "/icons/application-terminal.png";
     }
 }

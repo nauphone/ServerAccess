@@ -64,4 +64,10 @@ public class Group implements IConfigItem
         }
         return false;
     }
+
+    @Override
+    public String getIconName()
+    {
+        return "/icons/folder-horizontal.png";
+    }
 }

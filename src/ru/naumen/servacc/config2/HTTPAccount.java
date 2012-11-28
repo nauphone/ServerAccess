@@ -49,4 +49,10 @@ public class HTTPAccount extends Account implements IConnectable
         }
         return false;
     }
+
+    @Override
+    public String getIconName()
+    {
+        return "/icons/application-browser.png";
+    }
 }

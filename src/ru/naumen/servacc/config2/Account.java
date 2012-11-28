@@ -132,4 +132,10 @@ public class Account implements IConfigItem
         }
         return false;
     }
+
+    @Override
+    public String getIconName()
+    {
+        return "/icons/card.png";
+    }
 }
