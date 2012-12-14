@@ -72,7 +72,7 @@ Source: https://github.com/w31rd0/ServerAccess
 Description: An SSH,FTP and HTTP client.
  A tool for getting servers info from db and connecting to selected servers by ssh
  or others tools (uses ssh port mapping to local ports)
-Depends: libswt-gtk-3-java, libswt-gtk-3-jni
+Depends: libswt-gtk-3-java, libswt-gtk-3-jni, gftp
 Installed-Size: $SIZE
 Priority: optional
 Essential: no
