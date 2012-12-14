@@ -18,7 +18,7 @@ public class Linux implements Platform
     @Override
     public void openFTPBrowser(Object[] params) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("xdg-open ftp://anonymous@{0}:{1,number,#}", params));
+        Runtime.getRuntime().exec(MessageFormat.format("gftp ftp://anonymous@{0}:{1,number,#}", params));
     }
 
     @Override
