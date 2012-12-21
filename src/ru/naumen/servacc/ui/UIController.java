@@ -302,10 +302,10 @@ public class UIController implements GlobalThroughView
             {
                 event.doit = false;
 
-                TreeItem[] selection = filteredTree.getTree().getSelection();
-                if (selection.length == 1)
+                TreeItem[] treeSelection = filteredTree.getTree().getSelection();
+                if (treeSelection.length == 1)
                 {
-                    TreeItemController tic = getConfigTreeItem(selection[0]);
+                    TreeItemController tic = getConfigTreeItem(treeSelection[0]);
                     if (tic.getData() instanceof SSHAccount)
                     {
                         event.data = ((SSHAccount) tic.getData()).getUniqueIdentity();
@@ -621,16 +621,16 @@ public class UIController implements GlobalThroughView
             Collection<String> configSources = sourceListProvider.list();
 
             int encryptableFiles = 0;
-            for (String config : configSources)
+            for (String configURL : configSources)
             {
-                if (!config.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(config))
+                if (!configURL.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(configURL))
                 {
                     continue;
                 }
                 encryptableFiles++;
 
                 EncryptDialog dialog = new EncryptDialog(shell);
-                dialog.setURL(config);
+                dialog.setURL(configURL);
                 dialog.show();
                 String password = dialog.getPassword();
 
@@ -639,10 +639,10 @@ public class UIController implements GlobalThroughView
                     continue;
                 }
 
-                String content = new Scanner(configLoader.getConfigStream(config, shell)).useDelimiter("\\A").next();
+                String content = new Scanner(configLoader.getConfigStream(configURL, shell)).useDelimiter("\\A").next();
                 byte[] encryptedContent = new StringEncrypter("DESede", password).encrypt(content).getBytes();
 
-                OutputStream os = new FileOutputStream(config.substring(FileResource.uriPrefix.length()));
+                OutputStream os = new FileOutputStream(configURL.substring(FileResource.uriPrefix.length()));
                 os.write(FileResource.encryptedHeader);
                 os.write(System.getProperty("line.separator").getBytes());
                 os.write(encryptedContent);
@@ -667,17 +667,17 @@ public class UIController implements GlobalThroughView
             Collection<String> configSources = sourceListProvider.list();
 
             int decryptableFiles = 0;
-            for (String config : configSources)
+            for (String configURL : configSources)
             {
-                String filePath = config.substring(FileResource.uriPrefix.length());
-                if (!config.startsWith(FileResource.uriPrefix) || !FileResource.isConfigEncrypted(config))
+                String filePath = configURL.substring(FileResource.uriPrefix.length());
+                if (!configURL.startsWith(FileResource.uriPrefix) || !FileResource.isConfigEncrypted(configURL))
                 {
                     continue;
                 }
 
                 decryptableFiles++;
 
-                InputStream stream = configLoader.getConfigStream(config, shell);
+                InputStream stream = configLoader.getConfigStream(configURL, shell);
                 if (stream == null)
                 {
                     continue;
@@ -887,10 +887,10 @@ public class UIController implements GlobalThroughView
 
     private TreeItem getSelectedTreeItem()
     {
-        TreeItem[] selection = filteredTree.getTree().getSelection();
-        if ((selection.length) == 1)
+        TreeItem[] treeSelection = filteredTree.getTree().getSelection();
+        if ((treeSelection.length) == 1)
         {
-            return selection[0];
+            return treeSelection[0];
         }
         return null;
     }
