@@ -1,3 +1,21 @@
+New in 0.9.10:
+-------
+
+Bugs fixed:
+
+ * NPE when trying to reconnect rebooted machine (#12)
+ * Global through account is not flushed (#21)
+ * File transfer doesn't work (#22)
+
+GFTP is added to dependency list in order to support file transfer on Linux.
+Support for generic file transfer mechanism may be added in future.
+
+Code cleanup:
+
+ * Use logger instead of printStackTrace()
+ * Many small code cleanups
+
+
 New in 0.9.9.5:
 -------
 
