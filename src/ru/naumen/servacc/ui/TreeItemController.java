@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import ru.naumen.servacc.config2.EmptyConfigItem;
 import ru.naumen.servacc.config2.i.IConfigItem;
 
 public class TreeItemController
 {
     private TreeItemController parent;
-    private IConfigItem data;
+    private IConfigItem data = new EmptyConfigItem();
     private List<TreeItemController> children;
 
     private boolean visible = true;
@@ -89,7 +90,7 @@ public class TreeItemController
 
     public boolean matches(String filter)
     {
-        return data != null && data.matches(filter);
+        return data.matches(filter);
     }
 
     private boolean uprisingMatches(String filter)
