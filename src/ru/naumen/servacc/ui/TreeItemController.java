@@ -89,7 +89,7 @@ public class TreeItemController
 
     public boolean matches(String filter)
     {
-        return data.matches(filter);
+        return data != null && data.matches(filter);
     }
 
     private boolean uprisingMatches(String filter)
