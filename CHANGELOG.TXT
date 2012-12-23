@@ -1,3 +1,11 @@
+New in 0.9.10.1:
+-------
+
+Hotfix:
+
+ * Fix NPE during filtering
+
+
 New in 0.9.10:
 -------
 
