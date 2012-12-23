@@ -712,8 +712,7 @@ public class UIController implements GlobalThroughView
 
     private void buildBranch(TreeItemController parent, IConfigItem config)
     {
-        TreeItemController newTreeItem = new TreeItemController(parent);
-        newTreeItem.setData(config);
+        TreeItemController newTreeItem = new TreeItemController(parent, config);
         if (config instanceof Group)
         {
             for (IConfigItem configItem : ((Group) config).getChildren())

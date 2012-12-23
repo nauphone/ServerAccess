@@ -18,8 +18,9 @@ import ru.naumen.servacc.config2.i.IConfigItem;
 
 public class TreeItemController
 {
-    private TreeItemController parent;
-    private IConfigItem data = new EmptyConfigItem();
+    private final IConfigItem data;
+    private final TreeItemController parent;
+
     private List<TreeItemController> children;
 
     private boolean visible = true;
@@ -27,12 +28,13 @@ public class TreeItemController
 
     public TreeItemController()
     {
-        this(null);
+        this(null, new EmptyConfigItem());
     }
 
-    public TreeItemController(TreeItemController parent)
+    public TreeItemController(TreeItemController parent, IConfigItem data)
     {
         this.parent = parent;
+        this.data = data;
         children = new ArrayList<TreeItemController>();
     }
 
@@ -44,11 +46,6 @@ public class TreeItemController
     public IConfigItem getData()
     {
         return data;
-    }
-
-    public void setData(IConfigItem data)
-    {
-        this.data = data;
     }
 
     public List<TreeItemController> getChildren()
