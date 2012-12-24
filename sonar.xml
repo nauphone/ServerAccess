@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="sonar" default="sonar">
+    <include file="build.xml" as="root"/>
+
+    <property name="sonar.jdbc.url" value="jdbc:postgresql://localhost:5433/sonar"/>
+    <property name="sonar.jdbc.driverClassName" value="org.postgresql.Driver"/>
+
+    <!-- Add the target -->
+    <target name="sonar" depends="root.test">
+        <!-- list of mandatories Sonar properties -->
+        <property name="sonar.sources" value="src" />
+
+        <!-- list of optional Sonar properties -->
+        <property name="sonar.projectName" value="ServerAccess" />
+        <property name="sonar.binaries" value="build,buildt" />
+        <property name="sonar.tests" value="test,buildt" />
+        <property name="sonar.surefire.reportsPath" value="buildt/reports" />
+        <property name="sonar.libraries" value="lib" />
+        <property name="sonar.jacoco.antTargets" value="root.test" />
+
+        <sonar:sonar key="ru.naumen:ServerAccess" version="0.9.10.1" xmlns:sonar="antlib:org.sonar.ant"/>
+    </target>
+</project>
