@@ -1,3 +1,11 @@
+New in 0.9.10.2:
+-------
+
+Hotfix:
+
+ * Add dependency on Log4J to Windows bundle
+
+
 New in 0.9.10.1:
 -------
 
