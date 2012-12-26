@@ -57,6 +57,7 @@ Section -Main
     File "..\distr\servacc.jar"
     File "..\build\swt\swt.jar"
     File "..\lib\mindterm.jar"
+    File "..\lib\log4j-1.2.17.jar"
     File "..\resource\putty.exe"
     File "..\resource\prog.ico"
     File "..\resource\rdesktop.exe"
@@ -66,12 +67,12 @@ Section -Registry
 SectionEnd
 
 Section -Shortcut
-    CreateShortCut "$INSTDIR\Server Access.lnk" "javaw.exe" "-classpath $\"mindterm.jar;servacc.jar;swt.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
+    CreateShortCut "$INSTDIR\Server Access.lnk" "javaw.exe" "-classpath $\"mindterm.jar;servacc.jar;swt.jar;log4j-1.2.17.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
 SectionEnd
 
 Section "$(TEXT_DesktopShortcut)"
     SetOutPath "$INSTDIR"
-    CreateShortCut "$DESKTOP\Server Access.lnk" "javaw.exe" "-classpath $\"mindterm.jar;servacc.jar;swt.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
+    CreateShortCut "$DESKTOP\Server Access.lnk" "javaw.exe" "-classpath $\"mindterm.jar;servacc.jar;swt.jar;log4j-1.2.17.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
 SectionEnd
 
 Section "$(TEXT_EnableBasicAuthorization)"
