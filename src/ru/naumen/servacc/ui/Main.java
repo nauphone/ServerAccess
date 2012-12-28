@@ -20,6 +20,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ApplicationProperties;
@@ -50,11 +51,14 @@ public class Main implements Runnable
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
         Backend backend = new Backend(browser, ftpBrowser, terminal, executor);
-        UIController controller = new UIController(shell, platform, backend, executor,
+        HTTPProxy httpProxy = new HTTPProxy(backend, executor);
+        UIController controller = new UIController(shell, platform, backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"));
         shell.open();
         // Load accounts
         controller.reloadConfig();
+        // Start proxy server
+        httpProxy.start();
 
         while (!shell.isDisposed())
         {
@@ -63,6 +67,7 @@ public class Main implements Runnable
                 display.sleep();
             }
         }
+        httpProxy.finish();
         display.dispose();
         backend.cleanup();
     }

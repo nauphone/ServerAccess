@@ -22,6 +22,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.mindbright.ssh2.SSH2InternalChannel;
 import com.mindbright.ssh2.SSH2SessionChannel;
 import com.mindbright.ssh2.SSH2SimpleClient;
 import org.apache.log4j.Logger;
@@ -220,5 +221,23 @@ public class Backend extends SSH2Backend
         {
             server.close();
         }
+    }
+
+    /**
+     * Use ssh chain to tunnel HTTP traffic
+     * TODO use better synchronized access
+     *
+     * @param host
+     * @param port
+     * @param account
+     */
+    public synchronized SSH2InternalChannel openProxyConnection(String host, int port, SSHAccount account) throws Exception
+    {
+        if (account != null)
+        {
+            SSH2SimpleClient client = getSSH2Client(account);
+            return client.getConnection().newLocalInternalForward(host, port);
+        }
+        return null;
     }
 }

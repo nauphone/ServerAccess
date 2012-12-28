@@ -52,8 +52,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
 import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
@@ -81,6 +81,7 @@ public class UIController implements GlobalThroughView
     private Clipboard clipboard;
     private Backend backend;
     private ExecutorService executor;
+    private HTTPProxy httpProxy;
     private ConfigLoader configLoader;
     private IConfig config;
 
@@ -88,6 +89,7 @@ public class UIController implements GlobalThroughView
     private ToolItem toolitemConnect;
     private ToolItem toolitemPortForwarding;
     private ToolItem toolitemFTP;
+    private ToolItem toolItemProxy;
     private ToolItem toolitemCopy;
     private ToolItem toolitemReloadConfig;
 
@@ -100,7 +102,7 @@ public class UIController implements GlobalThroughView
 
     private Timer refreshTimer;
 
-    public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, ListProvider sourceListProvider)
+    public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider)
     {
         this.shell = shell;
         this.clipboard = new Clipboard(shell.getDisplay());
@@ -109,6 +111,7 @@ public class UIController implements GlobalThroughView
         this.synchronousAlert = new SynchronousAlert(shell);
         this.asynchronousAlert = new AsynchronousProxy(synchronousAlert);
         this.configLoader = new ConfigLoader(shell, sourceListProvider, synchronousAlert);
+        this.httpProxy = httpProxy;
         this.globalThroughController = new GlobalThroughController(this, backend);
         createToolBar();
         createFilteredTree(platform.useSystemSearchWidget());
@@ -170,6 +173,11 @@ public class UIController implements GlobalThroughView
         toolitemFTP.setImage(ImageCache.getImage("/icons/drive-network.png"));
         toolitemFTP.setEnabled(false);
 
+        toolItemProxy = new ToolItem(toolbar, SWT.PUSH);
+        toolItemProxy.setText("HTTP Proxy");
+        toolItemProxy.setImage(ImageCache.getImage("/icons/earth.png"));
+        toolItemProxy.setEnabled(false);
+
         toolitemCopy = new ToolItem(toolbar, SWT.PUSH);
         toolitemCopy.setText("Copy Password");
         toolitemCopy.setImage(ImageCache.getImage("/icons/document-copy.png"));
@@ -215,6 +223,19 @@ public class UIController implements GlobalThroughView
             public void widgetSelected(SelectionEvent e)
             {
                 ftpConnectionRequested(getSelectedTreeItem());
+            }
+        });
+        toolItemProxy.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetSelected(SelectionEvent selectionEvent)
+            {
+                httpProxySetupRequested(getSelectedTreeItem());
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent selectionEvent)
+            {
             }
         });
         toolitemCopy.addSelectionListener(new SelectionListener()
@@ -266,6 +287,7 @@ public class UIController implements GlobalThroughView
                     toolitemConnect.setEnabled(isConnectable(item));
                     toolitemPortForwarding.setEnabled(isPortForwarder(item));
                     toolitemFTP.setEnabled(isFTPBrowseable(item));
+                    toolItemProxy.setEnabled(isPortForwarder(item));
                     toolitemCopy.setEnabled(isAccount(item));
                 }
             }
@@ -582,6 +604,20 @@ public class UIController implements GlobalThroughView
             }
         }
     }
+
+    private void httpProxySetupRequested(TreeItem item)
+    {
+        TreeItemController tic = getConfigTreeItem(item);
+        if (tic != null && tic.getData() instanceof SSHAccount)
+        {
+            ProxySetupDialog dialog = new ProxySetupDialog(shell);
+            dialog.show();
+
+            httpProxy.setProxyOn((SSHAccount) tic.getData(), dialog.getPort());
+            // TODO: display proxy status somewhere
+        }
+    }
+
 
     private void passwordCopyRequested(TreeItem item)
     {
