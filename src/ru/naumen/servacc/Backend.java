@@ -15,9 +15,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
@@ -41,24 +39,10 @@ public class Backend extends SSH2Backend
     private final Platform platform;
     private final ExecutorService executor;
 
-    public Backend(Platform platform)
+    public Backend(Platform platform, ExecutorService executorService)
     {
         this.platform = platform;
-        this.executor = Executors.newCachedThreadPool(new ThreadFactory()
-        {
-            @Override
-            public Thread newThread(Runnable runnable)
-            {
-                final Thread thread = new Thread(runnable);
-                thread.setDaemon(true);
-                return thread;
-            }
-        });
-    }
-
-    public void execute(Runnable runnable)
-    {
-        this.executor.execute(runnable);
+        this.executor = executorService;
     }
 
     public void openSSHAccount(final SSHAccount account) throws Exception

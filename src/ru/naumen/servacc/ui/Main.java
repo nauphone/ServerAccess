@@ -9,6 +9,10 @@
  */
 package ru.naumen.servacc.ui;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadFactory;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
@@ -41,8 +45,10 @@ public class Main implements Runnable
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
-        Backend backend = new Backend(platform);
-        UIController controller = new UIController(shell, platform, backend, configuration.sourceListProvider());
+        ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
+        Backend backend = new Backend(platform, executor);
+        UIController controller = new UIController(shell, platform, backend, executor,
+            configuration.sourceListProvider());
         shell.open();
         // Load accounts
         controller.reloadConfig();
@@ -76,5 +82,16 @@ public class Main implements Runnable
         });
         config.restorePosition();
         return shell;
+    }
+
+    private static class DaemonizerThreadFactory implements ThreadFactory
+    {
+        @Override
+        public Thread newThread(Runnable runnable)
+        {
+            final Thread thread = new Thread(runnable);
+            thread.setDaemon(true);
+            return thread;
+        }
     }
 }

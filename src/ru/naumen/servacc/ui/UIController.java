@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -86,6 +87,7 @@ public class UIController implements GlobalThroughView
 
     private Clipboard clipboard;
     private Backend backend;
+    private ExecutorService executor;
     private ConfigLoader configLoader;
     private IConfig config;
 
@@ -105,13 +107,14 @@ public class UIController implements GlobalThroughView
 
     private Timer refreshTimer;
 
-    public UIController(Shell shell, Platform platform, Backend backend, SourceListProvider sourceListProvider)
+    public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, SourceListProvider sourceListProvider)
     {
         this.shell = shell;
         this.platform = platform;
         this.sourceListProvider = sourceListProvider;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
+        this.executor = executor;
         this.configLoader = new ConfigLoader(this, shell, sourceListProvider);
         this.globalThroughController = new GlobalThroughController(this, backend);
         createToolBar();
@@ -504,7 +507,7 @@ public class UIController implements GlobalThroughView
         {
             if (tic.getData() instanceof SSHAccount)
             {
-                this.backend.execute(new Runnable()
+                this.executor.execute(new Runnable()
                 {
                     @Override
                     public void run()
@@ -523,7 +526,7 @@ public class UIController implements GlobalThroughView
             }
             else if (tic.getData() instanceof HTTPAccount)
             {
-                this.backend.execute(new Runnable()
+                this.executor.execute(new Runnable()
                 {
                     @Override
                     public void run()
