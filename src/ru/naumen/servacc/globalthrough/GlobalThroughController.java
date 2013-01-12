@@ -52,7 +52,7 @@ public class GlobalThroughController
 
     public void select(String uniqueIdentity, IConfig config)
     {
-        if(canSelect(config, uniqueIdentity, ""))
+        if(canSelect(config, uniqueIdentity))
         {
             globalThroughUniqueIdentity = uniqueIdentity;
         }
@@ -62,7 +62,19 @@ public class GlobalThroughController
         }
     }
 
-    private boolean canSelect(Object object, String uniqueIdentity, String prefix)
+    private boolean canSelect(IConfig config, String uniqueIdentity)
+    {
+        for (IConfigItem i : config.getChildren())
+        {
+            if (canSelect(i, uniqueIdentity, ""))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean canSelect(IConfigItem object, String uniqueIdentity, String prefix)
     {
         if (object instanceof SSHAccount)
         {
@@ -73,16 +85,6 @@ public class GlobalThroughController
                 view.setGlobalThroughWidget(globalThroughText);
                 backend.setGlobalThrough(account);
                 return true;
-            }
-        }
-        else if (object instanceof IConfig)
-        {
-            for (IConfigItem i : ((IConfig) object).getChildren())
-            {
-                if (canSelect(i, uniqueIdentity, prefix))
-                {
-                    return true;
-                }
             }
         }
         else if (object instanceof Group)
