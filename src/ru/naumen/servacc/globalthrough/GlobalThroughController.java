@@ -30,7 +30,7 @@ public class GlobalThroughController
     //      we should try to condense it inside single class
     private final SSH2Backend backend;
 
-    private String globalThroughUniqueIdentity;
+    private String globalThroughUniqueIdentity = "";
 
     public GlobalThroughController(GlobalThroughView view, SSH2Backend backend)
     {
@@ -38,29 +38,28 @@ public class GlobalThroughController
         this.backend = backend;
     }
 
-    public void refresh(IConfig defaultConfig)
+    public void refresh(IConfig newConfig)
     {
-        if (!Util.isEmptyOrNull(globalThroughUniqueIdentity))
-        {
-            select(globalThroughUniqueIdentity, defaultConfig);
-        }
-        else
-        {
-            clear();
-        }
+        select(globalThroughUniqueIdentity, newConfig);
     }
 
     public void clear()
     {
         view.clearGlobalThroughWidget();
-        globalThroughUniqueIdentity = null;
+        globalThroughUniqueIdentity = "";
         backend.setGlobalThrough(null);
     }
 
-    public void select(String uniqueIdentity, IConfig defaultConfig)
+    public void select(String uniqueIdentity, IConfig config)
     {
-        globalThroughUniqueIdentity = uniqueIdentity;
-        canSelect(defaultConfig, uniqueIdentity, "");
+        if(canSelect(config, uniqueIdentity, ""))
+        {
+            globalThroughUniqueIdentity = uniqueIdentity;
+        }
+        else
+        {
+            clear();
+        }
     }
 
     private boolean canSelect(Object object, String uniqueIdentity, String prefix)

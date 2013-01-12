@@ -7,8 +7,8 @@ import static org.junit.Assert.assertThat;
 import java.util.Arrays;
 import java.util.List;
 
-import org.junit.Ignore;
 import org.junit.Test;
+
 import ru.naumen.servacc.SSH2Backend;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
@@ -128,7 +128,6 @@ public class GlobalThroughControllerTest
     }
 
     @Test
-    @Ignore("not fixed yet")
     public void whenGlobalThroughAccountIsNotFoundAfterRefreshThenItShouldBeCleared()
     {
         SSHAccount account = new SSHAccountStub("user@host", "user@host");
