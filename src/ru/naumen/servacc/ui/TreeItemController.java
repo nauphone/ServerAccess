@@ -85,18 +85,19 @@ public class TreeItemController
         return true;
     }
 
-    public boolean matches(String filter)
-    {
-        return data.matches(filter);
-    }
-
     private boolean uprisingMatches(String filter)
     {
-        if (matches(filter))
-        {
-            return true;
-        }
-        return (getParent() != null && getParent().uprisingMatches(filter));
+        return dataMatches(filter) || parentMatches(filter);
+    }
+
+    private boolean parentMatches(String filter)
+    {
+        return (getParent() != null) && getParent().uprisingMatches(filter);
+    }
+
+    private boolean dataMatches(String filter)
+    {
+        return data.matches(filter);
     }
 
     public String toString()
