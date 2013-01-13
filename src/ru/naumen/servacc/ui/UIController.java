@@ -761,11 +761,10 @@ public class UIController implements GlobalThroughView
     {
         if (filters.size() > 0)
         {
-            Boolean matches = item.matches(filters);
-            if (matches)
+            if (item.matches(filters))
             {
                 item.setVisibility(true);
-                raiseVisibility(item);
+                item.raiseVisibility();
             }
             else
             {
@@ -837,17 +836,6 @@ public class UIController implements GlobalThroughView
             {
                 createTreeItem(treeItem, child);
             }
-        }
-    }
-
-    private void raiseVisibility(TreeItemController item)
-    {
-        TreeItemController parent = item.getParent();
-        while (!(parent == null || (parent.isExpanded() && parent.isVisible())))
-        {
-            parent.setVisibility(true);
-            parent.setExpanded(true);
-            parent = parent.getParent();
         }
     }
 

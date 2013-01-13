@@ -10,7 +10,6 @@
 package ru.naumen.servacc.test.ui;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
@@ -28,20 +27,6 @@ import ru.naumen.servacc.ui.TreeItemController;
 public class TreeItemControllerTest
 {
     private TreeItemController controller = new TreeItemController();
-
-    @Test
-    public void defaultParentIsNull()
-    {
-        assertThat(controller.getParent(), is(nullValue()));
-    }
-
-    @Test
-    public void parentMustBeSetInConstructor()
-    {
-        TreeItemController parent = new TreeItemController();
-        controller = new TreeItemController(parent, null);
-        assertThat(controller.getParent(), is(parent));
-    }
 
     @Test
     public void dataMustBeSetInConstructor()
@@ -155,5 +140,47 @@ public class TreeItemControllerTest
         };
         controller = new TreeItemController(null, data);
         assertThat(controller.getImageName(), is("icon name"));
+    }
+
+    @Test
+    public void allParentsAreExpandedOnRaiseVisibility()
+    {
+        TreeItemController root = new TreeItemController(null, null);
+        TreeItemController parent = new TreeItemController(root, null);
+        controller = new TreeItemController(parent, null);
+
+        root.setExpanded(false);
+        parent.setExpanded(false);
+        controller.raiseVisibility();
+        assertThat(parent.isExpanded(), is(true));
+        assertThat(root.isExpanded(), is(true));
+    }
+
+    @Test
+    public void allParentsAreVisibleOnRaiseVisibility()
+    {
+        TreeItemController root = new TreeItemController(null, null);
+        TreeItemController parent = new TreeItemController(root, null);
+        controller = new TreeItemController(parent, null);
+
+        root.setVisibility(false);
+        parent.setVisibility(false);
+        controller.raiseVisibility();
+        assertThat(parent.isVisible(), is(true));
+        assertThat(root.isVisible(), is(true));
+    }
+
+    @Test
+    public void raiseVisibilityStopsOnTheFirstVisibleAndExpandedParent()
+    {
+        TreeItemController root = new TreeItemController(null, null);
+        TreeItemController parent = new TreeItemController(root, null);
+        controller = new TreeItemController(parent, null);
+
+        root.setVisibility(false);
+        parent.setVisibility(true);
+        parent.setExpanded(true);
+        controller.raiseVisibility();
+        assertThat(root.isVisible(), is(false)); // process stops on parent
     }
 }

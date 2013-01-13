@@ -38,11 +38,6 @@ public class TreeItemController
         children = new ArrayList<TreeItemController>();
     }
 
-    public TreeItemController getParent()
-    {
-        return parent;
-    }
-
     public IConfigItem getData()
     {
         return data;
@@ -73,6 +68,17 @@ public class TreeItemController
         return expanded;
     }
 
+    public void raiseVisibility()
+    {
+        if ((parent == null) || (parent.isExpanded() && parent.isVisible()))
+        {
+            return;
+        }
+        parent.setVisibility(true);
+        parent.setExpanded(true);
+        parent.raiseVisibility();
+    }
+
     public boolean matches(Collection<String> filters)
     {
         for (String f : filters)
@@ -92,7 +98,7 @@ public class TreeItemController
 
     private boolean parentMatches(String filter)
     {
-        return (getParent() != null) && getParent().uprisingMatches(filter);
+        return (parent != null) && parent.uprisingMatches(filter);
     }
 
     private boolean dataMatches(String filter)
