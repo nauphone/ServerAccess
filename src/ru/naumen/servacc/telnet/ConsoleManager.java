@@ -109,7 +109,7 @@ public class ConsoleManager
             List<Integer> lst = new ArrayList<Integer>();
             while (val != IAC)
             {
-                lst.add(Integer.valueOf(val));
+                lst.add(val);
                 val = super.read();
             }
             super.read();
@@ -119,8 +119,8 @@ public class ConsoleManager
             {
             case O_WINDOW_SIZE_NEG:
                 session.sendWindowChange(
-                    arr[2].intValue() * 256 + arr[3].intValue(),
-                    arr[0].intValue() * 256 + arr[1].intValue());
+                    arr[2] * 256 + arr[3],
+                    arr[0] * 256 + arr[1]);
                 LOGGER.info("IAC SB WINDOW SIZE NEG: " + buffer);
                 break;
             default:

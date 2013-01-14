@@ -33,7 +33,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     private void parseHostAndPort()
     {
         String host = getParams().get(ACCOUNT_PARAM_ADDRESS);
-        Integer port = Integer.valueOf(DEFAULT_SSH_PORT);
+        Integer port = DEFAULT_SSH_PORT;
         String[] parts = host.split(":", 2);
         if (parts.length > 1)
         {
