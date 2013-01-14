@@ -31,7 +31,6 @@ import com.mindbright.ssh2.SSH2SFTPClient;
  */
 public class FTP2SFTPProxy implements FTPServerEventHandler
 {
-
     protected SSH2Connection connection;
     protected SSH2SFTPClient sftp;
     protected FTPServer ftp;
@@ -207,10 +206,13 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         {
             sftp.remove(expandRemote(file));
         }
+        catch (SSH2SFTP.SFTPPermissionDeniedException  e)
+        {
+            throw new FTPException(550, "access denied");
+        }
         catch (SSH2SFTP.SFTPException e)
         {
-            String msg = (e instanceof SSH2SFTP.SFTPPermissionDeniedException) ? "access denied." : file + ": no such file.";
-            throw new FTPException(550, msg);
+            throw new FTPException(550, file + ": no such file.");
         }
     }
 
@@ -220,10 +222,13 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         {
             sftp.rmdir(expandRemote(dir));
         }
+        catch (SSH2SFTP.SFTPPermissionDeniedException e)
+        {
+            throw new FTPException(550, "access denied");
+        }
         catch (SSH2SFTP.SFTPException e)
         {
-            String msg = (e instanceof SSH2SFTP.SFTPPermissionDeniedException) ? "access denied." : dir + ": no such directory.";
-            throw new FTPException(550, msg);
+            throw new FTPException(550, dir + ": no such directory.");
         }
     }
 
@@ -349,7 +354,9 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
     {
         String res = s;
         while (res.length() < width)
+        {
             res = " " + res;
+        }
         return res;
     }
 
