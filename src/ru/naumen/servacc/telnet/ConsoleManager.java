@@ -114,17 +114,16 @@ public class ConsoleManager
             }
             super.read();
             Integer[] arr = lst.toArray(new Integer[lst.size()]);
-            StringBuffer buffer = new StringBuffer();
             switch (command)
             {
             case O_WINDOW_SIZE_NEG:
                 session.sendWindowChange(
                     arr[2] * 256 + arr[3],
                     arr[0] * 256 + arr[1]);
-                LOGGER.info("IAC SB WINDOW SIZE NEG: " + buffer);
+                LOGGER.info("IAC SB WINDOW SIZE NEG");
                 break;
             default:
-                LOGGER.warn("IAC SB UNKNOWN(" + command + buffer + ")");
+                LOGGER.warn("IAC SB UNKNOWN(" + command + ")");
                 break;
             }
         }
