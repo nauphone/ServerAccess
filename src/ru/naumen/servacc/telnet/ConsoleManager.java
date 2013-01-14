@@ -224,11 +224,6 @@ public class ConsoleManager
             this.manager = manager;
         }
 
-        public void write_(byte[] bs) throws IOException
-        {
-            out.write(bs);
-        }
-
         public void write(byte[] b, int off, int len) throws IOException
         {
             if ((off | len | (b.length - (len + off)) | (off + len)) < 0)

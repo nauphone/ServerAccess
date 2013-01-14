@@ -9,20 +9,19 @@
  */
 package ru.naumen.servacc;
 
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.zip.GZIPInputStream;
-import java.util.zip.InflaterInputStream;
 import java.util.zip.Inflater;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
+import java.util.zip.InflaterInputStream;
 
 import ru.naumen.servacc.util.Util;
 
@@ -49,12 +48,6 @@ public class HTTPResource
     public HTTPResource(String url) throws MalformedURLException
     {
         this.url = new URL(url);
-    }
-
-    public HTTPResource(String url, String login, String password) throws MalformedURLException
-    {
-        this(url);
-        setAuthentication(login, password);
     }
 
     public void close()

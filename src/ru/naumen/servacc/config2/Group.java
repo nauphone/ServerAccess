@@ -38,11 +38,6 @@ public class Group implements IConfigItem
         return name;
     }
 
-    public String getComment()
-    {
-        return comment;
-    }
-
     public List<IConfigItem> getChildren()
     {
         return children;
