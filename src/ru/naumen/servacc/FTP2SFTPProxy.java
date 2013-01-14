@@ -282,14 +282,12 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
 
     public void store(String file, InputStream data, boolean binary) throws FTPException
     {
-        SSH2SFTP.FileHandle handle = null;
         try
         {
-            file = expandRemote(file);
-            handle = sftp.open(file, SSH2SFTP.SSH_FXF_WRITE | SSH2SFTP.SSH_FXF_TRUNC | SSH2SFTP.SSH_FXF_CREAT, new SSH2SFTP.FileAttributes());
-
+            String expandedFile = expandRemote(file);
+            SSH2SFTP.FileHandle handle = sftp.open(expandedFile, SSH2SFTP.SSH_FXF_WRITE | SSH2SFTP.SSH_FXF_TRUNC |
+                                                    SSH2SFTP.SSH_FXF_CREAT, new SSH2SFTP.FileAttributes());
             sftp.writeFully(handle, data);
-
         }
         catch (IOException e)
         {
@@ -317,13 +315,11 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
 
     public void retrieve(String file, OutputStream data, boolean binary) throws FTPException
     {
-        SSH2SFTP.FileHandle handle = null;
         try
         {
-            String eFile = expandRemote(file);
-            handle = sftp.open(eFile, SSH2SFTP.SSH_FXF_READ, new SSH2SFTP.FileAttributes());
+            String expandedFile = expandRemote(file);
+            SSH2SFTP.FileHandle handle = sftp.open(expandedFile, SSH2SFTP.SSH_FXF_READ, new SSH2SFTP.FileAttributes());
             sftp.readFully(handle, data);
-
         }
         catch (SSH2SFTP.SFTPNoSuchFileException e)
         {
