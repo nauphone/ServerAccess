@@ -85,7 +85,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     {
         if (uniqueIdentity == null)
         {
-            uniqueIdentity = getSignature(this);
+            uniqueIdentity = getSignature();
             // follow 'through' links
             SSHAccount cur = this;
             List<String> ids = new ArrayList<String>();
@@ -99,17 +99,16 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
                     break;
                 }
                 ids.add(cur.getId());
-                uniqueIdentity += " via " + getSignature(cur);
+                uniqueIdentity += " via " + cur.getSignature();
             }
         }
         return uniqueIdentity;
     }
 
-    private static String getSignature(SSHAccount account)
+    private String getSignature()
     {
-        String address = account.getParams().get(ACCOUNT_PARAM_ADDRESS);
-        String login = account.getLogin();
-        return "ssh://" + login + "@" + address;
+        String address = getParams().get(ACCOUNT_PARAM_ADDRESS);
+        return "ssh://" + getLogin() + "@" + address;
     }
 
     @Override
