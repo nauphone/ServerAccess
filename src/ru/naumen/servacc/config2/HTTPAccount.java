@@ -24,9 +24,7 @@ public class HTTPAccount extends Account implements IConnectable
 
     public String toString()
     {
-        String result;
-        String url = getParams().get("url");
-        result = url;
+        String result = getParams().get("url");
         String login = getParams().get(ACCOUNT_PARAM_LOGIN);
         if (!Util.isEmptyOrNull(login))
         {
