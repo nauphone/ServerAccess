@@ -116,4 +116,9 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     {
         return "/icons/application-terminal.png";
     }
+
+    public boolean needSudoLogin()
+    {
+        return getParams().containsKey("sudologin");
+    }
 }

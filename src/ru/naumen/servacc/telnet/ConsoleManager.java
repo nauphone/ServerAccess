@@ -17,10 +17,8 @@ import java.io.PushbackInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.mindbright.ssh2.SSH2SessionChannel;
-
 import org.apache.log4j.Logger;
 
 public class ConsoleManager
@@ -162,7 +160,7 @@ public class ConsoleManager
                     processIAC();
                     break;
                 case 17:
-                    unread((params.get("password") + "\n").getBytes());
+                    unread((getPassword() + "\n").getBytes());
                     break;
                 }
                 val = super.read();
@@ -256,15 +254,15 @@ public class ConsoleManager
     private ConsoleManagerInputStream in = null;
     private ConsoleManagerOutputStream out = null;
     private SSH2SessionChannel session;
-    private Map<String, String> params;
+    private String password;
     private boolean inSudoLogin;
 
-    public ConsoleManager(Socket client, SSH2SessionChannel session, Map<String, String> params)
+    public ConsoleManager(Socket client, SSH2SessionChannel session, String password, boolean sudoLogin)
     {
         this.client = client;
         this.session = session;
-        this.params = params;
-        this.inSudoLogin = params.containsKey("sudologin");
+        this.password = password;
+        this.inSudoLogin = sudoLogin;
     }
 
     public InputStream getInputStream() throws IOException
@@ -295,5 +293,10 @@ public class ConsoleManager
         say(IAC, DO, O_WINDOW_SIZE_NEG);
         say(IAC, WILL, O_ECHO);
         say(IAC, WILL, O_SUPPRESS_GA);
+    }
+
+    private String getPassword()
+    {
+        return password;
     }
 }

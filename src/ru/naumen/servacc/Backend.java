@@ -91,7 +91,7 @@ public class Backend extends SSH2Backend
                 throw new IOException("Failed to get PTY on remote side");
             }
             final Socket term = openTerminal(account);
-            final ConsoleManager console = new ConsoleManager(term, session, account.getParams());
+            final ConsoleManager console = new ConsoleManager(term, session, account.getPassword(), account.needSudoLogin());
             if (platform.needToNegotiateProtocolOptions())
             {
                 // TODO: probably this should be done regardless of the TELNET
