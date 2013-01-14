@@ -8,3 +8,5 @@ build
 buildt
 distr
 *.deb
+.sonar
+target
