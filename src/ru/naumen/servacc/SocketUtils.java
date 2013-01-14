@@ -17,9 +17,9 @@ public class SocketUtils
     public static final String LOCALHOST = "127.0.0.1";
     public static final int COLD_TIMEOUT = 15000;
     public static final int WARM_TIMEOUT = 1000;
-    private static int PORTBASE = 12000;
-    private static int PORTMAX = 13000;
-    private static int port = PORTBASE;
+    private static final int PORT_BASE = 12000;
+    private static final int PORT_MAX = 13000;
+    private static int port = PORT_BASE;
 
     public static ServerSocket createListener(String host) throws Exception
     {
@@ -32,9 +32,9 @@ public class SocketUtils
             }
             catch (Exception e)
             {
-                if (port > PORTMAX)
+                if (port > PORT_MAX)
                 {
-                    port = PORTBASE;
+                    port = PORT_BASE;
                 }
                 if (port == portstart)
                 {
