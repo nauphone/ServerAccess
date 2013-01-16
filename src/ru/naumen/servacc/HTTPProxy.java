@@ -136,7 +136,7 @@ public class HTTPProxy
             }
         }
 
-        public void readSocket() throws IOException
+        private void readSocket() throws IOException
         {
             clientInputStream = new PushbackInputStream(socket.getInputStream(), 1024);
             int symbol;
@@ -154,11 +154,9 @@ public class HTTPProxy
             request = builder.toString();
         }
 
-        public void parseRequest() throws MalformedURLException
+        private void parseRequest() throws MalformedURLException
         {
-            int nextAfterFirstSpace = request.indexOf(' ') + 1;
-            int secondSpace = request.indexOf(' ', nextAfterFirstSpace);
-            final URL requestedURL = new URL(request.substring(nextAfterFirstSpace, secondSpace));
+            final URL requestedURL = new URLBuilder(request).toURL();
             final String protocol = requestedURL.getProtocol();
             if(!supportedProtocol(protocol))
             {
@@ -221,6 +219,27 @@ public class HTTPProxy
                     }
                 }
             });
+        }
+    }
+
+    /**
+     * @author Andrey Hitrin
+     * @since 16.01.13
+     */
+    public static class URLBuilder
+    {
+        private String request;
+
+        public URLBuilder(String request)
+        {
+            this.request = request;
+        }
+
+        public URL toURL() throws MalformedURLException
+        {
+            int nextAfterFirstSpace = request.indexOf(' ') + 1;
+            int secondSpace = request.indexOf(' ', nextAfterFirstSpace);
+            return new URL(request.substring(nextAfterFirstSpace, secondSpace));
         }
     }
 }
