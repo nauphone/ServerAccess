@@ -123,7 +123,7 @@
         </exec>
 
         <delete dir="${build}/swt" />
-        <move file="nsis/sa_install.exe" todir="build" failonerror="false"/>
+        <move file="nsis/sa_install-${version}.exe" todir="build" failonerror="false"/>
 
         <fail message="NSIS build failed">
             <condition>

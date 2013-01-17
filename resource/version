@@ -18,8 +18,8 @@ if [[ "$old_version" == "" || "$new_version" == "" ]]; then
     exit 1
 fi
 
-# add here files to change
-files_to_change=( build.xml sonar.xml VERSION.TXT resource/naumen-server-access.spec )
+# add here files that contain current version number
+files_to_change=( build.xml sonar.xml VERSION.TXT resource/naumen-server-access.spec nsis/serveraccess2.nsi )
 
 for a_file in "${files_to_change[@]}"
 do
