@@ -1,3 +1,8 @@
+|image0|_
+
+.. |image0| image:: https://travis-ci.org/apatrushev/ServerAccess.png
+.. _image0: https://travis-ci.org/apatrushev/ServerAccess
+
 Overview
 ========
 
