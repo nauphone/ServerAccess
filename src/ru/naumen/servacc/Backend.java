@@ -210,8 +210,7 @@ public class Backend extends SSH2Backend
         try
         {
             server.setSoTimeout(SocketUtils.COLD_TIMEOUT);
-            Object[] params = new Object[] {SocketUtils.LOCALHOST, server.getLocalPort()};
-            platform.openFTPBrowser(params);
+            platform.openFTPBrowser(SocketUtils.LOCALHOST, server.getLocalPort());
             return server.accept();
         }
         finally

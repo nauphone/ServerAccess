@@ -20,7 +20,7 @@ public interface Platform
 {
     void openTerminal(String localHost, int localPort, String options) throws IOException;
 
-    void openFTPBrowser(Object[] params) throws IOException;
+    void openFTPBrowser(String localhost, int localPort) throws IOException;
 
     void openInBrowser(String url) throws IOException;
 
