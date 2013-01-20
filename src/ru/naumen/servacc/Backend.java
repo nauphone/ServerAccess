@@ -117,16 +117,11 @@ public class Backend extends SSH2Backend
 
     private Socket openTerminal(SSHAccount account) throws Exception
     {
-        String options = "";
-        if (account.getParams().containsKey("putty_options"))
-        {
-            options = account.getParams().get("putty_options");
-        }
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
         {
             server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
-            platform.openTerminal(server.getLocalPort(), options);
+            platform.openTerminal(server.getLocalPort(), account.getParams());
             // FIXME: collect children and kill it on (on?)
             return server.accept();
         }

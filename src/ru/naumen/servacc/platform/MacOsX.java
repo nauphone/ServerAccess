@@ -11,6 +11,7 @@ package ru.naumen.servacc.platform;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Map;
 
 import org.eclipse.swt.program.Program;
 
@@ -21,7 +22,7 @@ import org.eclipse.swt.program.Program;
 public class MacOsX implements Platform
 {
     @Override
-    public void openTerminal(int localPort, String options) throws IOException
+    public void openTerminal(int localPort, Map<String, String> params) throws IOException
     {
         Runtime.getRuntime().exec(MessageFormat.format("open telnet://127.0.0.1:{0,number,#}", localPort));
     }

@@ -11,6 +11,7 @@ package ru.naumen.servacc.platform;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.Map;
 
 /**
  * @author Andrey Hitrin
@@ -18,9 +19,9 @@ import java.text.MessageFormat;
 public class Linux implements Platform
 {
     @Override
-    public void openTerminal(int localPort, String options) throws IOException
+    public void openTerminal(int localPort, Map<String, String> params) throws IOException
     {
-        new Putty().connect(localPort, options);
+        new Putty().connect(localPort, params);
     }
 
     @Override
