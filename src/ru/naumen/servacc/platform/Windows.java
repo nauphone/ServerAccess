@@ -11,9 +11,6 @@ package ru.naumen.servacc.platform;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import ru.naumen.servacc.util.Util;
 
@@ -26,15 +23,7 @@ public class Windows implements Platform
     @Override
     public void openTerminal(int localPort, String options) throws IOException
     {
-        List<String> command = new ArrayList<String>();
-        command.add("putty");
-        String[] splitOptions = options.split(" ");
-        for (String opt : splitOptions)
-        {
-            command.add(opt);
-        }
-        command.addAll(Arrays.asList("-telnet", "127.0.0.1", "-P", "" + localPort));
-        new ProcessBuilder(command).start();
+        new Putty().connect(localPort, options);
     }
 
     @Override
