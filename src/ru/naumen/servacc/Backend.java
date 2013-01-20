@@ -126,7 +126,7 @@ public class Backend extends SSH2Backend
         try
         {
             server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
-            platform.openTerminal(SocketUtils.LOCALHOST, server.getLocalPort(), options);
+            platform.openTerminal(server.getLocalPort(), options);
             // FIXME: collect children and kill it on (on?)
             return server.accept();
         }
@@ -210,7 +210,7 @@ public class Backend extends SSH2Backend
         try
         {
             server.setSoTimeout(SocketUtils.COLD_TIMEOUT);
-            platform.openFTPBrowser(SocketUtils.LOCALHOST, server.getLocalPort());
+            platform.openFTPBrowser(server.getLocalPort());
             return server.accept();
         }
         finally

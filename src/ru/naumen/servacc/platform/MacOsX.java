@@ -21,15 +21,15 @@ import org.eclipse.swt.program.Program;
 public class MacOsX implements Platform
 {
     @Override
-    public void openTerminal(String localHost, int localPort, String options) throws IOException
+    public void openTerminal(int localPort, String options) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("open telnet://{0}:{1,number,#}", localHost, localPort));
+        Runtime.getRuntime().exec(MessageFormat.format("open telnet://127.0.0.1:{0,number,#}", localPort));
     }
 
     @Override
-    public void openFTPBrowser(String localhost, int localPort) throws IOException
+    public void openFTPBrowser(int localPort) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("open ftp://anonymous@{0}:{1,number,#}", localhost, localPort));
+        Runtime.getRuntime().exec(MessageFormat.format("open ftp://anonymous@127.0.0.1:{0,number,#}", localPort));
     }
 
     @Override

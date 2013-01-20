@@ -21,15 +21,15 @@ import ru.naumen.servacc.util.Util;
 public class Windows implements Platform
 {
     @Override
-    public void openTerminal(String localHost, int localPort, String options) throws IOException
+    public void openTerminal(int localPort, String options) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("cmd /C start putty {2} -telnet {0} -P {1,number,#}", localHost, localPort, options));
+        Runtime.getRuntime().exec(MessageFormat.format("cmd /C start putty {1} -telnet 127.0.0.1 -P {0,number,#}", localPort, options));
     }
 
     @Override
-    public void openFTPBrowser(String localhost, int localPort) throws IOException
+    public void openFTPBrowser(int localPort) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("cmd /C explorer /n,ftp://{0}:{1,number,#}", localhost, localPort));
+        Runtime.getRuntime().exec(MessageFormat.format("cmd /C explorer /n,ftp://127.0.0.1:{0,number,#}", localPort));
     }
 
     @Override
