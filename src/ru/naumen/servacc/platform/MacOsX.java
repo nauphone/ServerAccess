@@ -21,9 +21,9 @@ import org.eclipse.swt.program.Program;
 public class MacOsX implements Platform
 {
     @Override
-    public void openTerminal(Object[] params) throws IOException
+    public void openTerminal(String localHost, int localPort, String options) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("open telnet://{0}:{1,number,#}", params));
+        Runtime.getRuntime().exec(MessageFormat.format("open telnet://{0}:{1,number,#}", localHost, localPort));
     }
 
     @Override

@@ -126,7 +126,7 @@ public class Backend extends SSH2Backend
         try
         {
             server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
-            platform.openTerminal(new Object[] {SocketUtils.LOCALHOST, server.getLocalPort(), options});
+            platform.openTerminal(SocketUtils.LOCALHOST, server.getLocalPort(), options);
             // FIXME: collect children and kill it on (on?)
             return server.accept();
         }

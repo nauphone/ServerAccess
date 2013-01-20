@@ -21,9 +21,9 @@ import ru.naumen.servacc.util.Util;
 public class Windows implements Platform
 {
     @Override
-    public void openTerminal(Object[] params) throws IOException
+    public void openTerminal(String localHost, int localPort, String options) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("cmd /C start putty {2} -telnet {0} -P {1,number,#}", params));
+        Runtime.getRuntime().exec(MessageFormat.format("cmd /C start putty {2} -telnet {0} -P {1,number,#}", localHost, localPort, options));
     }
 
     @Override

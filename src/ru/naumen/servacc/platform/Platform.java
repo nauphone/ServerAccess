@@ -18,7 +18,7 @@ import java.io.IOException;
  */
 public interface Platform
 {
-    void openTerminal(Object[] params) throws IOException;
+    void openTerminal(String localHost, int localPort, String options) throws IOException;
 
     void openFTPBrowser(Object[] params) throws IOException;
 
