@@ -30,13 +30,13 @@ public class Windows implements Platform
     @Override
     public void openFTPBrowser(int localPort) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("cmd /C explorer /n,ftp://127.0.0.1:{0,number,#}", localPort));
+        new ProcessBuilder("explorer", MessageFormat.format("/n,ftp://127.0.0.1:{0,number,#}", localPort)).start();
     }
 
     @Override
     public void openInBrowser(String url) throws IOException
     {
-        Runtime.getRuntime().exec("cmd /C start " + url);
+        new ProcessBuilder("start", url).start();
     }
 
     @Override

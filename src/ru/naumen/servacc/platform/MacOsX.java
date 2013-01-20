@@ -13,8 +13,6 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Map;
 
-import org.eclipse.swt.program.Program;
-
 /**
  * @author Andrey Hitrin
  * @since 08.02.12
@@ -24,20 +22,20 @@ public class MacOsX implements Platform
     @Override
     public void openTerminal(int localPort, Map<String, String> params) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("open telnet://127.0.0.1:{0,number,#}", localPort));
+        new ProcessBuilder("open", MessageFormat.format("telnet://127.0.0.1:{0,number,#}", localPort)).start();
     }
 
     @Override
     public void openFTPBrowser(int localPort) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("open ftp://anonymous@127.0.0.1:{0,number,#}", localPort));
+        new ProcessBuilder("open", MessageFormat.format("ftp://anonymous@127.0.0.1:{0,number,#}", localPort)).start();
     }
 
     @Override
     public void openInBrowser(String url) throws IOException
     {
         // open URL in default browser
-        Program.launch(url);
+        new ProcessBuilder("open", url).start();
     }
 
     @Override

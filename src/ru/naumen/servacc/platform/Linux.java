@@ -27,13 +27,13 @@ public class Linux implements Platform
     @Override
     public void openFTPBrowser(int localPort) throws IOException
     {
-        Runtime.getRuntime().exec(MessageFormat.format("gftp ftp://anonymous@127.0.0.1:{0,number,#}", localPort));
+        new ProcessBuilder("gftp", MessageFormat.format("ftp://anonymous@127.0.0.1:{0,number,#}", localPort)).start();
     }
 
     @Override
     public void openInBrowser(String url) throws IOException
     {
-        Runtime.getRuntime().exec("xdg-open " + url);
+        new ProcessBuilder("xdg-open", url).start();
     }
 
     @Override
