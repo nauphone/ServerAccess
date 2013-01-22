@@ -92,12 +92,7 @@ public class Backend extends SSH2Backend
             }
             final Socket term = openTerminal(account);
             final ConsoleManager console = new ConsoleManager(term, session, account.getPassword(), account.needSudoLogin());
-            if (platform.needToNegotiateProtocolOptions())
-            {
-                // TODO: probably this should be done regardless of the TELNET
-                // client being used, but this was not tested with PuTTY yet
-                console.negotiateProtocolOptions();
-            }
+            console.negotiateProtocolOptions();
             session.changeStdIn(console.getInputStream());
             session.changeStdOut(console.getOutputStream());
             if (!session.doShell())

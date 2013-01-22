@@ -60,12 +60,6 @@ public class MacOsX implements Platform
     }
 
     @Override
-    public boolean needToNegotiateProtocolOptions()
-    {
-        return true;
-    }
-
-    @Override
     public boolean useSystemSearchWidget()
     {
         return true;

@@ -63,12 +63,6 @@ public class Windows implements Platform
     }
 
     @Override
-    public boolean needToNegotiateProtocolOptions()
-    {
-        return false;
-    }
-
-    @Override
     public boolean useSystemSearchWidget()
     {
         return false;

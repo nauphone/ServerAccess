@@ -56,12 +56,6 @@ public class Linux implements Platform
     }
 
     @Override
-    public boolean needToNegotiateProtocolOptions()
-    {
-        return false;
-    }
-
-    @Override
     public boolean useSystemSearchWidget()
     {
         return false;

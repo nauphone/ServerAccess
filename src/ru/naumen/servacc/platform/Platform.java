@@ -31,7 +31,5 @@ public interface Platform
 
     boolean isAppMenuSupported();
 
-    boolean needToNegotiateProtocolOptions();
-
     boolean useSystemSearchWidget();
 }
