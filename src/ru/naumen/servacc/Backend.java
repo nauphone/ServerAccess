@@ -110,7 +110,7 @@ public class Backend extends SSH2Backend
         }
     }
 
-    private Socket openTerminal(SSHAccount account) throws Exception
+    private Socket openTerminal(SSHAccount account) throws IOException
     {
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
@@ -194,7 +194,7 @@ public class Backend extends SSH2Backend
             "FTP Server");
     }
 
-    private Socket openFTPBrowser() throws Exception
+    private Socket openFTPBrowser() throws IOException
     {
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
         try
