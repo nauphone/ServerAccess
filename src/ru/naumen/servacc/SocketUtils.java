@@ -9,6 +9,7 @@
  */
 package ru.naumen.servacc;
 
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
@@ -21,7 +22,7 @@ public class SocketUtils
     private static final int PORT_MAX = 13000;
     private static int port = PORT_BASE;
 
-    public static ServerSocket createListener(String host) throws Exception
+    public static ServerSocket createListener(String host) throws IOException
     {
         int portstart = port;
         while (true)
@@ -30,7 +31,7 @@ public class SocketUtils
             {
                 return new ServerSocket(++port, 0, InetAddress.getByName(host));
             }
-            catch (Exception e)
+            catch (IOException e)
             {
                 if (port > PORT_MAX)
                 {
@@ -44,7 +45,7 @@ public class SocketUtils
         }
     }
 
-    public static int getFreePort() throws Exception
+    public static int getFreePort() throws IOException
     {
         ServerSocket sock = SocketUtils.createListener("0.0.0.0");
         int port = sock.getLocalPort();
