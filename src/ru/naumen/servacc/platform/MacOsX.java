@@ -22,7 +22,7 @@ public class MacOsX implements Platform
     @Override
     public void openTerminal(int localPort, Map<String, String> params) throws IOException
     {
-        new ProcessBuilder("open", MessageFormat.format("telnet://127.0.0.1:{0,number,#}", localPort)).start();
+        new MacOsXTerminal().connect(localPort, params);
     }
 
     @Override
@@ -64,4 +64,5 @@ public class MacOsX implements Platform
     {
         return true;
     }
+
 }
