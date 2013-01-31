@@ -25,7 +25,7 @@ import ru.naumen.servacc.platform.Terminal;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ShellConfiguration;
 import ru.naumen.servacc.settings.impl.DefaultConfiguration;
-import ru.naumen.servacc.util.Util;
+import ru.naumen.servacc.platform.OS;
 
 public class Main implements Runnable
 {
@@ -40,8 +40,8 @@ public class Main implements Runnable
     public void run()
     {
         // Create GUI
-        Platform platform = Util.platform();
-        Terminal terminal = Util.terminal();
+        Platform platform = OS.platform();
+        Terminal terminal = OS.terminal();
         DefaultConfiguration configuration = DefaultConfiguration.create(platform);
 
         Display display = new Display();

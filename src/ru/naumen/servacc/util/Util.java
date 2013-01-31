@@ -12,13 +12,6 @@ package ru.naumen.servacc.util;
 import java.util.regex.Pattern;
 
 import com.mindbright.util.Base64;
-import ru.naumen.servacc.platform.Linux;
-import ru.naumen.servacc.platform.MacOsX;
-import ru.naumen.servacc.platform.MacOsXTerminal;
-import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.platform.Putty;
-import ru.naumen.servacc.platform.Terminal;
-import ru.naumen.servacc.platform.Windows;
 
 public class Util
 {
@@ -31,38 +24,6 @@ public class Util
     {
         String regexp = "(?iu).*" + Pattern.quote(filter) + ".*";
         return string.matches(regexp);
-    }
-
-    public static Platform platform()
-    {
-        if (isMacOSX())
-        {
-            return new MacOsX();
-        }
-        else if (isWindows())
-        {
-            return new Windows();
-        }
-        return new Linux();
-    }
-
-    public static Terminal terminal()
-    {
-        if (isMacOSX())
-        {
-            return new MacOsXTerminal();
-        }
-        return new Putty();
-    }
-
-    private static boolean isMacOSX()
-    {
-        return "Mac OS X".equalsIgnoreCase(System.getProperty("os.name"));
-    }
-
-    private static boolean isWindows()
-    {
-        return System.getProperty("os.name").startsWith("Windows");
     }
 
     public static final String base64encode(String string)
