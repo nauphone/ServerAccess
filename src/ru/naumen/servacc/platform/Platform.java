@@ -10,7 +10,6 @@ package ru.naumen.servacc.platform;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * Hides platform-specific code behind abstraction.
@@ -19,8 +18,6 @@ import java.util.Map;
  */
 public interface Platform
 {
-    void openTerminal(int localPort, Map<String, String> params) throws IOException;
-
     void openFTPBrowser(int localPort) throws IOException;
 
     void openInBrowser(String url) throws IOException;

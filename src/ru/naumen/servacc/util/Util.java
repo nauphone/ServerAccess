@@ -11,12 +11,14 @@ package ru.naumen.servacc.util;
 
 import java.util.regex.Pattern;
 
+import com.mindbright.util.Base64;
 import ru.naumen.servacc.platform.Linux;
 import ru.naumen.servacc.platform.MacOsX;
+import ru.naumen.servacc.platform.MacOsXTerminal;
 import ru.naumen.servacc.platform.Platform;
+import ru.naumen.servacc.platform.Putty;
+import ru.naumen.servacc.platform.Terminal;
 import ru.naumen.servacc.platform.Windows;
-
-import com.mindbright.util.Base64;
 
 public class Util
 {
@@ -42,6 +44,15 @@ public class Util
             return new Windows();
         }
         return new Linux();
+    }
+
+    public static Terminal terminal()
+    {
+        if (isMacOSX())
+        {
+            return new MacOsXTerminal();
+        }
+        return new Putty();
     }
 
     private static boolean isMacOSX()

@@ -19,12 +19,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.platform.Platform;
+import ru.naumen.servacc.platform.Terminal;
 import ru.naumen.servacc.settings.ApplicationProperties;
-import ru.naumen.servacc.settings.impl.DefaultConfiguration;
 import ru.naumen.servacc.settings.ShellConfiguration;
+import ru.naumen.servacc.settings.impl.DefaultConfiguration;
 import ru.naumen.servacc.util.Util;
 
 public class Main implements Runnable
@@ -41,12 +41,13 @@ public class Main implements Runnable
     {
         // Create GUI
         Platform platform = Util.platform();
+        Terminal terminal = Util.terminal();
         DefaultConfiguration configuration = DefaultConfiguration.create(platform);
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
-        Backend backend = new Backend(platform, executor);
+        Backend backend = new Backend(platform, terminal, executor);
         UIController controller = new UIController(shell, platform, backend, executor,
             configuration.sourceListProvider());
         shell.open();

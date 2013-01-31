@@ -11,7 +11,6 @@ package ru.naumen.servacc.platform;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Map;
 
 /**
  * @author Andrey Hitrin
@@ -19,12 +18,6 @@ import java.util.Map;
  */
 public class MacOsX implements Platform
 {
-    @Override
-    public void openTerminal(int localPort, Map<String, String> params) throws IOException
-    {
-        new MacOsXTerminal().connect(localPort, params);
-    }
-
     @Override
     public void openFTPBrowser(int localPort) throws IOException
     {

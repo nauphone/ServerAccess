@@ -22,6 +22,7 @@ import java.util.concurrent.TimeoutException;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.platform.Platform;
+import ru.naumen.servacc.platform.Terminal;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
 
@@ -37,11 +38,13 @@ public class Backend extends SSH2Backend
 {
     private static final Logger LOGGER = Logger.getLogger(Backend.class);
     private final Platform platform;
+    private final Terminal terminal;
     private final ExecutorService executor;
 
-    public Backend(Platform platform, ExecutorService executorService)
+    public Backend(Platform platform, Terminal terminal, ExecutorService executorService)
     {
         this.platform = platform;
+        this.terminal = terminal;
         this.executor = executorService;
     }
 
@@ -116,7 +119,7 @@ public class Backend extends SSH2Backend
         try
         {
             server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
-            platform.openTerminal(server.getLocalPort(), account.getParams());
+            terminal.connect(server.getLocalPort(), account.getParams());
             // FIXME: collect children and kill it on (on?)
             return server.accept();
         }
