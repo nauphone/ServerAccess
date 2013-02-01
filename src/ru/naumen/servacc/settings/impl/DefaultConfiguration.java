@@ -25,9 +25,9 @@ public class DefaultConfiguration
     private SourceListProvider sourceListProvider;
     private ApplicationProperties windowProperties;
 
-    public DefaultConfiguration(SourceListProvider sourceListProvider, ApplicationProperties windowProperties)
+    public DefaultConfiguration(ApplicationProperties properties, ApplicationProperties windowProperties)
     {
-        this.sourceListProvider = sourceListProvider;
+        this.sourceListProvider = new FileSourceListProvider(properties.getAppProperties());
         this.windowProperties = windowProperties;
     }
 
@@ -49,8 +49,7 @@ public class DefaultConfiguration
             configDirectory.mkdirs();
             file(configDirectory, "accounts.xml", new FileCopy("/defaults/accounts.xml"));
             return new DefaultConfiguration(
-                new FileSourceListProvider(
-                    file(configDirectory, "serveraccess.properties", new DefaultPropertiesFile())),
+                file(configDirectory, "serveraccess.properties", new DefaultPropertiesFile()),
                 file(configDirectory, "window.properties", new FileCopy("/defaults/window.properties")));
         }
         catch (IOException e)
