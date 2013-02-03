@@ -29,4 +29,6 @@ public interface Platform
     boolean isAppMenuSupported();
 
     boolean useSystemSearchWidget();
+
+    Terminal defaultTerminal();
 }

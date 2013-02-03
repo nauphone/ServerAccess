@@ -53,4 +53,10 @@ public class Linux implements Platform
     {
         return false;
     }
+
+    @Override
+    public Terminal defaultTerminal()
+    {
+        return new Putty();
+    }
 }

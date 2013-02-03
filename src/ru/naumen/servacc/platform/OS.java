@@ -17,11 +17,7 @@ public class OS
 
     public static Terminal terminal()
     {
-        if (isMacOSX())
-        {
-            return new MacOsXTerminal();
-        }
-        return new Putty();
+        return platform().defaultTerminal();
     }
 
     public static boolean isMacOSX()

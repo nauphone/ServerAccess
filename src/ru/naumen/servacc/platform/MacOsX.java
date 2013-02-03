@@ -58,4 +58,10 @@ public class MacOsX implements Platform
         return true;
     }
 
+    @Override
+    public Terminal defaultTerminal()
+    {
+        return new MacOsXTerminal();
+    }
+
 }
