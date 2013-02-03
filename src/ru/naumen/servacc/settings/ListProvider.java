@@ -15,7 +15,7 @@ import java.util.Collection;
  * @author Andrey Hitrin
  * @since 07.09.12
  */
-public interface SourceListProvider
+public interface ListProvider
 {
     Collection<String> list();
 }

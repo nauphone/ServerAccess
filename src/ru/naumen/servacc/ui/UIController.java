@@ -74,7 +74,7 @@ import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.globalthrough.GlobalThroughController;
 import ru.naumen.servacc.globalthrough.GlobalThroughView;
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.settings.SourceListProvider;
+import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
@@ -82,7 +82,7 @@ public class UIController implements GlobalThroughView
 {
     private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
-    private final SourceListProvider sourceListProvider;
+    private final ListProvider sourceListProvider;
 
     private Clipboard clipboard;
     private Backend backend;
@@ -106,7 +106,7 @@ public class UIController implements GlobalThroughView
 
     private Timer refreshTimer;
 
-    public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, SourceListProvider sourceListProvider)
+    public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, ListProvider sourceListProvider)
     {
         this.shell = shell;
         this.sourceListProvider = sourceListProvider;

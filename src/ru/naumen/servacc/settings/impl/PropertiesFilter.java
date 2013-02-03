@@ -6,18 +6,18 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
 
-import ru.naumen.servacc.settings.SourceListProvider;
+import ru.naumen.servacc.settings.ListProvider;
 
 /**
  * @author Andrey Hitrin
  * @since 21.09.12
  */
-public class FileSourceListProvider implements SourceListProvider
+public class PropertiesFilter implements ListProvider
 {
     private final Properties properties;
     private final String regex;
 
-    public FileSourceListProvider(Properties properties, String regex)
+    public PropertiesFilter(Properties properties, String regex)
     {
         this.properties = properties;
         this.regex = regex;

@@ -16,15 +16,15 @@ import java.util.Collection;
 import java.util.Properties;
 
 import org.junit.Test;
-import ru.naumen.servacc.settings.impl.FileSourceListProvider;
+import ru.naumen.servacc.settings.impl.PropertiesFilter;
 
 /**
  * @author Andrey Hitrin
  * @since 30.09.12
  */
-public class FileSourceListProviderTest
+public class ProviderFilterTest
 {
-    private FileSourceListProvider sourceListProvider;
+    private PropertiesFilter sourceListProvider;
 
     @Test
     public void mustUseRegexToFilterProperties() throws Exception
@@ -33,7 +33,7 @@ public class FileSourceListProviderTest
         properties.setProperty("source", "sourceFile");
         properties.setProperty("source1", "anotherFile");
         properties.setProperty("hello", "world");
-        sourceListProvider = new FileSourceListProvider(properties, "source[0-9]*");
+        sourceListProvider = new PropertiesFilter(properties, "source[0-9]*");
         Collection<String> configSources = sourceListProvider.list();
         assertThat(configSources.size(), is(2));
         assertThat(configSources.contains("sourceFile"), is(true));
@@ -46,7 +46,7 @@ public class FileSourceListProviderTest
         Properties properties = new Properties();
         properties.setProperty("source", "missingSource");
         properties.setProperty("source", "collision");
-        sourceListProvider = new FileSourceListProvider(properties, "source");
+        sourceListProvider = new PropertiesFilter(properties, "source");
         Collection<String> configSources = sourceListProvider.list();
         assertThat(configSources.size(), is(1));
         assertThat(configSources.contains("missingSource"), is(false));

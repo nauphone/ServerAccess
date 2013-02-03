@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ApplicationProperties;
-import ru.naumen.servacc.settings.SourceListProvider;
+import ru.naumen.servacc.settings.ListProvider;
 
 /**
  * @author Andrey Hitrin
@@ -31,9 +31,9 @@ public class DefaultConfiguration
         this.windowProperties = windowProperties;
     }
 
-    public SourceListProvider sourceListProvider()
+    public ListProvider sourceListProvider()
     {
-        return new FileSourceListProvider(properties.getAppProperties(), "source[0-9]*");
+        return new PropertiesFilter(properties.getAppProperties(), "source[0-9]*");
     }
 
     public ApplicationProperties getWindowProperties()
