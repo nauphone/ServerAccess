@@ -31,9 +31,9 @@ public class DefaultConfiguration
         this.windowProperties = windowProperties;
     }
 
-    public ListProvider sourceListProvider()
+    public ListProvider filterProperties(String regex)
     {
-        return new PropertiesFilter(properties.getAppProperties(), "source[0-9]*");
+        return new PropertiesFilter(properties.getAppProperties(), regex);
     }
 
     public ApplicationProperties getWindowProperties()

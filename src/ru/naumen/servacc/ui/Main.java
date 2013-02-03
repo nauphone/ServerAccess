@@ -49,7 +49,7 @@ public class Main implements Runnable
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
         Backend backend = new Backend(platform, terminal, executor);
         UIController controller = new UIController(shell, platform, backend, executor,
-            configuration.sourceListProvider());
+            configuration.filterProperties("source[0-9]*"));
         shell.open();
         // Load accounts
         controller.reloadConfig();
