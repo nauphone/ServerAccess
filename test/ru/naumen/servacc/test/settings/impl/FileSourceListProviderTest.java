@@ -27,13 +27,13 @@ public class FileSourceListProviderTest
     private FileSourceListProvider sourceListProvider;
 
     @Test
-    public void canListAllSourcesAtOnce() throws Exception
+    public void mustUseRegexToFilterProperties() throws Exception
     {
         Properties properties = new Properties();
         properties.setProperty("source", "sourceFile");
         properties.setProperty("source1", "anotherFile");
         properties.setProperty("hello", "world");
-        sourceListProvider = new FileSourceListProvider(properties);
+        sourceListProvider = new FileSourceListProvider(properties, "source[0-9]*");
         Collection<String> configSources = sourceListProvider.list();
         assertThat(configSources.size(), is(2));
         assertThat(configSources.contains("sourceFile"), is(true));
@@ -41,12 +41,12 @@ public class FileSourceListProviderTest
     }
 
     @Test
-    public void useOnlyLatestSourceOnCollision() throws Exception
+    public void useOnlyLatestPropertyValueOnCollision() throws Exception
     {
         Properties properties = new Properties();
         properties.setProperty("source", "missingSource");
         properties.setProperty("source", "collision");
-        sourceListProvider = new FileSourceListProvider(properties);
+        sourceListProvider = new FileSourceListProvider(properties, "source");
         Collection<String> configSources = sourceListProvider.list();
         assertThat(configSources.size(), is(1));
         assertThat(configSources.contains("missingSource"), is(false));

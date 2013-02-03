@@ -11,16 +11,16 @@ import ru.naumen.servacc.settings.SourceListProvider;
 /**
  * @author Andrey Hitrin
  * @since 21.09.12
- *
- * TODO: use better name
  */
 public class FileSourceListProvider implements SourceListProvider
 {
     private final Properties properties;
+    private final String regex;
 
-    public FileSourceListProvider(Properties properties)
+    public FileSourceListProvider(Properties properties, String regex)
     {
         this.properties = properties;
+        this.regex = regex;
     }
 
     @Override
@@ -31,7 +31,7 @@ public class FileSourceListProvider implements SourceListProvider
         Arrays.sort(keys);
         for (String key : keys)
         {
-            if (key.matches("source[0-9]*"))
+            if (key.matches(regex))
             {
                 result.add((String) properties.get(key));
             }

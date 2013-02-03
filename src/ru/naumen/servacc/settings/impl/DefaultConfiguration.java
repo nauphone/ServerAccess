@@ -33,7 +33,7 @@ public class DefaultConfiguration
 
     public SourceListProvider sourceListProvider()
     {
-        return new FileSourceListProvider(properties.getAppProperties());
+        return new FileSourceListProvider(properties.getAppProperties(), "source[0-9]*");
     }
 
     public ApplicationProperties getWindowProperties()
