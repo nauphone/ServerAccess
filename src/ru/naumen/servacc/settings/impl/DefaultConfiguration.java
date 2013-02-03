@@ -22,18 +22,18 @@ import ru.naumen.servacc.settings.SourceListProvider;
  */
 public class DefaultConfiguration
 {
-    private SourceListProvider sourceListProvider;
+    private ApplicationProperties properties;
     private ApplicationProperties windowProperties;
 
     public DefaultConfiguration(ApplicationProperties properties, ApplicationProperties windowProperties)
     {
-        this.sourceListProvider = new FileSourceListProvider(properties.getAppProperties());
+        this.properties = properties;
         this.windowProperties = windowProperties;
     }
 
     public SourceListProvider sourceListProvider()
     {
-        return sourceListProvider;
+        return new FileSourceListProvider(properties.getAppProperties());
     }
 
     public ApplicationProperties getWindowProperties()
