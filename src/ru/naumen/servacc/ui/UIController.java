@@ -82,7 +82,6 @@ public class UIController implements GlobalThroughView
 {
     private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
-    private final Platform platform;
     private final SourceListProvider sourceListProvider;
 
     private Clipboard clipboard;
@@ -110,7 +109,6 @@ public class UIController implements GlobalThroughView
     public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, SourceListProvider sourceListProvider)
     {
         this.shell = shell;
-        this.platform = platform;
         this.sourceListProvider = sourceListProvider;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
@@ -118,7 +116,7 @@ public class UIController implements GlobalThroughView
         this.configLoader = new ConfigLoader(this, shell, sourceListProvider);
         this.globalThroughController = new GlobalThroughController(this, backend);
         createToolBar();
-        createFilteredTree();
+        createFilteredTree(platform.useSystemSearchWidget());
         createGlobalThroughWidget();
         if (platform.isTraySupported())
         {
@@ -257,10 +255,9 @@ public class UIController implements GlobalThroughView
         });
     }
 
-    private void createFilteredTree()
+    private void createFilteredTree(boolean useSystemSearchWidget)
     {
-        filteredTree = new FilteredTree(shell, platform, SWT.NONE);
-        filteredTree.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL | GridData.FILL_VERTICAL | GridData.GRAB_VERTICAL));
+        filteredTree = new FilteredTree(shell, SWT.NONE, useSystemSearchWidget);
         // Selection handling
         filteredTree.getTree().addSelectionListener(new SelectionListener()
         {

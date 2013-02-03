@@ -19,8 +19,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 
-import ru.naumen.servacc.platform.Platform;
-
 public class FilteredTree extends Composite
 {
     private Text filter;
@@ -36,7 +34,7 @@ public class FilteredTree extends Composite
         return tree;
     }
 
-    public FilteredTree(Composite parent, Platform platform, int style)
+    public FilteredTree(Composite parent, int style, boolean useSystemSearchWidget)
     {
         super(parent, style);
         // Setup layout
@@ -44,7 +42,7 @@ public class FilteredTree extends Composite
         layout.marginHeight = layout.marginWidth = 0;
         setLayout(layout);
         // Filter
-        if (platform.useSystemSearchWidget())
+        if (useSystemSearchWidget)
         {
             filter = new Text(this, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
         }
@@ -71,5 +69,6 @@ public class FilteredTree extends Composite
         // Tree
         tree = new Tree(this, SWT.BORDER | SWT.SINGLE); // TODO: SWT.VIRTUAL
         tree.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
+        setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL | GridData.FILL_VERTICAL | GridData.GRAB_VERTICAL));
     }
 }
