@@ -19,7 +19,7 @@ import java.util.Map;
  * @author Andrey Hitrin
  * @since 20.01.13
  */
-public class Putty implements Terminal
+public class Putty extends Terminal
 {
     @Override
     public void connect(int localPort, Map<String, String> params) throws IOException

@@ -17,7 +17,7 @@ import java.util.Map;
  * @author Andrey Hitrin
  * @since 03.02.13
  */
-public class XTerm implements Terminal
+public class XTerm extends Terminal
 {
     @Override
     public void connect(int localPort, Map<String, String> params) throws IOException

@@ -7,7 +7,7 @@ import java.util.Map;
  * @author Andrey Hitrin
  * @since 31.01.13
  */
-public interface Terminal
+public abstract class Terminal
 {
-    void connect(int localPort, Map<String, String> params) throws IOException;
+    public abstract void connect(int localPort, Map<String, String> params) throws IOException;
 }

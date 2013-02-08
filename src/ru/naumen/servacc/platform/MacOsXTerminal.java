@@ -8,7 +8,7 @@ import java.util.Map;
  * @author Andrey Hitrin
  * @since 31.01.13
  */
-public class MacOsXTerminal implements Terminal
+public class MacOsXTerminal extends Terminal
 {
     @Override
     public void connect(int port, Map<String, String> params) throws IOException
