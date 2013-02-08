@@ -9,39 +9,14 @@
 
 package ru.naumen.servacc.platform;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
 /**
  * @author Andrey Hitrin
  * @since 20.01.13
  */
 public class Putty extends Terminal
 {
-    @Override
-    public void connect(int localPort, Map<String, String> params) throws IOException
+    public Putty()
     {
-        String options = extractPuttyOptions(params);
-        List<String> command = new ArrayList<String>();
-        command.add("putty");
-        String[] splitOptions = options.split(" ");
-        for (String opt : splitOptions)
-        {
-            command.add(opt);
-        }
-        command.addAll(Arrays.asList("-telnet", "127.0.0.1", "-P", "" + localPort));
-        new ProcessBuilder(command).start();
-    }
-
-    private String extractPuttyOptions(Map<String, String> params)
-    {
-        if (params.containsKey("putty_options"))
-        {
-            return params.get("putty_options");
-        }
-        return "";
+        super("putty  {options}  -telnet  {host}  -P  {port}");
     }
 }

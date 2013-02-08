@@ -7,7 +7,17 @@ import java.util.Map;
  * @author Andrey Hitrin
  * @since 31.01.13
  */
-public abstract class Terminal
+public class Terminal
 {
-    public abstract void connect(int localPort, Map<String, String> params) throws IOException;
+    protected final CommandBuilder builder;
+
+    public Terminal(String command)
+    {
+        builder = new CommandBuilder(command);
+    }
+
+    public void connect(int localPort, Map<String, String> params) throws IOException
+    {
+        new ProcessBuilder(builder.build(localPort, params)).start();
+    }
 }
