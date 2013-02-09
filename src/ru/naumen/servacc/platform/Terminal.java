@@ -9,7 +9,7 @@ import java.util.Map;
  */
 public class Terminal
 {
-    protected final CommandBuilder builder;
+    private final CommandBuilder builder;
 
     public Terminal(String command)
     {

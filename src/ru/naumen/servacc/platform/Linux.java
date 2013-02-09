@@ -57,6 +57,6 @@ public class Linux implements Platform
     @Override
     public Terminal defaultTerminal()
     {
-        return new Putty();
+        return new Terminal("xterm  -e  telnet {host} {port}");
     }
 }

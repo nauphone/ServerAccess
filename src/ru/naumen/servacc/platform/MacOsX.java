@@ -61,6 +61,6 @@ public class MacOsX implements Platform
     @Override
     public Terminal defaultTerminal()
     {
-        return new MacOsXTerminal();
+        return new Terminal("open  telnet://{host}:{port}");
     }
 }

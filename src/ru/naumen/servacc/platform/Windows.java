@@ -64,6 +64,6 @@ public class Windows implements Platform
     @Override
     public Terminal defaultTerminal()
     {
-        return new Putty();
+        return new Terminal("putty  {options}  -telnet  {host}  -P  {port}");
     }
 }
