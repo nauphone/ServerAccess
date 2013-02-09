@@ -19,6 +19,6 @@
         <property name="sonar.libraries" value="lib" />
         <property name="sonar.jacoco.antTargets" value="root.test" />
 
-        <sonar:sonar key="ru.naumen:ServerAccess" version="0.9.10.2" xmlns:sonar="antlib:org.sonar.ant"/>
+        <sonar:sonar key="ru.naumen:ServerAccess" version="0.9.11" xmlns:sonar="antlib:org.sonar.ant"/>
     </target>
 </project>
