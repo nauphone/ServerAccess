@@ -41,8 +41,8 @@ public class Main implements Runnable
     {
         // Create GUI
         Platform platform = OS.platform();
-        Terminal terminal = OS.terminal();
         DefaultConfiguration configuration = DefaultConfiguration.create(platform);
+        Terminal terminal = OS.terminal(platform, configuration.filterProperties("terminal"));
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());

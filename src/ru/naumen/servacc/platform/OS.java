@@ -1,5 +1,9 @@
 package ru.naumen.servacc.platform;
 
+import java.util.Iterator;
+
+import ru.naumen.servacc.settings.ListProvider;
+
 public class OS
 {
     public static Platform platform()
@@ -15,9 +19,20 @@ public class OS
         return new Linux();
     }
 
-    public static Terminal terminal()
+    /**
+     * In Java 8, this method should be moved directly to the Platform interface
+     * @param platform
+     * @param terminalProvider
+     * @return
+     */
+    public static Terminal terminal(Platform platform, ListProvider terminalProvider)
     {
-        return platform().defaultTerminal();
+        Iterator<String> iterator = terminalProvider.list().iterator();
+        if (iterator.hasNext())
+        {
+            return new Terminal(iterator.next());
+        }
+        return platform.defaultTerminal();
     }
 
     public static boolean isMacOSX()

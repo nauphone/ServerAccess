@@ -63,5 +63,4 @@ public class MacOsX implements Platform
     {
         return new MacOsXTerminal();
     }
-
 }
