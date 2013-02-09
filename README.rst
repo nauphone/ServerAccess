@@ -66,6 +66,22 @@ To create deb-package for Debian/Ubuntu distributive, use following script:
 Configuration
 =============
 
+At start application creates or opens main configuration file called ``serveraccess.properties``. It is located in the following directory:
+
+* Windows: ``%APPDATA%\Server Access\serveraccess.properties``
+* Mac OS X: ``~/Library/Application Support/Server Access/serveraccess.properties``
+* GNU Linux: ``~/.serveraccess/serveraccess.properties``
+
+Sample ``serveraccess.properties`` contents::
+
+    source=file:///Users/bob/Library/Application Support/Server Access/accounts.xml
+    source1=https://example.com/1/accounts.xml
+    source2=https://example.com/2/accounts.xml
+    terminal=guake  -n  1  {options}  -e  telnet {host} {port}
+
+Accounts file
+-------------
+
 A typical data source for ServerAccess is an XML file with the following structure::
 
     --Accounts
@@ -145,23 +161,30 @@ Sample configuration file contents::
 
     </Accounts>
 
-On the first launch an empty configuration file named ``accounts.xml`` will be created at the following location:
+On the first launch an empty configuration file named ``accounts.xml`` will be created near the ``serveraccess.properties`` file.
 
-* Windows: ``%APPDATA%\Server Access``
-* Mac OS X: ``~/Library/Application Support/Server Access``
-* GNU Linux: ``~/.serveraccess``
+Terminal launcher
+-----------------
 
-The location of ``accounts.xml`` may be customized, as well as other data sources added, in ``serveraccess.properties`` located at the same directory:
+ServerAccess allows you define what application must be used to open SSH connection. By default, it uses ``xterm`` on Linux, ``putty`` on Windows, and ``open`` on MacOs X. But you can redefine this by using ``terminal`` option in the ``serveraccess.properties`` file. For example, you may type something like this::
 
-* Windows: ``%APPDATA%\Server Access\serveraccess.properties``
-* Mac OS X: ``~/Library/Application Support/Server Access/serveraccess.properties``
-* GNU Linux: ``~/.serveraccess/serveraccess.properties``
+    terminal=guake  -n  1  {options}  -e  telnet {host} {port}
 
-Sample ``serveraccess.properties`` contents::
+A little explanation::
 
-    source=file:///Users/bob/Library/Application Support/Server Access/accounts.xml
-    source1=https://example.com/1/accounts.xml
-    source2=https://example.com/2/accounts.xml
+    terminal=guake  -n  1  {options}  -e  telnet {host} {port}
+             ↑      ↑      ↑                     ↑      ↑
+             program launched                    |      |
+                    |      |                     |      |
+                    a fixed list of options, separated with *double space*
+                           |                     |      |
+                           a template for individual options for each account
+                                                 |      |
+                                  a template for host   |
+                                                        |
+                                             a template for port
+
+We need richer documentation here :)
 
 
 Encryption
