@@ -27,18 +27,16 @@ import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
 public class ConfigLoader
 {
     private Map<String, String[]> authCache = new HashMap<String, String[]>();
-    private final UIController controller;
     private final Shell shell;
     private final ListProvider sourceListProvider;
 
-    public ConfigLoader(UIController controller, Shell shell, ListProvider sourceListProvider)
+    public ConfigLoader(Shell shell, ListProvider sourceListProvider)
     {
-        this.controller = controller;
         this.shell = shell;
         this.sourceListProvider = sourceListProvider;
     }
 
-    public IConfig loadConfig() throws Exception
+    public IConfig loadConfig(MessageListener messageListener) throws Exception
     {
         CompositeConfig compositeConfig = new CompositeConfig();
         Collection<String> sources = sourceListProvider.list();
@@ -54,7 +52,7 @@ public class ConfigLoader
             }
             catch (Exception e)
             {
-                controller.showAlert(e.getLocalizedMessage());
+                messageListener.notify(e.getLocalizedMessage());
             }
         }
         return compositeConfig;

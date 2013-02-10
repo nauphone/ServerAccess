@@ -50,7 +50,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.ToolBar;
@@ -83,6 +82,8 @@ public class UIController implements GlobalThroughView
     private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
     private final ListProvider sourceListProvider;
+    private final MessageListener synchronousAlert;
+    private final MessageListener asynchronousAlert;
 
     private Clipboard clipboard;
     private Backend backend;
@@ -113,8 +114,10 @@ public class UIController implements GlobalThroughView
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
         this.executor = executor;
-        this.configLoader = new ConfigLoader(this, shell, sourceListProvider);
+        this.configLoader = new ConfigLoader(shell, sourceListProvider);
         this.globalThroughController = new GlobalThroughController(this, backend);
+        this.synchronousAlert = new SynchronousAlert(shell);
+        this.asynchronousAlert = new AsynchronousProxy(synchronousAlert);
         createToolBar();
         createFilteredTree(platform.useSystemSearchWidget());
         createGlobalThroughWidget();
@@ -134,7 +137,7 @@ public class UIController implements GlobalThroughView
     {
         try
         {
-            config = configLoader.loadConfig();
+            config = configLoader.loadConfig(synchronousAlert);
             buildTree(config);
             updateTree(filteredTree.getFilter().getText());
             globalThroughController.refresh(config);
@@ -146,23 +149,14 @@ public class UIController implements GlobalThroughView
         }
     }
 
-    public void showAlert(String text)
+    private void showAlert(String text)
     {
-        MessageBox mb = new MessageBox(shell, SWT.SHEET);
-        mb.setMessage(text);
-        mb.open();
+        synchronousAlert.notify(text);
     }
 
-    protected void showAlertFromThread(final String message)
+    private void showAlertAsync(String message)
     {
-        Display.getDefault().asyncExec(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                showAlert(message);
-            }
-        });
+        asynchronousAlert.notify(message);
     }
 
     private void createToolBar()
@@ -516,7 +510,7 @@ public class UIController implements GlobalThroughView
                         catch (Exception e)
                         {
                             LOGGER.error("Cannot open SSH account", e);
-                            showAlertFromThread(e.getMessage());
+                            showAlertAsync(e.getMessage());
                         }
                     }
                 });
@@ -535,7 +529,7 @@ public class UIController implements GlobalThroughView
                         catch (Exception e)
                         {
                             LOGGER.error("Cannot open HTTP account", e);
-                            showAlertFromThread(e.getMessage());
+                            showAlertAsync(e.getMessage());
                         }
                     }
                 });
