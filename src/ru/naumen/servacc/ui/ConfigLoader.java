@@ -9,11 +9,14 @@
  */
 package ru.naumen.servacc.ui;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Scanner;
 
 import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.FileResource;
@@ -22,21 +25,25 @@ import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.settings.ListProvider;
+import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
+import ru.naumen.servacc.util.Util;
 
 public class ConfigLoader
 {
     private Map<String, String[]> authCache = new HashMap<String, String[]>();
     private final Shell shell;
     private final ListProvider sourceListProvider;
+    private final MessageListener listener;
 
-    public ConfigLoader(Shell shell, ListProvider sourceListProvider)
+    public ConfigLoader(Shell shell, ListProvider sourceListProvider, MessageListener listener)
     {
         this.shell = shell;
         this.sourceListProvider = sourceListProvider;
+        this.listener = listener;
     }
 
-    public IConfig loadConfig(MessageListener messageListener) throws Exception
+    public IConfig loadConfig() throws Exception
     {
         CompositeConfig compositeConfig = new CompositeConfig();
         Collection<String> sources = sourceListProvider.list();
@@ -52,7 +59,7 @@ public class ConfigLoader
             }
             catch (Exception e)
             {
-                messageListener.notify(e.getLocalizedMessage());
+                listener.notify(e.getLocalizedMessage());
             }
         }
         return compositeConfig;
@@ -113,7 +120,7 @@ public class ConfigLoader
 
     private IConfig loadConfigFromFile(String source) throws Exception
     {
-        InputStream stream = getConfigStream(source, shell);
+        InputStream stream = getConfigStream(source);
         try
         {
             return stream == null ? null : new Config(stream);
@@ -125,7 +132,7 @@ public class ConfigLoader
         }
     }
 
-    public InputStream getConfigStream(String source, Shell shell) throws IOException
+    public InputStream getConfigStream(String source) throws IOException
     {
         String password = null;
         String[] auth = authCache.get(source);
@@ -153,6 +160,97 @@ public class ConfigLoader
                     return null;
                 }
             }
+        }
+    }
+
+    public void encryptLocalAccounts()
+    {
+        try
+        {
+            Collection<String> configSources = sourceListProvider.list();
+
+            int encryptableFiles = 0;
+            for (String configURL : configSources)
+            {
+                if (!configURL.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(configURL))
+                {
+                    continue;
+                }
+                encryptableFiles++;
+
+                String password = askForPassword(configURL);
+
+                if (Util.isEmptyOrNull(password))
+                {
+                    continue;
+                }
+
+                String content = new Scanner(getConfigStream(configURL)).useDelimiter("\\A").next();
+                byte[] encryptedContent = new StringEncrypter("DESede", password).encrypt(content).getBytes();
+
+                OutputStream os = new FileOutputStream(configURL.substring(FileResource.uriPrefix.length()));
+                os.write(FileResource.encryptedHeader);
+                os.write(System.getProperty("line.separator").getBytes());
+                os.write(encryptedContent);
+                os.close();
+            }
+
+            if (encryptableFiles < 1)
+            {
+                listener.notify("All accounts are already encrypted");
+            }
+        }
+        catch (Exception e)
+        {
+            listener.notify(e.getMessage());
+        }
+    }
+
+    private String askForPassword(String configURL)
+    {
+        EncryptDialog dialog = new EncryptDialog(shell);
+        dialog.setURL(configURL);
+        dialog.show();
+        return dialog.getPassword();
+    }
+
+    public void decryptLocalAccounts()
+    {
+        try
+        {
+            Collection<String> configSources = sourceListProvider.list();
+
+            int decryptableFiles = 0;
+            for (String configURL : configSources)
+            {
+                String filePath = configURL.substring(FileResource.uriPrefix.length());
+                if (!configURL.startsWith(FileResource.uriPrefix) || !FileResource.isConfigEncrypted(configURL))
+                {
+                    continue;
+                }
+
+                decryptableFiles++;
+
+                InputStream stream = getConfigStream(configURL);
+                if (stream == null)
+                {
+                    continue;
+                }
+                String content = new Scanner(stream).useDelimiter("\\A").next();
+                stream.close();
+                FileOutputStream os = new FileOutputStream(filePath);
+                os.write(content.getBytes());
+                os.close();
+            }
+
+            if (decryptableFiles < 1)
+            {
+                listener.notify("All accounts are already decrypted");
+            }
+        }
+        catch (IOException e)
+        {
+            listener.notify(e.getMessage());
         }
     }
 }

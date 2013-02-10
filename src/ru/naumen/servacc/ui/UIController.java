@@ -9,14 +9,9 @@
  */
 package ru.naumen.servacc.ui;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Scanner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
@@ -59,7 +54,6 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 import ru.naumen.servacc.Backend;
-import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
@@ -74,14 +68,12 @@ import ru.naumen.servacc.globalthrough.GlobalThroughController;
 import ru.naumen.servacc.globalthrough.GlobalThroughView;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ListProvider;
-import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.Util;
 
 public class UIController implements GlobalThroughView
 {
     private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
-    private final ListProvider sourceListProvider;
     private final MessageListener synchronousAlert;
     private final MessageListener asynchronousAlert;
 
@@ -110,14 +102,13 @@ public class UIController implements GlobalThroughView
     public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, ListProvider sourceListProvider)
     {
         this.shell = shell;
-        this.sourceListProvider = sourceListProvider;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
         this.executor = executor;
-        this.configLoader = new ConfigLoader(shell, sourceListProvider);
-        this.globalThroughController = new GlobalThroughController(this, backend);
         this.synchronousAlert = new SynchronousAlert(shell);
         this.asynchronousAlert = new AsynchronousProxy(synchronousAlert);
+        this.configLoader = new ConfigLoader(shell, sourceListProvider, synchronousAlert);
+        this.globalThroughController = new GlobalThroughController(this, backend);
         createToolBar();
         createFilteredTree(platform.useSystemSearchWidget());
         createGlobalThroughWidget();
@@ -137,7 +128,7 @@ public class UIController implements GlobalThroughView
     {
         try
         {
-            config = configLoader.loadConfig(synchronousAlert);
+            config = configLoader.loadConfig();
             buildTree(config);
             updateTree(filteredTree.getFilter().getText());
             globalThroughController.refresh(config);
@@ -458,7 +449,7 @@ public class UIController implements GlobalThroughView
         {
             public void handleEvent(Event event)
             {
-                encryptLocalAccounts();
+                configLoader.encryptLocalAccounts();
             }
         });
     }
@@ -471,7 +462,7 @@ public class UIController implements GlobalThroughView
         {
             public void handleEvent(Event event)
             {
-                decryptLocalAccounts();
+                configLoader.decryptLocalAccounts();
             }
         });
     }
@@ -605,92 +596,6 @@ public class UIController implements GlobalThroughView
             {
                 LOGGER.error("Cannot copy password", e);
             }
-        }
-    }
-
-    private void encryptLocalAccounts()
-    {
-        try
-        {
-            Collection<String> configSources = sourceListProvider.list();
-
-            int encryptableFiles = 0;
-            for (String configURL : configSources)
-            {
-                if (!configURL.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(configURL))
-                {
-                    continue;
-                }
-                encryptableFiles++;
-
-                EncryptDialog dialog = new EncryptDialog(shell);
-                dialog.setURL(configURL);
-                dialog.show();
-                String password = dialog.getPassword();
-
-                if (Util.isEmptyOrNull(password))
-                {
-                    continue;
-                }
-
-                String content = new Scanner(configLoader.getConfigStream(configURL, shell)).useDelimiter("\\A").next();
-                byte[] encryptedContent = new StringEncrypter("DESede", password).encrypt(content).getBytes();
-
-                OutputStream os = new FileOutputStream(configURL.substring(FileResource.uriPrefix.length()));
-                os.write(FileResource.encryptedHeader);
-                os.write(System.getProperty("line.separator").getBytes());
-                os.write(encryptedContent);
-                os.close();
-            }
-
-            if (encryptableFiles < 1)
-            {
-                showAlert("All accounts are already encrypted");
-            }
-        }
-        catch (Exception e)
-        {
-            showAlert(e.getMessage());
-        }
-    }
-
-    private void decryptLocalAccounts()
-    {
-        try
-        {
-            Collection<String> configSources = sourceListProvider.list();
-
-            int decryptableFiles = 0;
-            for (String configURL : configSources)
-            {
-                String filePath = configURL.substring(FileResource.uriPrefix.length());
-                if (!configURL.startsWith(FileResource.uriPrefix) || !FileResource.isConfigEncrypted(configURL))
-                {
-                    continue;
-                }
-
-                decryptableFiles++;
-
-                InputStream stream = configLoader.getConfigStream(configURL, shell);
-                if (stream == null)
-                {
-                    continue;
-                }
-                String content = new Scanner(stream).useDelimiter("\\A").next();
-                stream.close();
-                FileOutputStream os = new FileOutputStream(filePath);
-                os.write(content.getBytes());
-                os.close();
-            }
-
-            if (decryptableFiles < 1)
-            {
-                showAlert("All accounts are already decrypted");
-            }
-        }
-        catch (IOException e)
-        {
-            showAlert(e.getMessage());
         }
     }
 
