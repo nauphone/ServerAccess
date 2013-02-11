@@ -81,7 +81,7 @@ Section "$(TEXT_EnableBasicAuthorization)"
 SectionEnd
 
 Section "$(TEXT_InstallDefaultPuttyCodepage)"
-    WriteRegStr     HKCU "Software\SimonTatham\PuTTY\Sessions\Default Settings" "LineCodePage" "UTF-8"
+    WriteRegStr     HKCU "Software\SimonTatham\PuTTY\Sessions\Default%20Settings" "LineCodePage" "UTF-8"
 SectionEnd
 
 Function .onInit
