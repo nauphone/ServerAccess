@@ -29,7 +29,7 @@ public class Windows implements Platform
     @Override
     public void openInBrowser(String url) throws IOException
     {
-        new ProcessBuilder("start", url).start();
+        new ProcessBuilder("cmd", "/C", "start " + url).start();
     }
 
     @Override
