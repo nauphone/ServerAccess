@@ -1,3 +1,16 @@
+New in 0.9.11.1:
+-------
+
+Bugs fixed:
+
+ * Use proper registry path for PuTTY settings
+ * Fix error with HTTP browser launch on Windows
+ * Add missing dependency: libswt-cairo
+
+Code cleanup:
+
+ * Remove obsolete Makefile
+
 New in 0.9.11:
 -------
 
@@ -6,6 +19,8 @@ New features/changes:
  * Add support for Travis CI
  * Always negotiate telnet options (seems to work fine)
  * Terminal string can be taken from config (#6)
+
+Default terminal emulator used on Linux since this version is XTerm.
 
 Bugs fixed:
 
