@@ -158,8 +158,8 @@ public class Backend extends SSH2Backend
             targetURL.append(userInfo).append('@');
         }
         // host and port
-        final String host = url.getHost();
-        final int port = url.getPort() >= 0 ? url.getPort() : 80;
+        final String remoteHost = url.getHost();
+        final int remotePort = url.getPort() >= 0 ? url.getPort() : 80;
         String targetHost;
         int targetPort;
         SSHAccount throughAccount = getThrough(account);
@@ -167,12 +167,12 @@ public class Backend extends SSH2Backend
         {
             targetHost = SocketUtils.LOCALHOST;
             targetPort = SocketUtils.getFreePort();
-            localPortForward(throughAccount, targetPort, host, port);
+            localPortForward(throughAccount, targetPort, remoteHost, remotePort);
         }
         else
         {
-            targetHost = host;
-            targetPort = port;
+            targetHost = remoteHost;
+            targetPort = remotePort;
         }
         targetURL.append(targetHost).append(':').append(targetPort);
         // path info
