@@ -131,6 +131,11 @@ public class Backend extends SSH2Backend
 
     public void openHTTPAccount(HTTPAccount account) throws Exception
     {
+        platform.openInBrowser(buildUrl(account));
+    }
+
+    private String buildUrl(HTTPAccount account) throws Exception
+    {
         URL url = new URL(account.getURL());
         // Construct URL
         StringBuffer targetURL = new StringBuffer();
@@ -177,7 +182,7 @@ public class Backend extends SSH2Backend
         {
             targetURL.append('?').append(url.getQuery());
         }
-        platform.openInBrowser(targetURL.toString());
+        return targetURL.toString();
     }
 
     public void localPortForward(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
