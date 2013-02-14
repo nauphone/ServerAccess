@@ -9,7 +9,7 @@
 
 Name         "Server Access"
 Caption      "Server Access"
-BrandingText "© NAUMEN 2005-2009"
+BrandingText "© NAUMEN 2005-2013"
 Icon         "gfx\naumen.ico"
 OutFile      "sa_install-0.9.11.1.exe"
 
@@ -58,6 +58,7 @@ Section -Main
     File "..\build\swt\swt.jar"
     File "..\lib\mindterm.jar"
     File "..\lib\log4j-1.2.17.jar"
+    File "..\resource\log4j.properties"
     File "..\resource\putty.exe"
     File "..\resource\prog.ico"
     File "..\resource\rdesktop.exe"
