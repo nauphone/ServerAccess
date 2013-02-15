@@ -43,12 +43,13 @@ public class Main implements Runnable
         Platform platform = OS.platform();
         DefaultConfiguration configuration = DefaultConfiguration.create(platform);
         Command browser = OS.buildCommand(configuration.filterProperties("browser"), platform.defaultBrowser());
+        Command ftpBrowser = OS.buildCommand(configuration.filterProperties("ftp"), platform.defaultFTPBrowser());
         Command terminal = OS.buildCommand(configuration.filterProperties("terminal"), platform.defaultTerminal());
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
-        Backend backend = new Backend(platform, browser, terminal, executor);
+        Backend backend = new Backend(browser, ftpBrowser, terminal, executor);
         UIController controller = new UIController(shell, platform, backend, executor,
             configuration.filterProperties("source[0-9]*"));
         shell.open();

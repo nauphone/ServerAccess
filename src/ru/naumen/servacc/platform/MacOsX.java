@@ -10,7 +10,6 @@ package ru.naumen.servacc.platform;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 /**
  * @author Andrey Hitrin
@@ -18,12 +17,6 @@ import java.text.MessageFormat;
  */
 public class MacOsX implements Platform
 {
-    @Override
-    public void openFTPBrowser(int localPort) throws IOException
-    {
-        new ProcessBuilder("open", MessageFormat.format("ftp://anonymous@127.0.0.1:{0,number,#}", localPort)).start();
-    }
-
     @Override
     public File getConfigDirectory() throws IOException
     {
@@ -55,6 +48,12 @@ public class MacOsX implements Platform
     public Command defaultBrowser()
     {
         return new Command("open  {url}");
+    }
+
+    @Override
+    public Command defaultFTPBrowser()
+    {
+        return new Command("open  ftp://anonymous@{host}:{port}");
     }
 
     @Override

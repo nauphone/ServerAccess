@@ -18,8 +18,6 @@ import java.io.IOException;
  */
 public interface Platform
 {
-    void openFTPBrowser(int localPort) throws IOException;
-
     File getConfigDirectory() throws IOException;
 
     boolean isTraySupported();
@@ -29,6 +27,8 @@ public interface Platform
     boolean useSystemSearchWidget();
 
     Command defaultBrowser();
+
+    Command defaultFTPBrowser();
 
     Command defaultTerminal();
 }

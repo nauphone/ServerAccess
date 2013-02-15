@@ -38,6 +38,11 @@ public class DefaultPropertiesFile implements DefaultFile
         outputStream.println("#browser=cmd  /C  start {url}");
         outputStream.println("#browser=cmd  /C  @start {url}");
         outputStream.println();
+        outputStream.println("# Use 'ftp' variable to set custom FTP browser");
+        outputStream.println("#ftp=gftp  ftp://anonymous@{host}:{port}");
+        outputStream.println("#ftp=putty  {options}  -telnet  {host}  -P  {port}");
+        outputStream.println("#ftp=open  ftp://anonymous@{host}:{port}");
+        outputStream.println();
         outputStream.println("# Use 'terminal' variable to set custom terminal launcher.");
         outputStream.println("# Seek for more documentation on http://github.com/apatrushev/ServerAccess");
         outputStream.println("#terminal=xterm  {options}  -e  telnet {host} {port}");

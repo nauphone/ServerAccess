@@ -10,7 +10,6 @@ package ru.naumen.servacc.platform;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.MessageFormat;
 
 import ru.naumen.servacc.util.Util;
 
@@ -20,12 +19,6 @@ import ru.naumen.servacc.util.Util;
  */
 public class Windows implements Platform
 {
-    @Override
-    public void openFTPBrowser(int localPort) throws IOException
-    {
-        new ProcessBuilder("explorer", MessageFormat.format("/n,ftp://127.0.0.1:{0,number,#}", localPort)).start();
-    }
-
     @Override
     public File getConfigDirectory() throws IOException
     {
@@ -59,6 +52,12 @@ public class Windows implements Platform
     public Command defaultBrowser()
     {
         return new Command("cmd  /C  start {url}");
+    }
+
+    @Override
+    public Command defaultFTPBrowser()
+    {
+        return new Command("explorer  /n,ftp://{host}:{port}");
     }
 
     @Override

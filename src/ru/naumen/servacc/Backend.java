@@ -13,22 +13,21 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
+import java.util.Collections;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ru.naumen.servacc.config2.HTTPAccount;
-import ru.naumen.servacc.config2.SSHAccount;
-import ru.naumen.servacc.platform.Command;
-import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.telnet.ConsoleManager;
-import ru.naumen.servacc.util.Util;
-
 import com.mindbright.ssh2.SSH2SessionChannel;
 import com.mindbright.ssh2.SSH2SimpleClient;
 import org.apache.log4j.Logger;
+import ru.naumen.servacc.config2.HTTPAccount;
+import ru.naumen.servacc.config2.SSHAccount;
+import ru.naumen.servacc.platform.Command;
+import ru.naumen.servacc.telnet.ConsoleManager;
+import ru.naumen.servacc.util.Util;
 
 /**
  * @author tosha
@@ -37,15 +36,15 @@ import org.apache.log4j.Logger;
 public class Backend extends SSH2Backend
 {
     private static final Logger LOGGER = Logger.getLogger(Backend.class);
-    private final Platform platform;
     private final Command browser;
     private final Command terminal;
+    private final Command ftpBrowser;
     private final ExecutorService executor;
 
-    public Backend(Platform platform, Command browser, Command terminal, ExecutorService executorService)
+    public Backend(Command browser, Command ftpBrowser, Command terminal, ExecutorService executorService)
     {
-        this.platform = platform;
         this.browser = browser;
+        this.ftpBrowser = ftpBrowser;
         this.terminal = terminal;
         this.executor = executorService;
     }
@@ -210,7 +209,7 @@ public class Backend extends SSH2Backend
         try
         {
             server.setSoTimeout(SocketUtils.COLD_TIMEOUT);
-            platform.openFTPBrowser(server.getLocalPort());
+            ftpBrowser.connect(server.getLocalPort(), Collections.EMPTY_MAP);
             return server.accept();
         }
         finally
