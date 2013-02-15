@@ -25,13 +25,6 @@ public class MacOsX implements Platform
     }
 
     @Override
-    public void openInBrowser(String url) throws IOException
-    {
-        // open URL in default browser
-        new ProcessBuilder("open", url).start();
-    }
-
-    @Override
     public File getConfigDirectory() throws IOException
     {
         final String userHome = System.getProperty("user.home");
@@ -59,8 +52,14 @@ public class MacOsX implements Platform
     }
 
     @Override
-    public Terminal defaultTerminal()
+    public Command defaultBrowser()
     {
-        return new Terminal("open  telnet://{host}:{port}");
+        return new Command("open  {url}");
+    }
+
+    @Override
+    public Command defaultTerminal()
+    {
+        return new Command("open  telnet://{host}:{port}");
     }
 }

@@ -24,12 +24,6 @@ public class Linux implements Platform
     }
 
     @Override
-    public void openInBrowser(String url) throws IOException
-    {
-        new ProcessBuilder("xdg-open", url).start();
-    }
-
-    @Override
     public File getConfigDirectory() throws IOException
     {
         final String userHome = System.getProperty("user.home");
@@ -55,8 +49,14 @@ public class Linux implements Platform
     }
 
     @Override
-    public Terminal defaultTerminal()
+    public Command defaultBrowser()
     {
-        return new Terminal("xterm  -e  telnet {host} {port}");
+        return new Command("xdg-open  {url}");
+    }
+
+    @Override
+    public Command defaultTerminal()
+    {
+        return new Command("xterm  -e  telnet {host} {port}");
     }
 }

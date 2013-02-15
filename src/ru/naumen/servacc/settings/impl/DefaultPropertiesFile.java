@@ -32,6 +32,12 @@ public class DefaultPropertiesFile implements DefaultFile
         outputStream.println("source=" + FileResource.uriPrefix + path);
         outputStream.println("#source1=<some another source file or url here>");
         outputStream.println();
+        outputStream.println("# Use 'browser' variable to set custom web browser");
+        outputStream.println("#browser=xdg-open  {url}");
+        outputStream.println("#browser=open  {url}");
+        outputStream.println("#browser=cmd  /C  start {url}");
+        outputStream.println("#browser=cmd  /C  @start {url}");
+        outputStream.println();
         outputStream.println("# Use 'terminal' variable to set custom terminal launcher.");
         outputStream.println("# Seek for more documentation on http://github.com/apatrushev/ServerAccess");
         outputStream.println("#terminal=xterm  {options}  -e  telnet {host} {port}");

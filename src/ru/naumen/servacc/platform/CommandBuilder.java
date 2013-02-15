@@ -49,6 +49,14 @@ public class CommandBuilder
         return result;
     }
 
+    public List<String> build(String url)
+    {
+        String[] commandParts = command.
+            replaceAll("[{]url[}]", url).
+            split("  ");
+        return Arrays.asList(commandParts);
+    }
+
     private List<String> extractOptions(Map<String, String> options, String optionsKey)
     {
         if (options.containsKey(optionsKey))

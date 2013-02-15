@@ -21,8 +21,8 @@ import java.util.concurrent.TimeoutException;
 
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
+import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.Platform;
-import ru.naumen.servacc.platform.Terminal;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
 
@@ -38,12 +38,14 @@ public class Backend extends SSH2Backend
 {
     private static final Logger LOGGER = Logger.getLogger(Backend.class);
     private final Platform platform;
-    private final Terminal terminal;
+    private final Command browser;
+    private final Command terminal;
     private final ExecutorService executor;
 
-    public Backend(Platform platform, Terminal terminal, ExecutorService executorService)
+    public Backend(Platform platform, Command browser, Command terminal, ExecutorService executorService)
     {
         this.platform = platform;
+        this.browser = browser;
         this.terminal = terminal;
         this.executor = executorService;
     }
@@ -131,7 +133,7 @@ public class Backend extends SSH2Backend
 
     public void openHTTPAccount(HTTPAccount account) throws Exception
     {
-        platform.openInBrowser(buildUrl(account));
+        browser.open(buildUrl(account));
     }
 
     private String buildUrl(HTTPAccount account) throws Exception

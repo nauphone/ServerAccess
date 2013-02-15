@@ -21,18 +21,18 @@ public class OS
 
     /**
      * In Java 8, this method should be moved directly to the Platform interface
-     * @param platform
-     * @param terminalProvider
+     * @param settingsProvider
+     * @param defaultCommand
      * @return
      */
-    public static Terminal terminal(Platform platform, ListProvider terminalProvider)
+    public static Command buildCommand(ListProvider settingsProvider, Command defaultCommand)
     {
-        Iterator<String> iterator = terminalProvider.list().iterator();
+        Iterator<String> iterator = settingsProvider.list().iterator();
         if (iterator.hasNext())
         {
-            return new Terminal(iterator.next());
+            return new Command(iterator.next());
         }
-        return platform.defaultTerminal();
+        return defaultCommand;
     }
 
     public static boolean isMacOSX()

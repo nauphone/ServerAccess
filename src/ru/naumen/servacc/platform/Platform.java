@@ -20,8 +20,6 @@ public interface Platform
 {
     void openFTPBrowser(int localPort) throws IOException;
 
-    void openInBrowser(String url) throws IOException;
-
     File getConfigDirectory() throws IOException;
 
     boolean isTraySupported();
@@ -30,5 +28,7 @@ public interface Platform
 
     boolean useSystemSearchWidget();
 
-    Terminal defaultTerminal();
+    Command defaultBrowser();
+
+    Command defaultTerminal();
 }

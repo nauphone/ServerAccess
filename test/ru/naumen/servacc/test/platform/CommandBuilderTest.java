@@ -74,6 +74,13 @@ public class CommandBuilderTest
         assertThat(builder.build(0, options), is(listOf("ping", "-c2", "goo.gl")));
     }
 
+    @Test
+    public void urlTemplateIsUsedToBuildBrowserCommand()
+    {
+        builder = new CommandBuilder("cmd  /C  start {url}");
+        assertThat(builder.build("http://google.com"), is(listOf("cmd", "/C", "start http://google.com")));
+    }
+
     private List<String> listOf(String... strings)
     {
         return Arrays.asList(strings);

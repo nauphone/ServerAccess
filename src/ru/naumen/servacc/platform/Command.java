@@ -10,12 +10,12 @@ import org.apache.log4j.Logger;
  * @author Andrey Hitrin
  * @since 31.01.13
  */
-public class Terminal
+public class Command
 {
-    private static final Logger LOGGER = Logger.getLogger(Terminal.class);
+    private static final Logger LOGGER = Logger.getLogger(Command.class);
     private final CommandBuilder builder;
 
-    public Terminal(String command)
+    public Command(String command)
     {
         builder = new CommandBuilder(command);
     }
@@ -23,6 +23,13 @@ public class Terminal
     public void connect(int localPort, Map<String, String> params) throws IOException
     {
         ProcessBuilder processBuilder = new ProcessBuilder(builder.build(localPort, params));
+        printDebugInfo(processBuilder);
+        processBuilder.start();
+    }
+
+    public void open(String url) throws IOException
+    {
+        ProcessBuilder processBuilder = new ProcessBuilder(builder.build(url));
         printDebugInfo(processBuilder);
         processBuilder.start();
     }

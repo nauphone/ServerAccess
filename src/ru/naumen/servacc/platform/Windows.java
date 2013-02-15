@@ -27,12 +27,6 @@ public class Windows implements Platform
     }
 
     @Override
-    public void openInBrowser(String url) throws IOException
-    {
-        new ProcessBuilder("cmd", "/C", "start " + url).start();
-    }
-
-    @Override
     public File getConfigDirectory() throws IOException
     {
         String appData = System.getenv("APPDATA");
@@ -62,8 +56,14 @@ public class Windows implements Platform
     }
 
     @Override
-    public Terminal defaultTerminal()
+    public Command defaultBrowser()
     {
-        return new Terminal("putty  {options}  -telnet  {host}  -P  {port}");
+        return new Command("cmd  /C  start {url}");
+    }
+
+    @Override
+    public Command defaultTerminal()
+    {
+        return new Command("putty  {options}  -telnet  {host}  -P  {port}");
     }
 }
