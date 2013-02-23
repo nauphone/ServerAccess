@@ -52,9 +52,12 @@ public class GlobalThroughController
 
     public void select(String uniqueIdentity, IConfig config)
     {
-        if(canSelect(config, uniqueIdentity))
+        Path path = find(config, uniqueIdentity);
+        if(path.found())
         {
             globalThroughUniqueIdentity = uniqueIdentity;
+            view.setGlobalThroughWidget(path.path());
+            backend.setGlobalThrough(path.account());
         }
         else
         {
@@ -62,29 +65,27 @@ public class GlobalThroughController
         }
     }
 
-    private boolean canSelect(IConfig config, String uniqueIdentity)
+    private Path find(IConfig config, String uniqueIdentity)
     {
         for (IConfigItem i : config.getChildren())
         {
-            if (canSelect(i, uniqueIdentity, ""))
+            Path path = find(i, uniqueIdentity, "");
+            if (path.found())
             {
-                return true;
+                return path;
             }
         }
-        return false;
+        return Path.notFound();
     }
 
-    private boolean canSelect(IConfigItem object, String uniqueIdentity, String prefix)
+    private Path find(IConfigItem object, String uniqueIdentity, String prefix)
     {
         if (object instanceof SSHAccount)
         {
             SSHAccount account = (SSHAccount) object;
             if (uniqueIdentity.equals(account.getUniqueIdentity()))
             {
-                String globalThroughText = prefix + " > " + account;
-                view.setGlobalThroughWidget(globalThroughText);
-                backend.setGlobalThrough(account);
-                return true;
+                return Path.foundAt(account, prefix + " > " + account);
             }
         }
         else if (object instanceof Group)
@@ -96,12 +97,52 @@ public class GlobalThroughController
                 {
                     newPrefix = prefix + " > " + newPrefix;
                 }
-                if (canSelect(i, uniqueIdentity, newPrefix))
+                Path p = find(i, uniqueIdentity, newPrefix);
+                if (p.found())
                 {
-                    return true;
+                    return p;
                 }
             }
         }
-        return false;
+        return Path.notFound();
+    }
+
+    private static class Path
+    {
+        private final SSHAccount account;
+        private final String path;
+        private final boolean found;
+
+        public static Path foundAt(SSHAccount account, String path)
+        {
+            return new Path(account, path, true);
+        }
+
+        public static Path notFound()
+        {
+            return new Path(null, "", false);
+        }
+
+        private Path(SSHAccount account, String path, boolean found)
+        {
+            this.account = account;
+            this.path = path;
+            this.found = found;
+        }
+
+        public SSHAccount account()
+        {
+            return account;
+        }
+
+        public String path()
+        {
+            return path;
+        }
+
+        public boolean found()
+        {
+            return found;
+        }
     }
 }
