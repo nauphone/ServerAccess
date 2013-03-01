@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
 
 /**
  * @author Andrey Hitrin
@@ -52,7 +53,7 @@ public class CommandBuilder
     public List<String> build(String url)
     {
         String[] commandParts = command.
-            replaceAll("[{]url[}]", url).
+            replaceAll("[{]url[}]", Matcher.quoteReplacement(url)).
             split("  ");
         return Arrays.asList(commandParts);
     }

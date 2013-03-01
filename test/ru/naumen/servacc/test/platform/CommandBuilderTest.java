@@ -81,6 +81,14 @@ public class CommandBuilderTest
         assertThat(builder.build("http://google.com"), is(listOf("cmd", "/C", "start http://google.com")));
     }
 
+    @Test
+    public void urlThatContainsSpecialSymbolsCanBeProcessed()
+    {
+        builder = new CommandBuilder("firefox  {url}");
+        String url = "http://secret.com/#/user$/temp?a=b&x=y";
+        assertThat(builder.build(url), is(listOf("firefox", url)));
+    }
+
     private List<String> listOf(String... strings)
     {
         return Arrays.asList(strings);
