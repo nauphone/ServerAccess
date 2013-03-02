@@ -7,7 +7,7 @@
  * packaging of this file.
  */
 
-package ru.naumen.servacc.test.globalthrough;
+package ru.naumen.servacc.test.config2;
 
 import java.util.Arrays;
 import java.util.List;
