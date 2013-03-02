@@ -10,6 +10,7 @@
 package ru.naumen.servacc.globalthrough;
 
 import ru.naumen.servacc.SSH2Backend;
+import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.config2.i.IConfig;
 
 /**

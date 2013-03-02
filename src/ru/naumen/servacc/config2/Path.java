@@ -7,10 +7,8 @@
  * packaging of this file.
  */
 
-package ru.naumen.servacc.globalthrough;
+package ru.naumen.servacc.config2;
 
-import ru.naumen.servacc.config2.Group;
-import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigItem;
 import ru.naumen.servacc.util.Util;

@@ -1,4 +1,4 @@
-package ru.naumen.servacc.test.globalthrough;
+package ru.naumen.servacc.test.config2;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -9,7 +9,7 @@ import static ru.naumen.servacc.test.config2.ConfigStub.httpAccount;
 
 import org.junit.Test;
 import ru.naumen.servacc.config2.SSHAccount;
-import ru.naumen.servacc.globalthrough.Path;
+import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.test.config2.SSHAccountStub;
 
 /**
