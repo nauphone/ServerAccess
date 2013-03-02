@@ -10,11 +10,7 @@
 package ru.naumen.servacc.globalthrough;
 
 import ru.naumen.servacc.SSH2Backend;
-import ru.naumen.servacc.config2.Group;
-import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfig;
-import ru.naumen.servacc.config2.i.IConfigItem;
-import ru.naumen.servacc.util.Util;
 
 /**
  * Contains all logic around management of Global Through account.
@@ -52,7 +48,7 @@ public class GlobalThroughController
 
     public void select(String uniqueIdentity, IConfig config)
     {
-        Path path = find(config, uniqueIdentity);
+        Path path = Path.find(config, uniqueIdentity);
         if(path.found())
         {
             globalThroughUniqueIdentity = uniqueIdentity;
@@ -62,87 +58,6 @@ public class GlobalThroughController
         else
         {
             clear();
-        }
-    }
-
-    private Path find(IConfig config, String uniqueIdentity)
-    {
-        for (IConfigItem i : config.getChildren())
-        {
-            Path path = find(i, uniqueIdentity, "");
-            if (path.found())
-            {
-                return path;
-            }
-        }
-        return Path.notFound();
-    }
-
-    private Path find(IConfigItem object, String uniqueIdentity, String prefix)
-    {
-        if (object instanceof SSHAccount)
-        {
-            SSHAccount account = (SSHAccount) object;
-            if (uniqueIdentity.equals(account.getUniqueIdentity()))
-            {
-                return Path.foundAt(account, prefix + " > " + account);
-            }
-        }
-        else if (object instanceof Group)
-        {
-            for (IConfigItem i : ((Group) object).getChildren())
-            {
-                String newPrefix = ((Group) object).getName();
-                if (!Util.isEmptyOrNull(prefix))
-                {
-                    newPrefix = prefix + " > " + newPrefix;
-                }
-                Path p = find(i, uniqueIdentity, newPrefix);
-                if (p.found())
-                {
-                    return p;
-                }
-            }
-        }
-        return Path.notFound();
-    }
-
-    private static class Path
-    {
-        private final SSHAccount account;
-        private final String path;
-        private final boolean found;
-
-        public static Path foundAt(SSHAccount account, String path)
-        {
-            return new Path(account, path, true);
-        }
-
-        public static Path notFound()
-        {
-            return new Path(null, "", false);
-        }
-
-        private Path(SSHAccount account, String path, boolean found)
-        {
-            this.account = account;
-            this.path = path;
-            this.found = found;
-        }
-
-        public SSHAccount account()
-        {
-            return account;
-        }
-
-        public String path()
-        {
-            return path;
-        }
-
-        public boolean found()
-        {
-            return found;
         }
     }
 }
