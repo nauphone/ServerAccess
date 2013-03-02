@@ -56,6 +56,6 @@ public class Linux implements Platform
     @Override
     public Command defaultTerminal()
     {
-        return new Command("xterm  -e  telnet {host} {port}");
+        return new Command("xterm  -T  {name}  -xrm  xterm*vt100*allowTitleOps: false  -e  telnet {host} {port}");
     }
 }
