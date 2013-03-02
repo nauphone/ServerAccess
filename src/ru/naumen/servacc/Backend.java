@@ -14,6 +14,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URL;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -49,7 +51,7 @@ public class Backend extends SSH2Backend
         this.executor = executorService;
     }
 
-    public void openSSHAccount(final SSHAccount account) throws Exception
+    public void openSSHAccount(final SSHAccount account, final String path) throws Exception
     {
         SSH2SimpleClient client;
         if (isConnected(account))
@@ -65,7 +67,7 @@ public class Backend extends SSH2Backend
                     @Override
                     public Object call() throws Exception
                     {
-                        openSSHAccount(account, clientCopy);
+                        openSSHAccount(account, clientCopy, path);
                         return null;
                     }
                 });
@@ -80,10 +82,10 @@ public class Backend extends SSH2Backend
         }
         // try with "cold" timeout
         client = getSSH2Client(account);
-        openSSHAccount(account, client);
+        openSSHAccount(account, client, path);
     }
 
-    private void openSSHAccount(final SSHAccount account, final SSH2SimpleClient client) throws Exception
+    private void openSSHAccount(final SSHAccount account, final SSH2SimpleClient client, final String path) throws Exception
     {
         final SSH2SessionChannel session = client.getConnection().newSession();
         try
@@ -94,7 +96,7 @@ public class Backend extends SSH2Backend
                 removeConnection(account);
                 throw new IOException("Failed to get PTY on remote side");
             }
-            final Socket term = openTerminal(account);
+            final Socket term = openTerminal(account, path);
             final ConsoleManager console = new ConsoleManager(term, session, account.getPassword(), account.needSudoLogin());
             console.negotiateProtocolOptions();
             session.changeStdIn(console.getInputStream());
@@ -114,13 +116,15 @@ public class Backend extends SSH2Backend
         }
     }
 
-    private Socket openTerminal(SSHAccount account) throws IOException
+    private Socket openTerminal(SSHAccount account, String path) throws IOException
     {
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
+        Map<String,String> params = new HashMap<String, String>(account.getParams());
+        params.put("name", path);
         try
         {
             server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
-            terminal.connect(server.getLocalPort(), account.getParams());
+            terminal.connect(server.getLocalPort(), params);
             // FIXME: collect children and kill it on (on?)
             return server.accept();
         }

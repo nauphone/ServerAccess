@@ -75,6 +75,14 @@ public class CommandBuilderTest
     }
 
     @Test
+    public void nameTemplateIsReplacedByNameParameter()
+    {
+        options.put("name", "hello");
+        builder = new CommandBuilder("xterm  -T  {name}");
+        assertThat(builder.build(0, options), is(listOf("xterm", "-T", "hello")));
+    }
+
+    @Test
     public void urlTemplateIsUsedToBuildBrowserCommand()
     {
         builder = new CommandBuilder("cmd  /C  start {url}");

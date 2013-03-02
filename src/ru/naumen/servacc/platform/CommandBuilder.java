@@ -42,6 +42,10 @@ public class CommandBuilder
             {
                 result.addAll(extractOptions(options, optionsKey));
             }
+            else if ("{name}".equals(part))
+            {
+                result.add(options.get("name"));
+            }
             else
             {
                 result.add(part);

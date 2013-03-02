@@ -58,6 +58,7 @@ import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
+import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigItem;
@@ -496,7 +497,9 @@ public class UIController implements GlobalThroughView
                     {
                         try
                         {
-                            backend.openSSHAccount((SSHAccount) tic.getData());
+                            SSHAccount account = (SSHAccount) tic.getData();
+                            Path path = Path.find(config, account.getUniqueIdentity());
+                            backend.openSSHAccount(account, path.path());
                         }
                         catch (Exception e)
                         {
