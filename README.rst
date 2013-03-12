@@ -177,12 +177,12 @@ By default, ServerAccess uses ``xterm`` on Linux, ``putty`` on Windows, and ``op
 
     terminal=guake  -n  1  -T  {name}  -e  telnet {host} {port}
 
-Words placed in braces are called "templates". You must use them to determine places where runtime data is being put. Supported templates are::
+Words placed in braces are called "templates". You must use them to determine places where runtime data is being put. Supported templates are:
 
- * host - here ServerAccess inserts host to connect to. Usually it is equal to 127.0.0.1, but you'd better use template for further compatibility.
- * port - here ServerAccess inserts port number. Port number is being generated dynamically, hence you cannot skip this template.
- * name - optional. When it is provided, ServerAccess inserts remote host name that you can use to distinguish between different terminals.
- * options - optional template that is used for backward compatibility with older versions
+* host - here ServerAccess inserts host to connect to. Usually it is equal to 127.0.0.1, but you'd better use template for further compatibility.
+* port - here ServerAccess inserts port number. Port number is being generated dynamically, hence you cannot skip this template.
+* name - optional. When it is provided, ServerAccess inserts remote host name that you can use to distinguish between different terminals.
+* options - optional template that is used for backward compatibility with older versions
 
 FTP launcher
 ------------
