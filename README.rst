@@ -163,29 +163,44 @@ Sample configuration file contents::
 
 On the first launch an empty configuration file named ``accounts.xml`` will be created near the ``serveraccess.properties`` file.
 
+Launchers
+=========
+
+ServerAccess allows you define what application must be used to open SSH connection, FTP connection or Web Browser. You can apply your prefferable options and use named templates as placeholders for stuff that is being determined and applied in runtime. Please refer for following sections for more information.
+
+You *must* use double whitespace to separate program arguments. This allows you use single whitespace inside these arguments, when needed. If you have troubles with custom launcher, you may use ``DEBUG`` logging level to see, what is being launched, in log file. If it doesn't help, please contact project maintainers.
+
 Terminal launcher
 -----------------
 
-ServerAccess allows you define what application must be used to open SSH connection. By default, it uses ``xterm`` on Linux, ``putty`` on Windows, and ``open`` on MacOs X. But you can redefine this by using ``terminal`` option in the ``serveraccess.properties`` file. For example, you may type something like this::
+By default, ServerAccess uses ``xterm`` on Linux, ``putty`` on Windows, and ``open`` on MacOs X. But you can redefine this by using ``terminal`` option in the ``serveraccess.properties`` file. For example, you may type something like this::
 
-    terminal=guake  -n  1  {options}  -e  telnet {host} {port}
+    terminal=guake  -n  1  -T  {name}  -e  telnet {host} {port}
 
-A little explanation::
+Words placed in braces are called "templates". You must use them to determine places where runtime data is being put. Supported templates are::
 
-    terminal=guake  -n  1  {options}  -e  telnet {host} {port}
-             ↑      ↑      ↑                     ↑      ↑
-             program launched                    |      |
-                    |      |                     |      |
-                    a fixed list of options, separated with *double space*
-                           |                     |      |
-                           a template for individual options for each account
-                                                 |      |
-                                  a template for host   |
-                                                        |
-                                             a template for port
+ * host - here ServerAccess inserts host to connect to. Usually it is equal to 127.0.0.1, but you'd better use template for further compatibility.
+ * port - here ServerAccess inserts port number. Port number is being generated dynamically, hence you cannot skip this template.
+ * name - optional. When it is provided, ServerAccess inserts remote host name that you can use to distinguish between different terminals.
+ * options - optional template that is used for backward compatibility with older versions
 
-We need richer documentation here :)
+FTP launcher
+------------
 
+Sadly, we have troubles in compatibility with different FTP clients. GFTP proved to be working, but other clients may not. An example::
+
+    ftp=gftp  ftp://anonymous@{host}:{port}
+
+Supported templates are the same as in "Terminal launcher" section.
+
+Web browser launcher
+--------------------
+
+An example (you chould use such a string in your ``serveraccess.properties`` file)::
+
+    browser=chromium-browser  {url}
+
+The main and the only supported terminal is ``url``. It is used to insert link to the given location.
 
 Encryption
 ==========
