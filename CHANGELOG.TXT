@@ -1,3 +1,25 @@
+New in 0.9.12:
+-------
+
+New features/changes:
+
+ * Host alias (#14)
+ * FTP browser/Web browser application may be redefined (#28)
+ * Pass account name to terminal (#20)
+
+Bugs fixed:
+
+ * Add log4j.properties to Windows installation
+ * URLs with special symbols didn't work
+
+Code cleanup and refactoring:
+
+ * Move encrypt/decrypt methods out from UIController (#26)
+ * Use MessageListener to break circular dependency
+ * Extract find logic into Path class
+ * build.xml fix: win32 target should not depend on clean
+ * Many small code cleanups
+
 New in 0.9.11.1:
 -------
 
