@@ -2,7 +2,7 @@
 <Accounts version="2">
     <Group comment="Group 1" name="Group 1">
         <Group comment="Server 1" name="Server 1">
-            <Account id="1" type="ssh">
+            <Account id="1" type="ssh" comment="example server">
                 <Param name="login" value="foo" />
                 <Param name="password" value="bar" />
                 <Param name="address" value="127.0.0.1:23" />

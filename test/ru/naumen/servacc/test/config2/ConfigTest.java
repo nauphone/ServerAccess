@@ -53,6 +53,7 @@ public class ConfigTest
         Assert.assertEquals("SSHAccount: attribute login", "foo", sshAccount.getLogin());
         Assert.assertEquals("SSHAccount: attribute password", "bar", sshAccount.getPassword());
         Assert.assertEquals("SSHAccount: attribute through", null, sshAccount.getParams().get("through"));
+        Assert.assertEquals("SSHAccount: attribute comment", "example server", sshAccount.getComment());
 
         Assert.assertTrue("Second one is Account", group.getChildren().get(1) instanceof Account);
         Account account = (Account)group.getChildren().get(1);
