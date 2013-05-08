@@ -37,17 +37,26 @@ public class HTTPProxy
     public int port;
     public SSHAccount serverAccount;
     public Future<?> serverTask;
+    private MessageListener listener;
 
     public HTTPProxy(Backend backend, ExecutorService executor)
     {
         this.backend = backend;
         this.executor = executor;
+        this.listener = new MessageListener()
+        {
+            @Override
+            public void notify(String text)
+            {
+            }
+        };
     }
 
-    public void setProxyOn(SSHAccount account, int localPort)
+    public void setProxyOn(SSHAccount account, int localPort, MessageListener messageListener)
     {
         serverAccount = account;
         port = localPort;
+        listener = messageListener;
         restartProxyServer();
     }
 
@@ -96,6 +105,7 @@ public class HTTPProxy
             catch (IOException e)
             {
                 LOG.error("Exception during main proxy loop", e);
+                listener.notify(e.getMessage());
             }
         }
     }

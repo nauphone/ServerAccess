@@ -614,7 +614,7 @@ public class UIController implements GlobalThroughView
             ProxySetupDialog dialog = new ProxySetupDialog(shell);
             dialog.show();
 
-            httpProxy.setProxyOn((SSHAccount) tic.getData(), dialog.getPort());
+            httpProxy.setProxyOn((SSHAccount) tic.getData(), dialog.getPort(), asynchronousAlert);
             // TODO: display proxy status somewhere
         }
     }
