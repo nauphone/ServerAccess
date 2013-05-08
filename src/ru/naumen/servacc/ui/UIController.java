@@ -54,6 +54,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.HTTPProxy;
+import ru.naumen.servacc.MessageListener;
 import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;

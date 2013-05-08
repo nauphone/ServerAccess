@@ -10,6 +10,7 @@
 package ru.naumen.servacc.ui;
 
 import org.eclipse.swt.widgets.Display;
+import ru.naumen.servacc.MessageListener;
 
 /**
  * @author Andrey Hitrin

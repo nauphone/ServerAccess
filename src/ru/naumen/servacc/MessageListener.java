@@ -7,7 +7,7 @@
  * packaging of this file.
  */
 
-package ru.naumen.servacc.ui;
+package ru.naumen.servacc;
 
 /**
  * @author Andrey Hitrin
