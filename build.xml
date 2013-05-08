@@ -53,6 +53,10 @@
 
     <path id="test.class.path">
         <pathelement location="lib/junit-4.10.jar"/>
+        <pathelement location="lib/httpclient-4.2.5.jar"/>
+        <pathelement location="lib/httpcore-4.2.4.jar"/>
+        <pathelement location="lib/httpmime-4.2.5.jar"/>
+        <pathelement location="lib/commons-logging-1.1.1.jar"/>
     </path>
 
     <target
