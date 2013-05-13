@@ -34,9 +34,9 @@ public class HTTPProxy
     private final Backend backend;
     private final ExecutorService executor;
 
-    public int port;
-    public SSHAccount serverAccount;
-    public Future<?> serverTask;
+    private int port;
+    private SSHAccount serverAccount;
+    private Future<?> serverTask;
     private MessageListener listener;
 
     public HTTPProxy(Backend backend, ExecutorService executor)
@@ -114,11 +114,11 @@ public class HTTPProxy
     {
         public static final int MAX_BUFFER_SIZE = 4096;
         private final Socket socket;
-        public final SSHAccount account;
+        private final SSHAccount account;
         private String request;
-        public String host;
-        public int port;
-        public PushbackInputStream clientInputStream;
+        private String host;
+        private int port;
+        private PushbackInputStream clientInputStream;
 
         public Listener(Socket s, SSHAccount account)
         {

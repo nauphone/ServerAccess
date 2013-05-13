@@ -1,12 +1,5 @@
 package ru.naumen.servacc.ui;
 
-import java.lang.Integer;
-import java.lang.Override;
-import java.lang.ProcessBuilder;
-import java.lang.StringBuilder;
-
-import ru.naumen.servacc.ui.DialogBase;
-
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
