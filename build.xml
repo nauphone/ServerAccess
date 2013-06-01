@@ -57,6 +57,8 @@
         <pathelement location="lib/httpcore-4.2.4.jar"/>
         <pathelement location="lib/httpmime-4.2.5.jar"/>
         <pathelement location="lib/commons-logging-1.1.1.jar"/>
+        <pathelement location="lib/pitest-0.30.jar"/>
+        <pathelement location="lib/pitest-ant-0.30.jar"/>
     </path>
 
     <target
@@ -231,6 +233,23 @@
             <formatter type="xml" />
         </junit>
         <fail if="junit.failure" message="Unit test(s) failed" />
+    </target>
+
+    <taskdef name="pitest" classname="org.pitest.ant.PitestTask" classpathref="test.class.path"/>
+
+    <target name="mutationCoverage" depends="test-build">
+        <path id="mutation.path">
+            <path refid="test.class.path"/>
+            <path refid="saclient.class.path" />
+            <pathelement location="${buildt}" />
+            <pathelement location="${build}" />
+        </path>
+        <pitest
+            classPath="mutation.path"
+            targetClasses="ru.naumen.*"
+            targetTests="ru.naumen.*"
+            reportDir="${buildt}/reports"
+            sourceDir="${src}"/>
     </target>
 
     <target
