@@ -139,6 +139,38 @@
     </target>
 
     <target
+        name="win64"
+        depends="jar"
+        description="--> build win32-x86_64 installer">
+
+        <mkdir dir="${build}/swt" />
+        <unzip src="lib/swt/swt-${swt-version}-win32-win32-x86_64.zip" dest="${build}/swt"/>
+
+        <!-- Windows users, add makensis to your PATH -->
+        <exec
+            executable="${nsis_cmd}"
+            dir="nsis"
+            resultproperty="nsis_exec_result">
+            <arg line="serveraccess2.nsi" />
+            <redirector>
+                <outputmapper type="merge" to="build/redirector.out" />
+                <errormapper type="merge" to="build/redirector.err" />
+            </redirector>
+        </exec>
+
+        <delete dir="${build}/swt" />
+        <move file="nsis/sa_install-${version}.exe" tofile="build/sa_install-${version}-x86_64.exe" failonerror="false"/>
+
+        <fail message="NSIS build failed">
+            <condition>
+                <not>
+                    <equals arg1="${nsis_exec_result}" arg2="0"/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <target
         name="java-build"
         depends="init"
         description="--> .java to build">
