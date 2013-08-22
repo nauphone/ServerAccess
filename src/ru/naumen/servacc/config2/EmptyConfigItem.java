@@ -34,4 +34,9 @@ public class EmptyConfigItem implements IConfigItem
     {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "";
+    }
 }

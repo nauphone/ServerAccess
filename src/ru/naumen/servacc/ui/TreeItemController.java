@@ -106,9 +106,10 @@ public class TreeItemController
         return data.matches(filter);
     }
 
+    @Override
     public String toString()
     {
-        return " " + data.toString();
+        return data.toString();
     }
 
     public String getImageName()

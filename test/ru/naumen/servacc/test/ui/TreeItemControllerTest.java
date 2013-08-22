@@ -183,4 +183,10 @@ public class TreeItemControllerTest
         controller.raiseVisibility();
         assertThat(root.isVisible(), is(false)); // process stops on parent
     }
+
+    @Test
+    public void defaultMessageIsEmpty()
+    {
+        assertThat(controller.toString(), is(""));
+    }
 }
