@@ -26,12 +26,12 @@ import ru.naumen.servacc.ui.TreeItemController;
  */
 public class TreeItemControllerTest
 {
+    private IConfigItem data = new HTTPAccount();
     private TreeItemController controller = new TreeItemController();
 
     @Test
     public void dataMustBeSetInConstructor()
     {
-        IConfigItem data = new HTTPAccount();
         controller = new TreeItemController(null, data);
         assertThat(controller.getData(), is(data));
     }
@@ -145,9 +145,9 @@ public class TreeItemControllerTest
     @Test
     public void allParentsAreExpandedOnRaiseVisibility()
     {
-        TreeItemController root = new TreeItemController(null, null);
-        TreeItemController parent = new TreeItemController(root, null);
-        controller = new TreeItemController(parent, null);
+        TreeItemController root = new TreeItemController(null, data);
+        TreeItemController parent = new TreeItemController(root, data);
+        controller = new TreeItemController(parent, data);
 
         root.setExpanded(false);
         parent.setExpanded(false);
@@ -159,9 +159,9 @@ public class TreeItemControllerTest
     @Test
     public void allParentsAreVisibleOnRaiseVisibility()
     {
-        TreeItemController root = new TreeItemController(null, null);
-        TreeItemController parent = new TreeItemController(root, null);
-        controller = new TreeItemController(parent, null);
+        TreeItemController root = new TreeItemController(null, data);
+        TreeItemController parent = new TreeItemController(root, data);
+        controller = new TreeItemController(parent, data);
 
         root.setVisibility(false);
         parent.setVisibility(false);
@@ -173,9 +173,9 @@ public class TreeItemControllerTest
     @Test
     public void raiseVisibilityStopsOnTheFirstVisibleAndExpandedParent()
     {
-        TreeItemController root = new TreeItemController(null, null);
-        TreeItemController parent = new TreeItemController(root, null);
-        controller = new TreeItemController(parent, null);
+        TreeItemController root = new TreeItemController(null, data);
+        TreeItemController parent = new TreeItemController(root, data);
+        controller = new TreeItemController(parent, data);
 
         root.setVisibility(false);
         parent.setVisibility(true);
