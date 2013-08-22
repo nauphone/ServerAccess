@@ -28,9 +28,14 @@ public class HTTPAccount extends Account implements IConnectable
     {
         String result = getURL();
         String login = getParams().get(ACCOUNT_PARAM_LOGIN);
+        String comment = getComment();
         if (!Util.isEmptyOrNull(login))
         {
             result = login + " @ " + result;
+        }
+        if (!Util.isEmptyOrNull(comment))
+        {
+            result = result + " (" + comment + ")";
         }
         return result;
     }

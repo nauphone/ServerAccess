@@ -60,4 +60,29 @@ public class HTTPAccountTest
         }});
         assertThat(account.toString(), is("superuser @ google.com"));
     }
+
+    @Test
+    public void commentIsRepresentedInToString()
+    {
+        HTTPAccount account = new HTTPAccount();
+        account.setParams(new HashMap<String, String>() {{
+            put("login", "superuser");
+            put("url", "google.com");
+        }});
+        account.setComment("example comment");
+        assertThat(account.toString(), is("superuser @ google.com (example comment)"));
+    }
+
+    @Test
+    public void emptyCommentIsNotRepresentedInToString()
+    {
+        HTTPAccount account = new HTTPAccount();
+        account.setParams(new HashMap<String, String>() {{
+            put("login", "superuser");
+            put("url", "google.com");
+        }});
+        account.setComment("");
+        assertThat(account.toString(), is("superuser @ google.com"));
+    }
+
 }
