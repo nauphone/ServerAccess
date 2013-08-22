@@ -13,9 +13,10 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import org.junit.Test;
-
+import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.i.IConfigItem;
 import ru.naumen.servacc.ui.TreeItemController;
@@ -188,5 +189,16 @@ public class TreeItemControllerTest
     public void defaultMessageIsEmpty()
     {
         assertThat(controller.toString(), is(""));
+    }
+
+    @Test
+    public void messageIsTakenFromData()
+    {
+        Account account = new HTTPAccount();
+        account.setParams(new HashMap<String, String>(){{
+            put("url", "https://rvm.io");
+        }});
+        controller = new TreeItemController(null, account);
+        assertThat(controller.toString(), is("https://rvm.io"));
     }
 }
