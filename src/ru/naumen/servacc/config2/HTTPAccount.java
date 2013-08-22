@@ -19,12 +19,14 @@ public class HTTPAccount extends Account implements IConnectable
 
     public String getURL()
     {
-        return getParams().get(HTTPACCOUNT_PARAM_URL);
+        String url = getParams().get(HTTPACCOUNT_PARAM_URL);
+        return (url != null) ? url : "";
     }
 
+    @Override
     public String toString()
     {
-        String result = getParams().get("url");
+        String result = getURL();
         String login = getParams().get(ACCOUNT_PARAM_LOGIN);
         if (!Util.isEmptyOrNull(login))
         {
@@ -37,7 +39,7 @@ public class HTTPAccount extends Account implements IConnectable
     public boolean matches(String filter)
     {
         String login = getParams().get(ACCOUNT_PARAM_LOGIN);
-        String url = getParams().get("url");
+        String url = getURL();
         for (String s : new String[] {getName(), getComment(), url, login})
         {
             if (!Util.isEmptyOrNull(s) && Util.matches(s, filter))
