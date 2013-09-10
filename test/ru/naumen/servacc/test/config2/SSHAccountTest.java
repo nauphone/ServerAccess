@@ -12,7 +12,10 @@ package ru.naumen.servacc.test.config2;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.util.HashMap;
+
 import org.junit.Test;
+import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.SSHAccount;
 
 /**
@@ -26,5 +29,17 @@ public class SSHAccountTest
     {
         SSHAccount account = new SSHAccount();
         assertThat(account.toString(), is("*** empty ***"));
+    }
+
+    @Test
+    public void accountDescriptionContainsLoginAndAddressAndComment()
+    {
+        SSHAccount account = new SSHAccount();
+        account.setParams(new HashMap<String, String>() {{
+            put(Account.ACCOUNT_PARAM_LOGIN, "superuser");
+            put(Account.ACCOUNT_PARAM_ADDRESS, "google.com:22");
+        }});
+        account.setComment("Boy, that escalated quickly");
+        assertThat(account.toString(), is("superuser @ google.com:22 (Boy, that escalated quickly)"));
     }
 }

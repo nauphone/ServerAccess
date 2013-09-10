@@ -78,6 +78,10 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
         {
             result += EMPTY_NAME;
         }
+        if (!Util.isEmptyOrNull(getComment()))
+        {
+            result += " (" + getComment() + ")";
+        }
         return result;
     }
 
