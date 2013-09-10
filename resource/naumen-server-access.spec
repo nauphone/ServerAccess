@@ -1,6 +1,6 @@
 Name: naumen-server-access
 Group: Applications/Internet
-Version: 0.9.12
+Version: 0.9.13
 %define release %( svnversion -c %( pwd ) | sed "s/.*://" )
 Release: %{release}
 Summary: Nauphone servers(linux) installations access tools

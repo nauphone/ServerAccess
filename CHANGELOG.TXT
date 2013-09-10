@@ -1,3 +1,22 @@
+New in 0.9.13:
+-------
+
+Here we're again!
+
+New features/changes:
+
+ * HTTP Proxy Server (#39)
+
+Bugs fixed:
+
+ * Windows 64-bit compatibility (#44)
+ * HTTP proxy cannot deal with multiple target hosts (#40)
+ * Account comments are not displayed (#34)
+
+Code cleanup and refactoring:
+
+ * More unit tests on legacy code
+
 New in 0.9.12:
 -------
 

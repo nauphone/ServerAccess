@@ -3,7 +3,7 @@
 <project name="servacc" default="prepare-release" basedir=".">
     <property
         name="version"
-        value="0.9.12" />
+        value="0.9.13" />
     <property
         name="src"
         location="src" />
