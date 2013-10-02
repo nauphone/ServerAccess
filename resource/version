@@ -19,7 +19,7 @@ if [[ "$old_version" == "" || "$new_version" == "" ]]; then
 fi
 
 # add here files that contain current version number
-files_to_change=( build.xml sonar.xml VERSION.TXT resource/naumen-server-access.spec nsis/serveraccess2.nsi )
+files_to_change=( build.xml sonar.xml VERSION.TXT nsis/serveraccess2.nsi )
 
 for a_file in "${files_to_change[@]}"
 do
