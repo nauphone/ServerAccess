@@ -17,10 +17,10 @@ cd "$(dirname "${BASH_SOURCE[0]}")"/..
 
 # detect version
 NAME="naumen-server-access"
-VERSION=`cat ./VERSION.TXT 2>/dev/null`
+VERSION=`git describe | cut -d- -f2,3`
 if [[ -z $VERSION ]]
 then
-    echo "Cannot find VERSION.TXT file."
+    echo "Cannot detect git version."
     exit 1;
 fi;
 
