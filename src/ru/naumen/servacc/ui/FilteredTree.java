@@ -76,4 +76,9 @@ public class FilteredTree extends Composite
     {
         filter.setFocus();
     }
+
+    public String getText()
+    {
+        return filter.getText();
+    }
 }
