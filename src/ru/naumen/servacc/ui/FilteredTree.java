@@ -60,7 +60,7 @@ public class FilteredTree extends Composite
             {
                 public void mouseDown(MouseEvent e)
                 {
-                    filter.setFocus();
+                    focusOnFilterField();
                 }
             });
             filter = new Text(composite, SWT.SEARCH | SWT.ICON_CANCEL | SWT.ICON_SEARCH);
@@ -70,5 +70,10 @@ public class FilteredTree extends Composite
         tree = new Tree(this, SWT.BORDER | SWT.SINGLE); // TODO: SWT.VIRTUAL
         tree.setLayoutData(new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL));
         setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL | GridData.FILL_VERTICAL | GridData.GRAB_VERTICAL));
+    }
+
+    public void focusOnFilterField()
+    {
+        filter.setFocus();
     }
 }

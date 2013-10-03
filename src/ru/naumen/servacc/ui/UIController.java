@@ -126,7 +126,7 @@ public class UIController implements GlobalThroughView
             createAppMenu();
         }
         // set focus to search widget on startup
-        filteredTree.getFilter().setFocus();
+        filteredTree.focusOnFilterField();
     }
 
     public void reloadConfig()
@@ -300,6 +300,18 @@ public class UIController implements GlobalThroughView
             {
                 Text field = ((Text) e.getSource());
                 filterTextChanged(field.getText());
+            }
+        });
+        shell.getDisplay().addFilter(SWT.KeyDown, new Listener()
+        {
+            @Override
+            public void handleEvent(Event event)
+            {
+                // Focus on Ctrl+C
+                if (event.stateMask == SWT.CTRL && event.keyCode == (int) 'c')
+                {
+                    filteredTree.focusOnFilterField();
+                }
             }
         });
         // Drag source
