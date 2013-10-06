@@ -2,7 +2,7 @@
 Name=Naumen Server Access
 Comment=A SSH client
 Exec=/opt/naumen/server-access/server-access
-Icon=naumen_server_access
+Icon=naumen-server-access.png
 Terminal=false
 Type=Application
 Categories=Network;RemoteAccess;
