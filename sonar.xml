@@ -3,7 +3,7 @@
 <project name="sonar" default="sonar">
     <include file="build.xml" as="root"/>
 
-    <property name="sonar.jdbc.url" value="jdbc:postgresql://localhost:5433/sonar"/>
+    <property name="sonar.jdbc.url" value="jdbc:postgresql://localhost:5432/sonar"/>
     <property name="sonar.jdbc.driverClassName" value="org.postgresql.Driver"/>
 
     <!-- Add the target -->
