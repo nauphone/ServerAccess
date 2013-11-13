@@ -29,7 +29,7 @@ public class DefaultPropertiesFile implements DefaultFile
         String path = accountsFile.getCanonicalPath().replaceAll("\\\\", "/");
         PrintStream outputStream = new PrintStream(new FileOutputStream(configFile));
         outputStream.println("# You can define several sources, with different number each");
-        outputStream.println("source=" + FileResource.uriPrefix + path);
+        outputStream.println("source=" + FileResource.URI_PREFIX + path);
         outputStream.println("#source1=<some another source file or url here>");
         outputStream.println();
         outputStream.println("# Use 'browser' variable to set custom web browser");

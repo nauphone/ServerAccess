@@ -86,8 +86,8 @@ public class PortForwardingDialog extends DialogBase
 
     protected boolean validate()
     {
-        final Color red = shell.getDisplay().getSystemColor(SWT.COLOR_RED);
-        final Color fg = shell.getDisplay().getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
+        final Color red = getSystemColor(SWT.COLOR_RED);
+        final Color fg = getSystemColor(SWT.COLOR_WIDGET_FOREGROUND);
 
         boolean result = true;
 

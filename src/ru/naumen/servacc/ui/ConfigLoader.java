@@ -72,7 +72,7 @@ public class ConfigLoader
         {
             return loadConfigViaHTTP(source);
         }
-        else if (source.startsWith(FileResource.uriPrefix))
+        else if (source.startsWith(FileResource.URI_PREFIX))
         {
             return loadConfigFromFile(source);
         }
@@ -173,7 +173,7 @@ public class ConfigLoader
             int encryptableFiles = 0;
             for (String configURL : configSources)
             {
-                if (!configURL.startsWith(FileResource.uriPrefix) || FileResource.isConfigEncrypted(configURL))
+                if (!configURL.startsWith(FileResource.URI_PREFIX) || FileResource.isConfigEncrypted(configURL))
                 {
                     continue;
                 }
@@ -189,8 +189,8 @@ public class ConfigLoader
                 String content = new Scanner(getConfigStream(configURL)).useDelimiter("\\A").next();
                 byte[] encryptedContent = new StringEncrypter("DESede", password).encrypt(content).getBytes();
 
-                OutputStream os = new FileOutputStream(configURL.substring(FileResource.uriPrefix.length()));
-                os.write(FileResource.encryptedHeader);
+                OutputStream os = new FileOutputStream(configURL.substring(FileResource.URI_PREFIX.length()));
+                os.write(FileResource.ENCRYPTED_HEADER);
                 os.write(System.getProperty("line.separator").getBytes());
                 os.write(encryptedContent);
                 os.close();
@@ -224,8 +224,8 @@ public class ConfigLoader
             int decryptableFiles = 0;
             for (String configURL : configSources)
             {
-                String filePath = configURL.substring(FileResource.uriPrefix.length());
-                if (!configURL.startsWith(FileResource.uriPrefix) || !FileResource.isConfigEncrypted(configURL))
+                String filePath = configURL.substring(FileResource.URI_PREFIX.length());
+                if (!configURL.startsWith(FileResource.URI_PREFIX) || !FileResource.isConfigEncrypted(configURL))
                 {
                     continue;
                 }

@@ -77,8 +77,8 @@ public class HTTPResource
         }
         if (!Util.isEmptyOrNull(login))
         {
-            String password = this.password != null ? this.password : "";
-            String auth = "Basic " + Util.base64encode(login + ":" + password);
+            String passwordToEncode = this.password != null ? this.password : "";
+            String auth = "Basic " + Util.base64encode(login + ":" + passwordToEncode);
             connection.setRequestProperty("Authorization", auth);
         }
         connection.connect();

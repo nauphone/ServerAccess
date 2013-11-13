@@ -55,10 +55,10 @@ public class Config implements IConfig
 
     private class Parser
     {
-        InputStream stream;
+        private InputStream stream;
         private Group rootGroup;
-        Map<String, Account> accounts;
-        Map<Account, String> needsThrough;
+        private Map<String, Account> accounts;
+        private Map<Account, String> needsThrough;
 
         Parser(InputStream stream)
         {

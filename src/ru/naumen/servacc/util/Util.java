@@ -15,6 +15,11 @@ import com.mindbright.util.Base64;
 
 public class Util
 {
+    private Util()
+    {
+        // Utility class should not have public constructor
+    }
+
     public static boolean isEmptyOrNull(String str)
     {
         return str == null || str.trim().length() == 0;

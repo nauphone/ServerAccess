@@ -12,6 +12,7 @@ package ru.naumen.servacc.ui;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
@@ -25,9 +26,9 @@ import ru.naumen.servacc.util.Util;
 
 public class DialogBase
 {
-    protected final Shell shell;
-    protected boolean result = false;
-    protected int cols;
+    private final Shell shell;
+    private boolean result = false;
+    private int cols;
 
     public DialogBase(Shell parent, int style, int cols)
     {
@@ -134,5 +135,10 @@ public class DialogBase
         {
             shell.close();
         }
+    }
+
+    protected Color getSystemColor(int colorCode)
+    {
+        return shell.getDisplay().getSystemColor(colorCode);
     }
 }

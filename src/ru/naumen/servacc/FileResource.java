@@ -23,8 +23,13 @@ import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
 
 public class FileResource
 {
-    public static final String uriPrefix = "file://";
-    public static final byte[] encryptedHeader = "RSACC".getBytes();
+    public static final String URI_PREFIX = "file://";
+    public static final byte[] ENCRYPTED_HEADER = "RSACC".getBytes();
+
+    private FileResource()
+    {
+        // Utility class should not have public constructor
+    }
 
     public static InputStream getConfigStream(String uri, String password) throws IOException, EncryptionException
     {
@@ -41,7 +46,7 @@ public class FileResource
                 throw new EncryptionException("No password provided");
             }
 
-            stream.skip(encryptedHeader.length);
+            stream.skip(ENCRYPTED_HEADER.length);
             String content = new Scanner(stream).useDelimiter("\\A").next();
             stream.close();
 
@@ -75,21 +80,21 @@ public class FileResource
 
     private static boolean isConfigEncrypted(PushbackInputStream stream) throws IOException
     {
-        byte[] b = new byte[encryptedHeader.length];
+        byte[] b = new byte[ENCRYPTED_HEADER.length];
         if (stream.read(b) != b.length)
         {
             throw new IOException("Failed to read accounts file");
         }
         stream.unread(b);
-        return Arrays.equals(b, encryptedHeader);
+        return Arrays.equals(b, ENCRYPTED_HEADER);
     }
 
     private static PushbackInputStream openConfigStream(String uri) throws IOException
     {
-        if (!uri.startsWith(uriPrefix))
+        if (!uri.startsWith(URI_PREFIX))
         {
-            throw new IOException("Bad accounts file resource prefix: " + uriPrefix);
+            throw new IOException("Bad accounts file resource prefix: " + URI_PREFIX);
         }
-        return new PushbackInputStream(new FileInputStream(uri.substring(uriPrefix.length())), encryptedHeader.length);
+        return new PushbackInputStream(new FileInputStream(uri.substring(URI_PREFIX.length())), ENCRYPTED_HEADER.length);
     }
 }

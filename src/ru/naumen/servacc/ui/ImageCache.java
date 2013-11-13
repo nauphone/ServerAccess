@@ -33,6 +33,11 @@ public class ImageCache
     private static final Logger LOGGER = Logger.getLogger(ImageCache.class);
     private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
 
+    private ImageCache()
+    {
+        // Utility class should not have public constructor
+    }
+
     public static Image getImage(String name)
     {
         return getImage(name, 0);

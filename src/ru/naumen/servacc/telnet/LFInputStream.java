@@ -16,15 +16,14 @@ import java.io.PushbackInputStream;
 
 public class LFInputStream extends PushbackInputStream
 {
-    private int __length = 0;
+    private int readLength = 0;
 
     public LFInputStream(InputStream input)
     {
         super(input, 2);
     }
 
-
-    private int __read() throws IOException
+    private int readInternal() throws IOException
     {
         int ch;
 
@@ -38,7 +37,7 @@ public class LFInputStream extends PushbackInputStream
                 unread("\n".getBytes());
                 ch = super.read();
                 // This is a kluge for read(byte[], ...) to read the right amount
-                --__length;
+                --readLength;
             }
             else
             {
@@ -53,16 +52,19 @@ public class LFInputStream extends PushbackInputStream
         return ch;
     }
 
+    @Override
     public int read() throws IOException
     {
-        return __read();
+        return readInternal();
     }
 
+    @Override
     public int read(byte buffer[]) throws IOException
     {
         return read(buffer, 0, buffer.length);
     }
 
+    @Override
     public int read(byte buffer[], int offset, int length) throws IOException
     {
         int ch, off;
@@ -74,15 +76,16 @@ public class LFInputStream extends PushbackInputStream
 
         ch = available();
 
-        __length = (length > ch ? ch : length);
+        readLength = (length > ch ? ch : length);
 
         // If nothing is available, block to read only one character
-        if (__length < 1)
+        if (readLength < 1)
         {
-            __length = 1;
+            readLength = 1;
         }
 
-        if ((ch = __read()) == -1)
+        ch = readInternal();
+        if (ch == -1)
         {
             return -1;
         }
@@ -92,13 +95,16 @@ public class LFInputStream extends PushbackInputStream
         do
         {
             buffer[offset++] = (byte)ch;
+            --readLength;
+            ch = readInternal();
         }
-        while (--__length > 0 && (ch = __read()) != -1);
+        while (readLength > 0 && ch != -1);
 
 
         return (offset - off);
     }
 
+    @Override
     public int available() throws IOException
     {
         return (buf.length - pos) + in.available();

@@ -22,6 +22,11 @@ public class SocketUtils
     private static final int PORT_MAX = 13000;
     private static int port = PORT_BASE;
 
+    private SocketUtils()
+    {
+        // Utility class should not have public constructor
+    }
+
     public static ServerSocket createListener(String host) throws IOException
     {
         int portstart = port;
@@ -48,8 +53,8 @@ public class SocketUtils
     public static int getFreePort() throws IOException
     {
         ServerSocket sock = SocketUtils.createListener("0.0.0.0");
-        int port = sock.getLocalPort();
+        int nextFreePort = sock.getLocalPort();
         sock.close();
-        return port;
+        return nextFreePort;
     }
 }

@@ -6,6 +6,11 @@ import ru.naumen.servacc.settings.ListProvider;
 
 public class OS
 {
+    private OS()
+    {
+        // Utility class should not have public constructor
+    }
+
     public static Platform platform()
     {
         if (isMacOSX())

@@ -39,7 +39,8 @@ public class FilteredTree extends Composite
         super(parent, style);
         // Setup layout
         GridLayout layout = new GridLayout();
-        layout.marginHeight = layout.marginWidth = 0;
+        layout.marginHeight = 0;
+        layout.marginWidth = 0;
         setLayout(layout);
         // Filter
         if (useSystemSearchWidget)
@@ -51,7 +52,8 @@ public class FilteredTree extends Composite
             // Add magnifier icon manually, SWT.SEARCH works for Mac OS X only
             Composite composite = new Composite(this, SWT.NONE);
             GridLayout compositeLayout = new GridLayout(2, false);
-            compositeLayout.marginHeight = compositeLayout.marginWidth = 0;
+            compositeLayout.marginHeight = 0;
+            compositeLayout.marginWidth = 0;
             composite.setLayout(compositeLayout);
             composite.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
             Label magnifier = new Label(composite, SWT.NONE);
