@@ -515,7 +515,8 @@ public class UIController implements GlobalThroughView
         }
         try
         {
-            if (tic.getData() instanceof SSHAccount)
+            final IConfigItem data = tic.getData();
+            if (data instanceof SSHAccount)
             {
                 this.executor.execute(new Runnable()
                 {
@@ -524,7 +525,7 @@ public class UIController implements GlobalThroughView
                     {
                         try
                         {
-                            SSHAccount account = (SSHAccount) tic.getData();
+                            SSHAccount account = (SSHAccount) data;
                             Path path = Path.find(config, account.getUniqueIdentity());
                             backend.openSSHAccount(account, path.path());
                         }
@@ -536,7 +537,7 @@ public class UIController implements GlobalThroughView
                     }
                 });
             }
-            else if (tic.getData() instanceof HTTPAccount)
+            else if (data instanceof HTTPAccount)
             {
                 this.executor.execute(new Runnable()
                 {
@@ -545,7 +546,7 @@ public class UIController implements GlobalThroughView
                     {
                         try
                         {
-                            backend.openHTTPAccount((HTTPAccount) tic.getData());
+                            backend.openHTTPAccount((HTTPAccount) data);
                         }
                         catch (Exception e)
                         {
@@ -554,6 +555,12 @@ public class UIController implements GlobalThroughView
                         }
                     }
                 });
+            }
+            else if (data instanceof Group) {
+                boolean expandedState = tic.isExpanded();
+                item.setExpanded(!expandedState);
+                tic.setExpanded(!expandedState);
+                scheduleRefresh(filteredTree.getText());
             }
             else
             {
@@ -714,7 +721,6 @@ public class UIController implements GlobalThroughView
         else
         {
             item.setVisibility(true);
-            item.setExpanded(false);
         }
         for (TreeItemController child : item.getChildren())
         {
