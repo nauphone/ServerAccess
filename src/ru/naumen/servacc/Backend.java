@@ -91,7 +91,7 @@ public class Backend extends SSH2Backend
         final SSH2SessionChannel session = client.getConnection().newSession();
         try
         {
-            if (!session.requestPTY("xterm", 24, 80, new byte[] {12, 0, 0, 0, 0, 0}))
+            if (!session.requestPTY("xterm", 24, 80, new byte[]{ 12, 0, 0, 0, 0, 0 }))
             {
                 client.getTransport().normalDisconnect("bye bye");
                 removeConnection(account);
@@ -120,7 +120,7 @@ public class Backend extends SSH2Backend
     private Socket openTerminal(SSHAccount account, String path) throws IOException
     {
         ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
-        Map<String,String> params = new HashMap<String, String>(account.getParams());
+        Map<String, String> params = new HashMap<String, String>(account.getParams());
         params.put("name", path);
         try
         {

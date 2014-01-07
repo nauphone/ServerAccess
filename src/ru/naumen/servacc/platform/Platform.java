@@ -13,6 +13,7 @@ import java.io.IOException;
 
 /**
  * Hides platform-specific code behind abstraction.
+ *
  * @author Andrey Hitrin
  * @since 08.02.2012
  */

@@ -38,11 +38,11 @@ public class SSH2PasswordInteractor implements SSH2Interactor
     {
         if (prompts.length == 0)
         {
-            return new String[] {};
+            return new String[]{ };
         }
         else if (prompts.length == 1 && prompts[0].startsWith("Password"))
         {
-            return new String[] {password};
+            return new String[]{ password };
         }
         else
         {

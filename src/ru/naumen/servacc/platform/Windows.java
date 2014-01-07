@@ -25,7 +25,7 @@ public class Windows implements Platform
         String appData = System.getenv("APPDATA");
         if (!Util.isEmptyOrNull(appData))
         {
-             return new File(new File(appData), "Server Access");
+            return new File(new File(appData), "Server Access");
         }
         return null;
     }

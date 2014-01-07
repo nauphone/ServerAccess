@@ -105,7 +105,7 @@ public class ConfigLoader
                     String login = dialog.getLogin();
                     String password = dialog.getPassword();
                     resource.setAuthentication(login, password);
-                    authCache.put(url, new String[] {login, password});
+                    authCache.put(url, new String[]{ login, password });
                 }
                 else
                 {
@@ -126,7 +126,7 @@ public class ConfigLoader
         {
             return stream == null ? null : new Config(stream);
         }
-        catch(Exception e)
+        catch (Exception e)
         {
             stream.close();
             throw e;
@@ -154,7 +154,7 @@ public class ConfigLoader
                 if (dialog.show())
                 {
                     password = dialog.getPassword();
-                    authCache.put(source, new String[] {null, password});
+                    authCache.put(source, new String[]{ null, password });
                 }
                 else
                 {

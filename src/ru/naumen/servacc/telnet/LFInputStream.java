@@ -94,7 +94,7 @@ public class LFInputStream extends PushbackInputStream
 
         do
         {
-            buffer[offset++] = (byte)ch;
+            buffer[offset++] = (byte) ch;
             --readLength;
             ch = readInternal();
         }

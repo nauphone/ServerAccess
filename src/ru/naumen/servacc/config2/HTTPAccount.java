@@ -45,7 +45,7 @@ public class HTTPAccount extends Account implements IConnectable
     {
         String login = getParams().get(ACCOUNT_PARAM_LOGIN);
         String url = getURL();
-        for (String s : new String[] {getName(), getComment(), url, login})
+        for (String s : new String[]{ getName(), getComment(), url, login })
         {
             if (!Util.isEmptyOrNull(s) && Util.matches(s, filter))
             {

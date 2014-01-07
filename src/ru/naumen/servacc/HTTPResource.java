@@ -127,7 +127,7 @@ public class HTTPResource
 
     private static TrustManager[] getConfidingTrustManager()
     {
-        return new TrustManager[] {new X509TrustManager()
+        return new TrustManager[]{ new X509TrustManager()
         {
             public java.security.cert.X509Certificate[] getAcceptedIssuers()
             {
@@ -141,7 +141,7 @@ public class HTTPResource
             public void checkServerTrusted(java.security.cert.X509Certificate[] certs, String authType)
             {
             }
-        }};
+        } };
     }
 
     private static SSLSocketFactory getSSLSocketFactory() throws Exception

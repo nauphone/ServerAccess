@@ -55,8 +55,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
      * Connect this instance with an <code>SSH2Connection</code> which is
      * connected to the server we want to transfer files to/from.
      *
-     * @param connection
-     *            Established connection to the server.
+     * @param connection Established connection to the server.
      */
     private void initSFTP(SSH2Connection connection) throws SSH2SFTP.SFTPException
     {
@@ -79,15 +78,11 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
     /**
      * Initialize the FTP server portion of this class.
      *
-     * @param ftpInput
-     *            The ftp command input stream.
-     * @param ftpOutput
-     *            The ftp command output stream.
-     * @param identity
-     *            Username to log in as
-     * @param needPassword
-     *            Tells the instance if it should request a password or not from
-     *            the user. The actual password the user then gives is ignored.
+     * @param ftpInput     The ftp command input stream.
+     * @param ftpOutput    The ftp command output stream.
+     * @param identity     Username to log in as
+     * @param needPassword Tells the instance if it should request a password or not from
+     *                     the user. The actual password the user then gives is ignored.
      */
     private void initFTP(InputStream ftpInput, OutputStream ftpOutput, String identity, boolean needPassword)
     {
@@ -98,11 +93,8 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
      * Login to server. This is actually a null operation for this class since
      * the user is already authenticated as part of the SSH connection.
      *
-     * @param user
-     *            Username to login as.
-     * @param pass
-     *            Password.
-     *
+     * @param user Username to login as.
+     * @param pass Password.
      * @return Returns true if the login was successful.
      */
     public boolean login(String user, String pass)
@@ -211,7 +203,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         {
             sftp.remove(expandRemote(file));
         }
-        catch (SSH2SFTP.SFTPPermissionDeniedException  e)
+        catch (SSH2SFTP.SFTPPermissionDeniedException e)
         {
             throw new FTPException(FILE_UNAVAILABLE, "access denied");
         }
@@ -296,7 +288,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         {
             String expandedFile = expandRemote(file);
             SSH2SFTP.FileHandle handle = sftp.open(expandedFile, SSH2SFTP.SSH_FXF_WRITE | SSH2SFTP.SSH_FXF_TRUNC |
-                                                    SSH2SFTP.SSH_FXF_CREAT, new SSH2SFTP.FileAttributes());
+                SSH2SFTP.SSH_FXF_CREAT, new SSH2SFTP.FileAttributes());
             sftp.writeFully(handle, data);
         }
         catch (IOException e)

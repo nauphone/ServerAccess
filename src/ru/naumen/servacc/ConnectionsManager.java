@@ -11,7 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Stores list of connections.
  *
  * @author tosha
- * Extracted @since 22.11.12
+ *         Extracted @since 22.11.12
  */
 public class ConnectionsManager
 {

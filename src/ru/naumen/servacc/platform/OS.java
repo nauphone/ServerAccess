@@ -26,6 +26,7 @@ public class OS
 
     /**
      * In Java 8, this method should be moved directly to the Platform interface
+     *
      * @param settingsProvider
      * @param defaultCommand
      * @return

@@ -53,10 +53,10 @@ public class ShellConfiguration
         PropertiesFile propertiesFile = propertiesProvider.getAppProperties();
         Rectangle bounds = shell.getBounds();
         shell.setBounds(
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
-                Integer.parseInt(propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_X, String.valueOf(bounds.x))),
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_Y, String.valueOf(bounds.y))),
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_WIDTH, String.valueOf(bounds.width))),
+            Integer.parseInt(propertiesFile.getProperty(WINDOW_HEIGHT, String.valueOf(bounds.height)))
         );
     }
 }

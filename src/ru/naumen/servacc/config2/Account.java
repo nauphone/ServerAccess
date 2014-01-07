@@ -123,7 +123,7 @@ public class Account implements IConfigItem
     {
         String login = params.get(ACCOUNT_PARAM_LOGIN);
         String address = params.get(ACCOUNT_PARAM_ADDRESS);
-        for (String s : new String[] {name, comment, address, login})
+        for (String s : new String[]{ name, comment, address, login })
         {
             if (!Util.isEmptyOrNull(s) && Util.matches(s, filter))
             {

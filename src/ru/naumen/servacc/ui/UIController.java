@@ -314,7 +314,7 @@ public class UIController implements GlobalThroughView
         });
         // Drag source
         DragSource ds = new DragSource(filteredTree.getTree(), DND.DROP_MOVE);
-        ds.setTransfer(new Transfer[] {TextTransfer.getInstance()});
+        ds.setTransfer(new Transfer[]{ TextTransfer.getInstance() });
         ds.addDragListener(new DragSourceAdapter()
         {
             public void dragSetData(DragSourceEvent event)
@@ -363,7 +363,7 @@ public class UIController implements GlobalThroughView
 
         // Drop target
         DropTarget dt = new DropTarget(widget, DND.DROP_MOVE);
-        dt.setTransfer(new Transfer[] {TextTransfer.getInstance()});
+        dt.setTransfer(new Transfer[]{ TextTransfer.getInstance() });
         dt.addDropListener(new DropTargetAdapter()
         {
             public void drop(DropTargetEvent event)
@@ -634,8 +634,8 @@ public class UIController implements GlobalThroughView
             {
                 final String password = ((Account) tic.getData()).getPassword();
                 clipboard.setContents(
-                    new Object[] {password},
-                    new Transfer[] {TextTransfer.getInstance()});
+                    new Object[]{ password },
+                    new Transfer[]{ TextTransfer.getInstance() });
             }
             catch (Exception e)
             {

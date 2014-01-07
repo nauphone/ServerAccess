@@ -168,7 +168,7 @@ public class HTTPProxy
         {
             final URL requestedURL = new URLBuilder(request).toURL();
             final String protocol = requestedURL.getProtocol();
-            if(!supportedProtocol(protocol))
+            if (!supportedProtocol(protocol))
             {
                 throw new MalformedURLException("Unsupported protocol detected: " + protocol);
             }

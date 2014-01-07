@@ -67,18 +67,18 @@ public class ConsoleManager
             int option = super.read();
             switch (option)
             {
-            case O_ECHO:
-                say(IAC, WILL, O_ECHO);
-                LOGGER.info("IAC DO ECHO");
-                break;
-            case O_SUPPRESS_GA:
-                say(IAC, WILL, O_SUPPRESS_GA);
-                LOGGER.info("IAC DO SUPPRESS GO AHEAD");
-                break;
-            default:
-                say(IAC, WONT, option);
-                LOGGER.warn("IAC DO UNKNOWN(" + option + ")");
-                break;
+                case O_ECHO:
+                    say(IAC, WILL, O_ECHO);
+                    LOGGER.info("IAC DO ECHO");
+                    break;
+                case O_SUPPRESS_GA:
+                    say(IAC, WILL, O_SUPPRESS_GA);
+                    LOGGER.info("IAC DO SUPPRESS GO AHEAD");
+                    break;
+                default:
+                    say(IAC, WONT, option);
+                    LOGGER.warn("IAC DO UNKNOWN(" + option + ")");
+                    break;
             }
         }
 
@@ -87,18 +87,18 @@ public class ConsoleManager
             int command = super.read();
             switch (command)
             {
-            case WILL:
-                processWILL();
-                break;
-            case DO:
-                processDO();
-                break;
-            case SB:
-                processSB();
-                break;
-            default:
-                LOGGER.warn("IAC UNKNOWN(" + command + ")");
-                break;
+                case WILL:
+                    processWILL();
+                    break;
+                case DO:
+                    processDO();
+                    break;
+                case SB:
+                    processSB();
+                    break;
+                default:
+                    LOGGER.warn("IAC UNKNOWN(" + command + ")");
+                    break;
             }
         }
 
@@ -116,15 +116,15 @@ public class ConsoleManager
             Integer[] arr = lst.toArray(new Integer[lst.size()]);
             switch (command)
             {
-            case O_WINDOW_SIZE_NEG:
-                session.sendWindowChange(
-                    arr[2] * 256 + arr[3],
-                    arr[0] * 256 + arr[1]);
-                LOGGER.info("IAC SB WINDOW SIZE NEG");
-                break;
-            default:
-                LOGGER.warn("IAC SB UNKNOWN(" + command + ")");
-                break;
+                case O_WINDOW_SIZE_NEG:
+                    session.sendWindowChange(
+                        arr[2] * 256 + arr[3],
+                        arr[0] * 256 + arr[1]);
+                    LOGGER.info("IAC SB WINDOW SIZE NEG");
+                    break;
+                default:
+                    LOGGER.warn("IAC SB UNKNOWN(" + command + ")");
+                    break;
             }
         }
 
@@ -133,18 +133,18 @@ public class ConsoleManager
             int command = super.read();
             switch (command)
             {
-            case O_SUPPRESS_GA:
-                say(IAC, DO, O_SUPPRESS_GA);
-                LOGGER.info("IAC WILL SUPPRESS GO AHEAD");
-                break;
-            case O_WINDOW_SIZE_NEG:
-                say(IAC, DO, O_WINDOW_SIZE_NEG);
-                LOGGER.info("IAC WILL WINDOW SIZE NEG");
-                break;
-            default:
-                say(IAC, DONT, command);
-                LOGGER.warn("IAC WILL UNKNOWN(" + command + ")");
-                break;
+                case O_SUPPRESS_GA:
+                    say(IAC, DO, O_SUPPRESS_GA);
+                    LOGGER.info("IAC WILL SUPPRESS GO AHEAD");
+                    break;
+                case O_WINDOW_SIZE_NEG:
+                    say(IAC, DO, O_WINDOW_SIZE_NEG);
+                    LOGGER.info("IAC WILL WINDOW SIZE NEG");
+                    break;
+                default:
+                    say(IAC, DONT, command);
+                    LOGGER.warn("IAC WILL UNKNOWN(" + command + ")");
+                    break;
             }
         }
 
@@ -155,12 +155,12 @@ public class ConsoleManager
             {
                 switch (val)
                 {
-                case IAC:
-                    processIAC();
-                    break;
-                case 17:
-                    unread((getPassword() + "\n").getBytes());
-                    break;
+                    case IAC:
+                        processIAC();
+                        break;
+                    case 17:
+                        unread((getPassword() + "\n").getBytes());
+                        break;
                 }
                 val = super.read();
             }
@@ -217,6 +217,7 @@ public class ConsoleManager
     class ConsoleManagerOutputStream extends FilterOutputStream
     {
         private ConsoleManager manager;
+
         public ConsoleManagerOutputStream(ConsoleManager manager) throws IOException
         {
             super(manager.client.getOutputStream());
@@ -279,7 +280,7 @@ public class ConsoleManager
 
     private void say(int a, int b, int c) throws IOException
     {
-        getOutputStream().write(new byte[] {(byte) a, (byte) b, (byte) c});
+        getOutputStream().write(new byte[]{ (byte) a, (byte) b, (byte) c });
     }
 
     public void negotiateProtocolOptions() throws IOException

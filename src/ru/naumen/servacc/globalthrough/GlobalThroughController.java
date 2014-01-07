@@ -50,7 +50,7 @@ public class GlobalThroughController
     public void select(String uniqueIdentity, IConfig config)
     {
         Path path = Path.find(config, uniqueIdentity);
-        if(path.found())
+        if (path.found())
         {
             globalThroughUniqueIdentity = uniqueIdentity;
             view.setGlobalThroughWidget(path.path());

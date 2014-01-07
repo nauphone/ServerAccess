@@ -50,7 +50,7 @@ public class Group implements IConfigItem
 
     public boolean matches(String filter)
     {
-        for (String s : new String[] {name, comment})
+        for (String s : new String[]{ name, comment })
         {
             if (!Util.isEmptyOrNull(s) && Util.matches(s, filter))
             {
