@@ -7,7 +7,7 @@
  * packaging of this file.
  */
 
-package ru.naumen.servacc.globalthrough;
+package ru.naumen.servacc;
 
 /**
  * This interface is supposed to display current state of Global Through settings.

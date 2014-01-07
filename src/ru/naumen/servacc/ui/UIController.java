@@ -51,6 +51,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
@@ -65,8 +66,7 @@ import ru.naumen.servacc.config2.i.IConfigItem;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
-import ru.naumen.servacc.globalthrough.GlobalThroughController;
-import ru.naumen.servacc.globalthrough.GlobalThroughView;
+import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.Util;
@@ -95,7 +95,6 @@ public class UIController implements GlobalThroughView
 
     private Label globalThrough;
     private Button clearGlobalThrough;
-    private GlobalThroughController globalThroughController;
 
     private TreeItemController root;
     private TreeItemController selection;
@@ -112,7 +111,7 @@ public class UIController implements GlobalThroughView
         this.asynchronousAlert = new AsynchronousProxy(synchronousAlert);
         this.configLoader = new ConfigLoader(shell, sourceListProvider, synchronousAlert);
         this.httpProxy = httpProxy;
-        this.globalThroughController = new GlobalThroughController(this, backend);
+        backend.setGlobalThroughView(this);
         createToolBar();
         createFilteredTree(platform.useSystemSearchWidget());
         createGlobalThroughWidget();
@@ -135,7 +134,7 @@ public class UIController implements GlobalThroughView
             config = configLoader.loadConfig();
             buildTree(config);
             updateTree(filteredTree.getText());
-            globalThroughController.refresh(config);
+            backend.refresh(config);
         }
         catch (Exception e)
         {
@@ -352,14 +351,14 @@ public class UIController implements GlobalThroughView
         {
             public void widgetSelected(SelectionEvent e)
             {
-                globalThroughController.clear();
+                backend.clearGlobalThrough();
             }
 
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
         });
-        globalThroughController.clear();
+        backend.clearGlobalThrough();
 
         // Drop target
         DropTarget dt = new DropTarget(widget, DND.DROP_MOVE);
@@ -370,7 +369,7 @@ public class UIController implements GlobalThroughView
             {
                 if (event.data != null)
                 {
-                    globalThroughController.select((String) event.data, config);
+                    backend.selectNewGlobalThrough((String) event.data, config);
                 }
             }
         });

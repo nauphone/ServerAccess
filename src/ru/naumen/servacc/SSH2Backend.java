@@ -24,7 +24,9 @@ import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
 import ru.naumen.servacc.config2.Account;
+import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.config2.SSHAccount;
+import ru.naumen.servacc.config2.i.IConfig;
 
 public class SSH2Backend
 {
@@ -34,6 +36,7 @@ public class SSH2Backend
     private SSHAccount globalThrough;
     private static RandomSeed seed;
     private static SecureRandomAndPad secureRandom;
+    private GlobalThroughView globalThroughView;
 
     private static SecureRandomAndPad nextSecure()
     {
@@ -48,7 +51,7 @@ public class SSH2Backend
         return secureRandom;
     }
 
-    protected SSH2Backend()
+    public SSH2Backend()
     {
         super();
         connections = new ConnectionsManager();
@@ -149,7 +152,7 @@ public class SSH2Backend
         return new SSH2SimpleClient(transport, auth);
     }
 
-    protected SSHAccount getThrough(Account account)
+    public SSHAccount getThrough(Account account)
     {
         SSHAccount throughAccount = null;
         if (account.getThrough() != null)
@@ -193,5 +196,35 @@ public class SSH2Backend
     {
         globalThrough = account;
         connections.clearCache();
+    }
+
+    public void setGlobalThroughView(GlobalThroughView view)
+    {
+        globalThroughView = view;
+    }
+
+    public void selectNewGlobalThrough(String uniqueIdentity, IConfig config)
+    {
+        Path path = Path.find(config, uniqueIdentity);
+        if (path.found())
+        {
+            globalThroughView.setGlobalThroughWidget(path.path());
+            setGlobalThrough(path.account());
+        }
+        else
+        {
+            clearGlobalThrough();
+        }
+    }
+
+    public void refresh(IConfig newConfig)
+    {
+        selectNewGlobalThrough(globalThrough.getUniqueIdentity(), newConfig);
+    }
+
+    public void clearGlobalThrough()
+    {
+        globalThroughView.clearGlobalThroughWidget();
+        setGlobalThrough(null);
     }
 }
