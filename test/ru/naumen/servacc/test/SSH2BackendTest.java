@@ -31,6 +31,13 @@ public class SSH2BackendTest
     }
 
     @Test
+    public void refereshOnStartMustBeSafe()
+    {
+        backend.refresh(config());
+        assertThat(backend.getThrough(new SSHAccount()), is(nullValue()));
+    }
+
+    @Test
     public void globalWidgetIsCleared()
     {
         view.cleared = false;

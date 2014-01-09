@@ -219,7 +219,12 @@ public class SSH2Backend
 
     public void refresh(IConfig newConfig)
     {
-        selectNewGlobalThrough(globalThrough.getUniqueIdentity(), newConfig);
+        String identity = "";
+        if (globalThrough != null)
+        {
+            identity = globalThrough.getUniqueIdentity();
+        }
+        selectNewGlobalThrough(identity, newConfig);
     }
 
     public void clearGlobalThrough()
