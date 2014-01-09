@@ -95,10 +95,8 @@ public class LFInputStream extends PushbackInputStream
         do
         {
             buffer[offset++] = (byte) ch;
-            --readLength;
-            ch = readInternal();
         }
-        while (readLength > 0 && ch != -1);
+        while (--readLength > 0 && (ch = readInternal()) != -1);
 
 
         return (offset - off);
