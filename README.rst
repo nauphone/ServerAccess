@@ -29,7 +29,7 @@ Prerequisites
 =============
 
 * Requires JRE to run.
-* Requires JDK and Apache Ant to build.
+* Requires JDK, Apache Ant and Ant-Contrib to build.
 
 Build and install
 =================

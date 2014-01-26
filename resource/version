@@ -18,13 +18,8 @@ if [[ "$old_version" == "" || "$new_version" == "" ]]; then
     exit 1
 fi
 
-# add here files that contain current version number
-files_to_change=( build.xml sonar.xml VERSION.TXT nsis/serveraccess2.nsi )
-
-for a_file in "${files_to_change[@]}"
-do
-    sed -i "s/$old_version/$new_version/" $a_file
-done
+# update version number for further generations of people
+sed -i "s/$old_version/$new_version/" VERSION.TXT
 
 # create changelog
 changelog=CHANGELOG.TXT

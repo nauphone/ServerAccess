@@ -7,7 +7,7 @@
     <property name="sonar.jdbc.driverClassName" value="org.postgresql.Driver"/>
 
     <!-- Add the target -->
-    <target name="sonar" depends="root.test">
+    <target name="sonar" depends="root.test,root.detect-version">
         <!-- list of mandatories Sonar properties -->
         <property name="sonar.sources" value="src" />
 
@@ -19,6 +19,6 @@
         <property name="sonar.libraries" value="lib" />
         <property name="sonar.jacoco.antTargets" value="root.test" />
 
-        <sonar:sonar key="ru.naumen:ServerAccess" version="0.9.13" xmlns:sonar="antlib:org.sonar.ant"/>
+        <sonar:sonar key="ru.naumen:ServerAccess" version="${version}" xmlns:sonar="antlib:org.sonar.ant"/>
     </target>
 </project>

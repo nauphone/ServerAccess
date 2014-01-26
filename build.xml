@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <project name="servacc" default="prepare-release" basedir=".">
-    <property
-        name="version"
-        value="0.9.13" />
+    <taskdef
+        resource="net/sf/antcontrib/antcontrib.properties"/>
+
     <property
         name="src"
         location="src" />
@@ -107,8 +107,23 @@
     </target>
 
     <target
+        name="detect-version">
+        <exec
+            executable="git"
+            outputproperty="raw.version">
+            <arg line="describe"/>
+        </exec>
+        <propertyregex
+            property="version"
+            input="${raw.version}"
+            regexp="serveraccess-([0-9.]*(-[0-9]+)?)"
+            select="\1"/>
+        <echo message="Version: ${version}"/>
+    </target>
+
+    <target
         name="win32"
-        depends="jar"
+        depends="jar,detect-version"
         description="--> build win32-x86 installer">
 
         <mkdir dir="${build}/swt" />
@@ -119,7 +134,7 @@
             executable="${nsis_cmd}"
             dir="nsis"
             resultproperty="nsis_exec_result">
-            <arg line="serveraccess2.nsi" />
+            <arg line="-DBuildVersion=${version} serveraccess2.nsi" />
             <redirector>
                 <outputmapper type="merge" to="build/redirector.out" />
                 <errormapper type="merge" to="build/redirector.err" />
@@ -140,7 +155,7 @@
 
     <target
         name="win64"
-        depends="jar"
+        depends="jar,detect-version"
         description="--> build win32-x86_64 installer">
 
         <mkdir dir="${build}/swt" />
@@ -151,7 +166,7 @@
             executable="${nsis_cmd}"
             dir="nsis"
             resultproperty="nsis_exec_result">
-            <arg line="serveraccess2.nsi" />
+            <arg line="-DBuildVersion=${version} serveraccess2.nsi" />
             <redirector>
                 <outputmapper type="merge" to="build/redirector.out" />
                 <errormapper type="merge" to="build/redirector.err" />
