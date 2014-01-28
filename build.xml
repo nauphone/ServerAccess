@@ -36,6 +36,9 @@
         name="swt-version"
         value="3.7.2" />
     <property
+        name="log4j-version"
+        value="1.2.17"/>
+    <property
         environment="env"/>
     <condition
         property="nsis_cmd"
@@ -52,7 +55,7 @@
             path="build" />
         <pathelement location="lib/swt.jar"/>
         <pathelement location="lib/mindterm.jar"/>
-        <pathelement location="lib/log4j-1.2.17.jar"/>
+        <pathelement location="lib/log4j-${log4j-version}.jar"/>
     </path>
 
     <path id="test.class.path">
@@ -73,7 +76,7 @@
             file="lib/mindterm.jar"
             todir="${distr}/lib/"/>
         <copy
-            file="lib/log4j-1.2.17.jar"
+            file="lib/log4j-${log4j-version}.jar"
             todir="${distr}/lib/"/>
         <copy
             file="resource/server-access"
@@ -277,6 +280,12 @@
         <copy
             file="lib/mindterm.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS" />
+        <copy
+            file="lib/log4j-${log4j-version}.jar"
+            tofile="${distr}/ServerAccess.app/Contents/MacOS/log4j.jar" />
+        <copy
+            file="resource/log4j.properties"
+            todir="${distr}/ServerAccess.app/Contents/MacOS"/>
         <copy
             file="${distr}/servacc.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS" />

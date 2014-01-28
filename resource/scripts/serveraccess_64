@@ -3,5 +3,5 @@ BASEDIR=`dirname $0`
 exec java \
         -d64 \
         -XstartOnFirstThread \
-        -classpath $BASEDIR:$BASEDIR/servacc.jar:$BASEDIR/mindterm.jar:$BASEDIR/swt/swt.jar \
+        -classpath $BASEDIR:$BASEDIR/servacc.jar:$BASEDIR/mindterm.jar:$BASEDIR/swt/swt.jar:$BASEDIR/log4j.jar \
         ru.naumen.servacc.ui.Main
