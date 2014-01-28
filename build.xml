@@ -2,7 +2,11 @@
 
 <project name="servacc" default="prepare-release" basedir=".">
     <taskdef
-        resource="net/sf/antcontrib/antcontrib.properties"/>
+        resource="net/sf/antcontrib/antcontrib.properties">
+        <classpath>
+            <pathelement location="lib/ant-contrib.jar"/>
+        </classpath>
+    </taskdef>
 
     <property
         name="src"
