@@ -28,7 +28,7 @@ import org.apache.log4j.Logger;
  * @author Andrey Hitrin
  * @since 21.08.12
  */
-public class ImageCache
+public final class ImageCache
 {
     private static final Logger LOGGER = Logger.getLogger(ImageCache.class);
     private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();

@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import ru.naumen.servacc.settings.ListProvider;
 
-public class OS
+public final class OS
 {
     private OS()
     {
@@ -41,12 +41,12 @@ public class OS
         return defaultCommand;
     }
 
-    public static boolean isMacOSX()
+    private static boolean isMacOSX()
     {
         return "Mac OS X".equalsIgnoreCase(System.getProperty("os.name"));
     }
 
-    public static boolean isWindows()
+    private static boolean isWindows()
     {
         return System.getProperty("os.name").startsWith("Windows");
     }

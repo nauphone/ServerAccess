@@ -21,7 +21,7 @@ import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
 
 
-public class FileResource
+public final class FileResource
 {
     public static final String URI_PREFIX = "file://";
     public static final byte[] ENCRYPTED_HEADER = "RSACC".getBytes();

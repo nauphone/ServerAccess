@@ -13,7 +13,7 @@ import java.util.regex.Pattern;
 
 import com.mindbright.util.Base64;
 
-public class Util
+public final class Util
 {
     private Util()
     {

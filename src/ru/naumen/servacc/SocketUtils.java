@@ -13,7 +13,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 
-public class SocketUtils
+public final class SocketUtils
 {
     public static final String LOCALHOST = "127.0.0.1";
     public static final int COLD_TIMEOUT = 15000;
