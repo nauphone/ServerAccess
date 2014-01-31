@@ -1,3 +1,25 @@
+New in 0.9.14:
+-------
+
+New features/changes:
+
+ * Hotkey for search field focus (#38)
+ * Open/close directory on double click (#23)
+ * New screenshots in README (#45)
+ * Create version number from `git describe` (#36)
+
+Bugs fixed:
+
+ * Fix build & launch issues under MacOS X
+ * Add missing application icon for .deb package (#47)
+
+Code cleanup and refactoring:
+
+ * Remove obsolete rpm spec file
+ * Fix miscellaneous static analysis warnings
+ * Minor improvements in internal design
+ * Add PiTest dependency in order to check/improve tests quality
+
 New in 0.9.13:
 -------
 
