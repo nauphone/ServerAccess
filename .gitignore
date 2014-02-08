@@ -10,3 +10,5 @@ distr
 *.deb
 .sonar
 target
+.gradle
+gradle

@@ -1,0 +1,27 @@
+apply plugin: 'java'
+
+dependencies {
+    compile files('lib/mindterm.jar', 'lib/swt.jar', 'lib/log4j-1.2.17.jar', 'lib/junit-4.10.jar', 'lib/httpclient-4.2.5.jar', 'lib/httpcore-4.2.4.jar')
+}
+
+task detect_version << {
+    println "not done yet"
+}
+
+task prepare_release(dependsOn: jar) << {
+    println "not done yet"
+}
+
+task win32(dependsOn: [jar, detect_version]) << {
+    println "not done yet"
+}
+
+task win64(dependsOn: [jar, detect_version]) << {
+    println "not done yet"
+}
+
+task macosx_cocoa_64(dependsOn: jar) << {
+    println "not done yet"
+}
+
+// vim: set ft=groovy:
