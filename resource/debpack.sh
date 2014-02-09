@@ -37,7 +37,7 @@ mkdir -p $tmpdir/usr/share/pixmaps/naumen-server-access
 
 echo copying files
 
-cp ./distr/servacc.jar $TARGET/
+cp ./build/libs/ServerAccess.jar $TARGET/
 cp ./resource/log4j.properties $TARGET/
 cp ./resource/server-access $TARGET/
 cp -R ./resource/icons/ $tmpdir/usr/share/pixmaps/naumen-server-access

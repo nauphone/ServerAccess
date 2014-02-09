@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="servacc" default="prepare-release" basedir=".">
+<project name="ServerAccess" default="prepare-release" basedir=".">
     <taskdef
         resource="net/sf/antcontrib/antcontrib.properties">
         <classpath>
@@ -10,22 +10,22 @@
 
     <property
         name="src"
-        location="src" />
+        location="src/main/java" />
     <property
         name="testsrc"
-        location="test" />
+        location="src/test/java" />
     <property
         name="build"
-        location="build" />
+        location="build/classes/main" />
     <property
         name="buildt"
-        location="buildt" />
+        location="build/classes/test" />
     <property
         name="junit.reports"
-        location="${buildt}/reports" />
+        location="build/test-results" />
     <property
         name="distr"
-        location="distr" />
+        location="build/libs" />
     <property
         name="debug"
         value="true" />
@@ -96,7 +96,7 @@
         depends="java-build,test"
         description="--> build jar">
         <jar
-            destfile="${distr}/servacc.jar"
+            destfile="${distr}/ServerAccess.jar"
             manifest="resource/MANIFEST.MF">
             <fileset dir="${build}" />
             <fileset dir="resource">
@@ -215,12 +215,14 @@
             <classpath>
                 <path refid="saclient.class.path" />
                 <path refid="test.class.path" />
+                <pathelement location="${buildt}" />
+                <pathelement location="${build}" />
             </classpath>
         </javac>
     </target>
 
     <target name="copy-test-resources" depends="init">
-        <copy file="test/test-config.xml" todir="${buildt}"/>
+        <copy file="src/test/resources/test-config.xml" todir="${buildt}"/>
     </target>
 
     <target name="test" depends="java-build,test-build,copy-test-resources">
@@ -262,10 +264,7 @@
     <target
         name="clean"
         description="--> remove stuff">
-        <delete dir="${build}" />
-        <delete dir="${buildt}" />
-        <delete dir="${junit.reports}" />
-        <delete dir="${distr}" />
+        <delete dir="build" />
     </target>
 
     <target
@@ -274,7 +273,7 @@
         description="--> Mac OS X app template">
 
         <exec executable="unzip" dir="${distr}">
-            <arg value="../resource/ServerAccess.app.tmpl.zip"/>
+            <arg value="../../resource/ServerAccess.app.tmpl.zip"/>
         </exec>
 
         <copy
@@ -287,7 +286,7 @@
             file="resource/log4j.properties"
             todir="${distr}/ServerAccess.app/Contents/MacOS"/>
         <copy
-            file="${distr}/servacc.jar"
+            file="${distr}/ServerAccess.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS" />
     </target>
 
@@ -308,7 +307,7 @@
             <arg value="../../lib/swt/swt-${swt-version}-cocoa-macosx.zip"/>
         </exec>
         <copy
-            file="${build}/swt/swt.jar"
+            file="lib/swt.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
         <delete dir="${build}/swt" />
     </target>
@@ -330,7 +329,7 @@
             <arg value="../../lib/swt/swt-${swt-version}-cocoa-macosx-x86_64.zip"/>
         </exec>
         <copy
-            file="${build}/swt/swt.jar"
+            file="lib/swt.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
         <delete dir="${build}/swt" />
     </target>

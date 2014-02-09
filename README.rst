@@ -36,11 +36,15 @@ Build and install
 
 Windows
 -------
-Use the following command to build the installer:
+Use one of the following commands to build the installer (depending of the target architecture):
 
     ``ant win32``
 
-Run the resulting ``sa_install.exe`` (from ``nsis`` subdirectory) which will guide you through the rest of install process.
+or:
+
+    ``ant win64``
+
+Run the resulting ``build/sa_install-<version>.exe`` which will guide you through the rest of install process.
 
 Mac OS X
 --------
@@ -48,7 +52,7 @@ Use the following command to build the application bundle for 64-bit architectur
 
     ``ant macosx-cocoa-x86_64``
 
-Copy ``ServerAccess.app`` (from ``distr`` subdirectory) to your ``/Applications`` folder.
+Copy ``ServerAccess.app`` (from ``build/libs`` subdirectory) to your ``/Applications`` folder.
 
 GNU Linux/Other
 ---------------
@@ -56,7 +60,7 @@ Use ``ant`` command to build application distribution.
 
 Then launch it (you will probably need to download SWT binaries for your platform and add them to Java class path):
 
-    ``./distr/server-access``
+    ``./build/libs/server-access``
 
 To create deb-package for Debian/Ubuntu distributive, use following script:
 
