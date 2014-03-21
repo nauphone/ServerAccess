@@ -31,6 +31,7 @@ public class ConnectionsManager
 
     public void remove(String key)
     {
+        // TODO: We do not put connection into connections list, so it will not be closed at exit. Bug or feature?
         cache.remove(key);
     }
 
