@@ -270,7 +270,7 @@
 
     <target
         name="macosx-common"
-        depends="clean, jar"
+        depends="jar"
         description="--> Mac OS X app template">
 
         <exec executable="unzip" dir="${distr}">
@@ -293,7 +293,7 @@
 
     <target
         name="macosx-cocoa"
-        depends="clean, jar, macosx-common"
+        depends="macosx-common"
         description="--> build Mac OS X + Cocoa app">
 
         <copy
@@ -315,7 +315,7 @@
 
     <target
         name="macosx-cocoa-x86_64"
-        depends="clean, jar, macosx-common"
+        depends="macosx-common"
         description="--> build Mac OS X + Cocoa x86_64 app">
 
         <copy
