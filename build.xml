@@ -244,23 +244,6 @@
         <fail if="junit.failure" message="Unit test(s) failed" />
     </target>
 
-    <taskdef name="pitest" classname="org.pitest.ant.PitestTask" classpathref="test.class.path"/>
-
-    <target name="mutationCoverage" depends="test-build">
-        <path id="mutation.path">
-            <path refid="test.class.path"/>
-            <path refid="saclient.class.path" />
-            <pathelement location="${buildt}" />
-            <pathelement location="${build}" />
-        </path>
-        <pitest
-            classPath="mutation.path"
-            targetClasses="ru.naumen.*"
-            targetTests="ru.naumen.*"
-            reportDir="${buildt}/reports"
-            sourceDir="${src}"/>
-    </target>
-
     <target
         name="clean"
         description="--> remove stuff">
