@@ -55,7 +55,7 @@ Section -Main
     ;SectionIn RO
     SetOutPath "$INSTDIR"
     File "..\build\libs\ServerAccess.jar"
-    File "..\lib\swt.jar"
+    File "..\build\swt\swt.jar"
     File "..\lib\mindterm.jar"
     File "..\lib\log4j-1.2.17.jar"
     File "..\resource\log4j.properties"
