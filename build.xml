@@ -302,14 +302,14 @@
             <arg value="+x" />
             <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
         </exec>
-        <mkdir dir="${build}/swt" />
-        <exec executable="unzip" dir="${build}/swt">
+        <mkdir dir="build/swt" />
+        <exec executable="unzip" dir="build/swt">
             <arg value="../../lib/swt/swt-${swt-version}-cocoa-macosx.zip"/>
         </exec>
         <copy
-            file="lib/swt.jar"
+            file="build/swt/swt.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
-        <delete dir="${build}/swt" />
+        <delete dir="build/swt" />
     </target>
 
     <target
@@ -324,14 +324,14 @@
             <arg value="+x" />
             <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
         </exec>
-        <mkdir dir="${build}/swt" />
-        <exec executable="unzip" dir="${build}/swt">
+        <mkdir dir="build/swt" />
+        <exec executable="unzip" dir="build/swt">
             <arg value="../../lib/swt/swt-${swt-version}-cocoa-macosx-x86_64.zip"/>
         </exec>
         <copy
-            file="lib/swt.jar"
+            file="build/swt/swt.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
-        <delete dir="${build}/swt" />
+        <delete dir="build/swt" />
     </target>
 
 </project>
