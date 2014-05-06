@@ -251,9 +251,9 @@
     </target>
 
     <target
-        name="macosx-common"
+        name="macosx-cocoa-x86_64"
         depends="jar"
-        description="--> Mac OS X app template">
+        description="--> build Mac OS X + Cocoa x86_64 app">
 
         <exec executable="unzip" dir="${distr}">
             <arg value="../../resource/ServerAccess.app.tmpl.zip"/>
@@ -271,38 +271,10 @@
         <copy
             file="${distr}/ServerAccess.jar"
             todir="${distr}/ServerAccess.app/Contents/MacOS" />
-    </target>
-
-    <target
-        name="macosx-cocoa"
-        depends="macosx-common"
-        description="--> build Mac OS X + Cocoa app">
-
         <copy
             file="resource/scripts/serveraccess"
-            tofile="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
-        <exec executable="chmod">
-            <arg value="+x" />
-            <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
-        </exec>
-        <mkdir dir="build/swt" />
-        <exec executable="unzip" dir="build/swt">
-            <arg value="../../lib/swt/swt-${swt-version}-cocoa-macosx.zip"/>
-        </exec>
-        <copy
-            file="build/swt/swt.jar"
-            todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
-        <delete dir="build/swt" />
-    </target>
+            todir="${distr}/ServerAccess.app/Contents/MacOS" />
 
-    <target
-        name="macosx-cocoa-x86_64"
-        depends="macosx-common"
-        description="--> build Mac OS X + Cocoa x86_64 app">
-
-        <copy
-            file="resource/scripts/serveraccess_64"
-            tofile="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
         <exec executable="chmod">
             <arg value="+x" />
             <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
