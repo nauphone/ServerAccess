@@ -325,7 +325,7 @@ public class Backend
         try
         {
             server.setSoTimeout(SocketUtils.COLD_TIMEOUT);
-            ftpBrowser.connect(server.getLocalPort(), Collections.EMPTY_MAP);
+            ftpBrowser.connect(server.getLocalPort(), Collections.<String, String>emptyMap());
             return server.accept();
         }
         finally
