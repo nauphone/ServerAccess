@@ -34,11 +34,29 @@ task prepare_release(dependsOn: build) << {
 }
 
 task win32(dependsOn: build) << {
-    println "not done yet"
+    copy {
+        from 'lib/win_32'
+        into 'build/libs'
+    }
+    exec {
+        workingDir 'nsis'
+        commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
+        standardOutput = new FileOutputStream('build/nsis.out')
+        errorOutput = new FileOutputStream('build/nsis.err')
+    }
 }
 
 task win64(dependsOn: build) << {
-    println "not done yet"
+    copy {
+        from 'lib/win_64'
+        into 'build/libs'
+    }
+    exec {
+        workingDir 'nsis'
+        commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
+        standardOutput = new FileOutputStream('build/nsis.out')
+        errorOutput = new FileOutputStream('build/nsis.err')
+    }
 }
 
 task macosx_cocoa_64(dependsOn: build) << {
