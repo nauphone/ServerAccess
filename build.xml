@@ -135,10 +135,9 @@
         depends="jar,detect-version"
         description="--> build win32-x86 installer">
 
-        <mkdir dir="build/swt" />
         <copy
             file="lib/win_32/swt-${swt-version}.jar"
-            tofile="build/swt/swt.jar" />
+            tofile="build/libs/swt.jar" />
 
         <!-- Windows users, add makensis to your PATH -->
         <exec
@@ -152,7 +151,6 @@
             </redirector>
         </exec>
 
-        <delete dir="build/swt" />
         <move file="nsis/sa_install-${version}.exe" todir="build" failonerror="false"/>
 
         <fail message="NSIS build failed">
@@ -169,10 +167,9 @@
         depends="jar,detect-version"
         description="--> build win32-x86_64 installer">
 
-        <mkdir dir="build/swt" />
         <copy
             file="lib/win_64/swt-${swt-version}.jar"
-            tofile="build/swt/swt.jar" />
+            tofile="build/libs/swt.jar" />
 
         <!-- Windows users, add makensis to your PATH -->
         <exec
@@ -186,7 +183,6 @@
             </redirector>
         </exec>
 
-        <delete dir="build/swt" />
         <move file="nsis/sa_install-${version}.exe" tofile="build/sa_install-${version}-x86_64.exe" failonerror="false"/>
 
         <fail message="NSIS build failed">
