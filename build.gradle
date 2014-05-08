@@ -1,5 +1,9 @@
 apply plugin: 'java'
 
+group = 'ru.naumen'
+sourceCompatibility = '1.6'
+targetCompatibility = '1.6'
+
 def detectVersion() {
     def rawVersion = "git describe".execute().text.trim()
     def extractedVersion = rawVersion =~ /serveraccess-([0-9.]*(-[0-9]+)?)/
