@@ -33,9 +33,6 @@
         name="debuglevel"
         value="lines,vars,source" />
     <property
-        name="swt-version"
-        value="3.7.2" />
-    <property
         name="log4j-version"
         value="1.2.17"/>
     <property
@@ -136,8 +133,8 @@
         description="--> build win32-x86 installer">
 
         <copy
-            file="lib/win_32/swt-${swt-version}.jar"
-            tofile="build/libs/swt.jar" />
+            file="lib/win_32/swt.jar"
+            todir="build/libs" />
 
         <!-- Windows users, add makensis to your PATH -->
         <exec
@@ -168,8 +165,8 @@
         description="--> build win32-x86_64 installer">
 
         <copy
-            file="lib/win_64/swt-${swt-version}.jar"
-            tofile="build/libs/swt.jar" />
+            file="lib/win_64/swt.jar"
+            todir="build/libs" />
 
         <!-- Windows users, add makensis to your PATH -->
         <exec
@@ -280,8 +277,8 @@
             <arg value="${distr}/ServerAccess.app/Contents/MacOS/serveraccess" />
         </exec>
         <copy
-            file="lib/macosx/swt-${swt-version}.jar"
-            tofile="${distr}/ServerAccess.app/Contents/MacOS/swt/swt.jar" />
+            file="lib/macosx/swt.jar"
+            todir="${distr}/ServerAccess.app/Contents/MacOS/swt" />
     </target>
 
 </project>
