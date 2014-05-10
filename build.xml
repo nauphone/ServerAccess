@@ -148,8 +148,6 @@
             </redirector>
         </exec>
 
-        <move file="nsis/sa_install-${version}_32.exe" todir="build" failonerror="false"/>
-
         <fail message="NSIS build failed">
             <condition>
                 <not>
@@ -179,8 +177,6 @@
                 <errormapper type="merge" to="build/redirector.err" />
             </redirector>
         </exec>
-
-        <move file="nsis/sa_install-${version}_64.exe" todir="build" failonerror="false"/>
 
         <fail message="NSIS build failed">
             <condition>
