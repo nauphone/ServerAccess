@@ -34,10 +34,6 @@ task prepare_release(dependsOn: build) << {
 }
 
 task win32(dependsOn: build) << {
-    copy {
-        from 'lib/win_32'
-        into 'build/libs'
-    }
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
@@ -47,10 +43,6 @@ task win32(dependsOn: build) << {
 }
 
 task win64(dependsOn: build) << {
-    copy {
-        from 'lib/win_64'
-        into 'build/libs'
-    }
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'

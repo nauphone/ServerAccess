@@ -132,10 +132,6 @@
         depends="jar,detect-version"
         description="--> build win32-x86 installer">
 
-        <copy
-            file="lib/win_32/swt.jar"
-            todir="build/libs" />
-
         <!-- Windows users, add makensis to your PATH -->
         <exec
             executable="${nsis_cmd}"
@@ -161,10 +157,6 @@
         name="win64"
         depends="jar,detect-version"
         description="--> build win32-x86_64 installer">
-
-        <copy
-            file="lib/win_64/swt.jar"
-            todir="build/libs" />
 
         <!-- Windows users, add makensis to your PATH -->
         <exec
