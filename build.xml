@@ -141,14 +141,14 @@
             executable="${nsis_cmd}"
             dir="nsis"
             resultproperty="nsis_exec_result">
-            <arg line="-DBuildVersion=${version} serveraccess2.nsi" />
+            <arg line="-DArch=32 -DBuildVersion=${version} serveraccess2.nsi" />
             <redirector>
                 <outputmapper type="merge" to="build/redirector.out" />
                 <errormapper type="merge" to="build/redirector.err" />
             </redirector>
         </exec>
 
-        <move file="nsis/sa_install-${version}.exe" todir="build" failonerror="false"/>
+        <move file="nsis/sa_install-${version}_32.exe" todir="build" failonerror="false"/>
 
         <fail message="NSIS build failed">
             <condition>
@@ -173,14 +173,14 @@
             executable="${nsis_cmd}"
             dir="nsis"
             resultproperty="nsis_exec_result">
-            <arg line="-DBuildVersion=${version} serveraccess2.nsi" />
+            <arg line="-DArch=64 -DBuildVersion=${version} serveraccess2.nsi" />
             <redirector>
                 <outputmapper type="merge" to="build/redirector.out" />
                 <errormapper type="merge" to="build/redirector.err" />
             </redirector>
         </exec>
 
-        <move file="nsis/sa_install-${version}.exe" tofile="build/sa_install-${version}-x86_64.exe" failonerror="false"/>
+        <move file="nsis/sa_install-${version}_64.exe" todir="build" failonerror="false"/>
 
         <fail message="NSIS build failed">
             <condition>

@@ -11,7 +11,7 @@ Name         "Server Access"
 Caption      "Server Access"
 BrandingText "© NAUMEN 2005-2013"
 Icon         "gfx\naumen.ico"
-OutFile      "sa_install-${BuildVersion}.exe"
+OutFile      "sa_install-${BuildVersion}_${Arch}.exe"
 
 InstallDir   "$PROGRAMFILES\NAUMEN\ServerAccess"
 
