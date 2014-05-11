@@ -52,7 +52,22 @@ task win64(dependsOn: build) << {
 }
 
 task macosx_cocoa_64(dependsOn: build) << {
-    println "not done yet"
+    copy {
+        from zipTree('resource/ServerAccess.app.tmpl.zip')
+        into 'build/libs'
+    }
+    copy {
+        from 'lib/mindterm.jar'
+        from 'lib/log4j-1.2.17.jar'
+        from 'resources/log4j.properties'
+        from 'build/libs/ServerAccess.jar'
+        from 'resource/scripts/serveraccess'
+        into 'build/libs/ServerAccess.app/Contents/MacOS'
+    }
+    copy {
+        from 'lib/macos/swt.jar'
+        into 'build/libs/ServerAccess.app/Contents/MacOS/swt'
+    }
 }
 
 task sonar(dependsOn: build) << {
