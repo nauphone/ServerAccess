@@ -25,6 +25,10 @@ task prepare_release(dependsOn: build) << {
         from 'lib/mindterm.jar'
         from 'lib/log4j-1.2.17.jar'
         into 'build/libs/lib'
+
+        rename { String fileName ->
+            fileName.replace('-1.2.17', '')
+        }
     }
     copy {
         from 'resource/server-access'
@@ -63,6 +67,10 @@ task macosx_cocoa_64(dependsOn: build) << {
         from 'build/libs/ServerAccess.jar'
         from 'resource/scripts/serveraccess'
         into 'build/libs/ServerAccess.app/Contents/MacOS'
+
+        rename { String fileName ->
+            fileName.replace('-1.2.17', '')
+        }
     }
     copy {
         from 'lib/macos/swt.jar'
