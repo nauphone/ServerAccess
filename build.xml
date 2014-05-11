@@ -96,7 +96,7 @@
             destfile="${distr}/ServerAccess.jar"
             manifest="resource/MANIFEST.MF">
             <fileset dir="${build}" />
-            <fileset dir="resource">
+            <fileset dir="src/main/resources">
                 <include name="*.ico" />
                 <include name="icons/**" />
                 <include name="defaults/**" />
