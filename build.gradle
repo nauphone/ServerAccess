@@ -63,7 +63,7 @@ task macosx(dependsOn: build) << {
     copy {
         from 'lib/mindterm.jar'
         from 'lib/log4j-1.2.17.jar'
-        from 'resources/log4j.properties'
+        from 'resource/log4j.properties'
         from 'build/libs/ServerAccess.jar'
         from 'resource/scripts/serveraccess'
         into 'build/libs/ServerAccess.app/Contents/MacOS'
@@ -73,7 +73,7 @@ task macosx(dependsOn: build) << {
         }
     }
     copy {
-        from 'lib/macos/swt.jar'
+        from 'lib/macosx/swt.jar'
         into 'build/libs/ServerAccess.app/Contents/MacOS/swt'
     }
 }
