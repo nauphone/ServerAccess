@@ -60,8 +60,8 @@ Section -Main
     File "..\lib\log4j-1.2.17.jar"
     File "..\resource\log4j.properties"
     File "..\resource\putty.exe"
-    File "..\resource\prog.ico"
     File "..\resource\rdesktop.exe"
+    File "..\src\main\resources\prog.ico"
 SectionEnd
 
 Section -Registry
