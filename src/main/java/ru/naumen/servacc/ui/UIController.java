@@ -91,7 +91,6 @@ public class UIController implements GlobalThroughView
     private ToolItem toolitemFTP;
     private ToolItem toolItemProxy;
     private ToolItem toolitemCopy;
-    private ToolItem toolitemReloadConfig;
 
     private Label globalThrough;
     private Button clearGlobalThrough;
@@ -127,7 +126,13 @@ public class UIController implements GlobalThroughView
         filteredTree.focusOnFilterField();
     }
 
-    public void reloadConfig()
+    public void start()
+    {
+        shell.open();
+        reloadConfig();
+    }
+
+    private void reloadConfig()
     {
         try
         {
@@ -184,7 +189,7 @@ public class UIController implements GlobalThroughView
 
         new ToolItem(toolbar, SWT.SEPARATOR);
 
-        toolitemReloadConfig = new ToolItem(toolbar, SWT.PUSH);
+        final ToolItem toolitemReloadConfig = new ToolItem(toolbar, SWT.PUSH);
         toolitemReloadConfig.setText("Reload Accounts");
         toolitemReloadConfig.setImage(ImageCache.getImage("/icons/arrow-circle-double.png"));
 

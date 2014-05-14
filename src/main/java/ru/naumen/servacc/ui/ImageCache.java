@@ -66,7 +66,7 @@ public final class ImageCache
         }
     }
 
-    private final static class ImageKey implements Comparable<ImageKey>
+    private static final class ImageKey implements Comparable<ImageKey>
     {
         private final String name;
         private final int index;

@@ -54,9 +54,7 @@ public class Main implements Runnable
         HTTPProxy httpProxy = new HTTPProxy(backend, executor);
         UIController controller = new UIController(shell, platform, backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"));
-        shell.open();
-        // Load accounts
-        controller.reloadConfig();
+        controller.start();
         // Start proxy server
         httpProxy.start();
 

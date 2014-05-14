@@ -9,19 +9,18 @@
  */
 package ru.naumen.servacc.util;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.KeySpec;
-
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
 import javax.crypto.spec.DESedeKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.math.BigInteger;
+import java.security.InvalidKeyException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.KeySpec;
 
 public class StringEncrypter
 {
@@ -41,27 +40,16 @@ public class StringEncrypter
             throw new IllegalArgumentException("encryption key was null");
         }
 
-        try
-        {
-            MessageDigest md;
-            md = MessageDigest.getInstance("SHA-1");
-            byte[] digest = md.digest(encryptionKey.getBytes());
-            BigInteger bi = new BigInteger(1, digest);
-            encryptionKey = String.format("%0" + (digest.length << 1) + "X", bi);
-        }
-        catch (NoSuchAlgorithmException e)
-        {
-            throw new EncryptionException(e);
-        }
+        final String hash = makeHash(encryptionKey);
 
-        if (encryptionKey.trim().length() < 24)
+        if (hash.trim().length() < 24)
         {
             throw new IllegalArgumentException("encryption key was less than 24 characters");
         }
 
         try
         {
-            byte[] keyAsBytes = encryptionKey.getBytes(UTF8);
+            byte[] keyAsBytes = hash.getBytes(UTF8);
 
             if (encryptionScheme.equals(DESEDE_ENCRYPTION_SCHEME))
             {
@@ -92,6 +80,22 @@ public class StringEncrypter
             throw new EncryptionException(e);
         }
         catch (NoSuchPaddingException e)
+        {
+            throw new EncryptionException(e);
+        }
+    }
+
+    private String makeHash(String encryptionKey) throws EncryptionException
+    {
+        try
+        {
+            MessageDigest md;
+            md = MessageDigest.getInstance("SHA-1");
+            byte[] digest = md.digest(encryptionKey.getBytes());
+            BigInteger bi = new BigInteger(1, digest);
+            return String.format("%0" + (digest.length << 1) + "X", bi);
+        }
+        catch (NoSuchAlgorithmException e)
         {
             throw new EncryptionException(e);
         }
