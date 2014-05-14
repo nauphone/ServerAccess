@@ -29,7 +29,8 @@ Prerequisites
 =============
 
 * Requires JRE to run.
-* Requires JDK and Apache Ant to build.
+* Requires JDK and Gradle to build.
+* Requires makensis to build Windows executables.
 
 Build and install
 =================
@@ -38,11 +39,11 @@ Windows
 -------
 Use one of the following commands to build the installer (depending of the target architecture):
 
-    ``ant win32``
+    ``gradle win32``
 
 or:
 
-    ``ant win64``
+    ``gradle win64``
 
 Run the resulting ``build/sa_install-<version>.exe`` which will guide you through the rest of install process.
 
@@ -50,13 +51,13 @@ Mac OS X
 --------
 Use the following command to build the application bundle for 64-bit architecture:
 
-    ``ant macosx-cocoa-x86_64``
+    ``gradle macosx``
 
 Copy ``ServerAccess.app`` (from ``build/libs`` subdirectory) to your ``/Applications`` folder.
 
 GNU Linux/Other
 ---------------
-Use ``ant`` command to build application distribution.
+Use ``gradle prepareRelease`` command to build application distribution.
 
 Then launch it (you will probably need to download SWT binaries for your platform and add them to Java class path):
 
