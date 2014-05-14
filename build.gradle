@@ -1,4 +1,5 @@
 apply plugin: 'java'
+apply plugin: 'sonar-runner'
 
 group = 'ru.naumen'
 sourceCompatibility = '1.6'
@@ -23,6 +24,14 @@ dependencies {
         'log4j:log4j:1.2.17'
     )
     testCompile 'junit:junit:4.10'
+}
+
+sonarRunner {
+    sonarProperties {
+        property "sonar.jdbc.url", "jdbc:postgresql://localhost:5432/sonar"
+        property "sonar.jdbc.driverClassName", "org.postgresql.Driver"
+        property "sonar.projectVersion", currentVersion
+    }
 }
 
 task mutationCoverage << {
@@ -85,11 +94,6 @@ task macosx(dependsOn: build) << {
         from 'lib/macosx/swt.jar'
         into 'build/libs/ServerAccess.app/Contents/MacOS/swt'
     }
-}
-
-task sonar(dependsOn: build) << {
-    // http://www.gradle.org/docs/current/userguide/sonar_plugin.html
-    println "not done yet"
 }
 
 // vim: set ft=groovy:
