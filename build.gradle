@@ -46,13 +46,10 @@ task mutationCoverage << {
 
 task prepareRelease(dependsOn: build) << {
     copy {
-        from 'lib/mindterm.jar'
-        from 'lib/log4j-1.2.17.jar'
+        from configurations.runtime
         into 'build/libs/lib'
-
-        rename { String fileName ->
-            fileName.replace('-1.2.17', '')
-        }
+        include 'log4j*.jar'
+        include 'mindterm.jar'
     }
     copy {
         from 'resource/server-access'
@@ -61,7 +58,7 @@ task prepareRelease(dependsOn: build) << {
     }
 }
 
-task win32(dependsOn: build) << {
+task win32(dependsOn: prepareRelease) << {
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
@@ -70,7 +67,7 @@ task win32(dependsOn: build) << {
     }
 }
 
-task win64(dependsOn: build) << {
+task win64(dependsOn: prepareRelease) << {
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
@@ -85,16 +82,16 @@ task macosx(dependsOn: build) << {
         into 'build/libs'
     }
     copy {
-        from 'lib/mindterm.jar'
-        from 'lib/log4j-1.2.17.jar'
+        from configurations.runtime
+        into 'build/libs/ServerAccess.app/Contents/MacOS'
+        include 'log4j*.jar'
+        include 'mindterm.jar'
+    }
+    copy {
         from 'resource/log4j.properties'
         from 'build/libs/ServerAccess.jar'
         from 'resource/scripts/serveraccess'
         into 'build/libs/ServerAccess.app/Contents/MacOS'
-
-        rename { String fileName ->
-            fileName.replace('-1.2.17', '')
-        }
     }
     copy {
         from 'lib/macosx/swt.jar'

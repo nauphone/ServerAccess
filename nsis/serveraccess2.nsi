@@ -55,9 +55,9 @@ Section -Main
     ;SectionIn RO
     SetOutPath "$INSTDIR"
     File "..\build\libs\ServerAccess.jar"
+    File "..\build\libs\lib\mindterm.jar"
+    File "..\build\libs\lib\log4j-1.2.17.jar"
     File "..\lib\win_${Arch}\swt.jar"
-    File "..\lib\mindterm.jar"
-    File "..\lib\log4j-1.2.17.jar"
     File "..\resource\log4j.properties"
     File "..\resource\putty.exe"
     File "..\resource\rdesktop.exe"
