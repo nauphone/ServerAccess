@@ -38,13 +38,13 @@ mkdir -p $tmpdir/usr/share/pixmaps/naumen-server-access
 echo copying files
 
 cp ./build/libs/ServerAccess.jar $TARGET/
+cp ./build/libs/lib/log4j-1.2.17.jar $TARGET/lib
+cp ./build/libs/lib/mindterm.jar $TARGET/lib
 cp ./resource/log4j.properties $TARGET/
 cp ./resource/server-access $TARGET/
 cp -R ./src/main/resources/icons/ $tmpdir/usr/share/pixmaps/naumen-server-access
 cp ./resource/naumen-server-access.desktop $tmpdir/usr/share/applications
 cp ./resource/naumen-server-access.png $tmpdir/usr/share/pixmaps/
-cp ./lib/mindterm.jar $TARGET/lib
-cp ./lib/log4j-1.2.17.jar $TARGET/lib
 cp LICENSE.GPL $TARGET/
 touch $TARGET/serveraccess.log
 chmod a+rw $TARGET/serveraccess.log
