@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.apache.log4j.Logger;
+import ru.naumen.servacc.exception.ServerAccessException;
 
 /**
  * Reads application properties.
@@ -40,7 +41,7 @@ public class ApplicationProperties
         catch (IOException e)
         {
             LOGGER.error("Cannot load properties file", e);
-            throw new RuntimeException(e);
+            throw new ServerAccessException(e);
         }
         return propertiesFile;
     }

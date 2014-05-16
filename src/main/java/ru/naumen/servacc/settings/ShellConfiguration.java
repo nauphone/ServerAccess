@@ -13,6 +13,7 @@ import java.io.IOException;
 
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Shell;
+import ru.naumen.servacc.exception.ServerAccessException;
 
 public class ShellConfiguration
 {
@@ -44,7 +45,7 @@ public class ShellConfiguration
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new ServerAccessException(e);
         }
     }
 

@@ -12,6 +12,7 @@ package ru.naumen.servacc.settings.impl;
 import java.io.File;
 import java.io.IOException;
 
+import ru.naumen.servacc.exception.ServerAccessException;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ListProvider;
@@ -54,7 +55,7 @@ public class DefaultConfiguration
         }
         catch (IOException e)
         {
-            throw new RuntimeException(e);
+            throw new ServerAccessException(e);
         }
     }
 

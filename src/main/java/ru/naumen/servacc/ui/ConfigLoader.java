@@ -25,6 +25,7 @@ import ru.naumen.servacc.MessageListener;
 import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
+import ru.naumen.servacc.exception.ServerAccessException;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.StringEncrypter;
 import ru.naumen.servacc.util.StringEncrypter.EncryptionException;
@@ -78,7 +79,7 @@ public class ConfigLoader
         }
         else
         {
-            throw new RuntimeException("Unknown source type: " + source);
+            throw new ServerAccessException("Unknown source type: " + source);
         }
     }
 

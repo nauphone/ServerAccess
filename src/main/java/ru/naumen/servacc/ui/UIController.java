@@ -51,8 +51,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
 import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
 import ru.naumen.servacc.SocketUtils;
@@ -66,7 +66,7 @@ import ru.naumen.servacc.config2.i.IConfigItem;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
-import ru.naumen.servacc.GlobalThroughView;
+import ru.naumen.servacc.exception.ServerAccessException;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.Util;
@@ -569,7 +569,7 @@ public class UIController implements GlobalThroughView
             }
             else
             {
-                throw new Exception("Unknown account type");
+                throw new ServerAccessException("Unknown account type");
             }
         }
         catch (Exception ex)
