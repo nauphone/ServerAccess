@@ -2,8 +2,8 @@ apply plugin: 'java'
 apply plugin: 'sonar-runner'
 
 group = 'ru.naumen'
-sourceCompatibility = '1.6'
-targetCompatibility = '1.6'
+sourceCompatibility = '1.7'
+targetCompatibility = '1.7'
 
 def detectVersion() {
     def rawVersion = "git describe".execute().text.trim()
