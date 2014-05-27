@@ -34,7 +34,7 @@ public class PortForwardingDialog extends DialogBase
 
     public PortForwardingDialog(Shell parent)
     {
-        super(parent, 0, 3);
+        super(parent, 3);
 
         localPortLabel = createLabel("Local Port");
         remoteHostLabel = createLabel("Remote Host");
@@ -96,10 +96,7 @@ public class PortForwardingDialog extends DialogBase
         {
             localPort = Integer.parseInt(localPortText.getText());
         }
-        catch (NumberFormatException e)
-        {
-        }
-        catch (NullPointerException e)
+        catch (NumberFormatException | NullPointerException e)
         {
         }
         if (1 > localPort || localPort > 65535)
@@ -117,10 +114,7 @@ public class PortForwardingDialog extends DialogBase
         {
             remotePort = Integer.parseInt(remotePortText.getText());
         }
-        catch (NumberFormatException e)
-        {
-        }
-        catch (NullPointerException e)
+        catch (NumberFormatException | NullPointerException e)
         {
         }
         if (1 > remotePort || remotePort > 65535)

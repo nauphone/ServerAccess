@@ -30,10 +30,10 @@ public class DialogBase
     private boolean result = false;
     private int cols;
 
-    public DialogBase(Shell parent, int style, int cols)
+    public DialogBase(Shell parent, int cols)
     {
         this.cols = cols;
-        shell = new Shell(parent, SWT.SHEET | style);
+        shell = new Shell(parent, SWT.SHEET);
         if (cols > 0)
         {
             shell.setLayout(new GridLayout(cols, false));
@@ -69,7 +69,7 @@ public class DialogBase
         {
             public void widgetSelected(SelectionEvent e)
             {
-                close(true);
+                close();
             }
         });
         shell.setDefaultButton(button);
@@ -128,10 +128,10 @@ public class DialogBase
         return true;
     }
 
-    protected void close(boolean result)
+    protected void close()
     {
-        this.result = result;
-        if (!result || validate())
+        this.result = true;
+        if (validate())
         {
             shell.close();
         }

@@ -68,8 +68,8 @@ public class Config implements IConfig
         public Group parseConfig() throws Exception
         {
             rootGroup = new Group();
-            accounts = new HashMap<String, Account>();
-            needsThrough = new HashMap<Account, String>();
+            accounts = new HashMap<>();
+            needsThrough = new HashMap<>();
             DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
             Document doc = builder.parse(stream);
             Node rootNode = doc.getDocumentElement();
@@ -119,7 +119,7 @@ public class Config implements IConfig
             String type = getAttribute(node, ACCOUNT_ATTR_TYPE, "");
             String name = getAttribute(node, ACCOUNT_ATTR_NAME, "");
             String comment = getAttribute(node, ACCOUNT_ATTR_COMMENT, "");
-            HashMap<String, String> params = new HashMap<String, String>();
+            HashMap<String, String> params = new HashMap<>();
             NodeList nodes = node.getChildNodes();
             for (int i = 0; i < nodes.getLength(); i++)
             {

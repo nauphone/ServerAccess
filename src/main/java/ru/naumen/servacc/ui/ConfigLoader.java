@@ -33,7 +33,7 @@ import ru.naumen.servacc.util.Util;
 
 public class ConfigLoader
 {
-    private Map<String, String[]> authCache = new HashMap<String, String[]>();
+    private Map<String, String[]> authCache = new HashMap<>();
     private final Shell shell;
     private final ListProvider sourceListProvider;
     private final MessageListener listener;
@@ -45,7 +45,7 @@ public class ConfigLoader
         this.listener = listener;
     }
 
-    public IConfig loadConfig() throws Exception
+    public IConfig loadConfig()
     {
         CompositeConfig compositeConfig = new CompositeConfig();
         Collection<String> sources = sourceListProvider.list();

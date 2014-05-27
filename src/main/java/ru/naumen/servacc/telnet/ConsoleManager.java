@@ -106,7 +106,7 @@ public class ConsoleManager
         {
             int command = super.read();
             int val = super.read();
-            List<Integer> lst = new ArrayList<Integer>();
+            List<Integer> lst = new ArrayList<>();
             while (val != IAC)
             {
                 lst.add(val);

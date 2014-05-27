@@ -21,7 +21,7 @@ public class CompositeConfig implements IConfig
 
     public CompositeConfig()
     {
-        children = new ArrayList<IConfigItem>();
+        children = new ArrayList<>();
     }
 
     public List<IConfigItem> getChildren()

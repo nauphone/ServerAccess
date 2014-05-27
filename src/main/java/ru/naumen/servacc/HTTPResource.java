@@ -87,22 +87,19 @@ public class HTTPResource
             if (connection.getResponseCode() == HttpURLConnection.HTTP_OK)
             {
                 String encoding = connection.getContentEncoding();
-                InputStream inputStream = null;
 
                 if (encoding != null && encoding.equalsIgnoreCase("gzip"))
                 {
-                    inputStream = new GZIPInputStream(connection.getInputStream());
+                    return new GZIPInputStream(connection.getInputStream());
                 }
                 else if (encoding != null && encoding.equalsIgnoreCase("deflate"))
                 {
-                    inputStream = new InflaterInputStream(connection.getInputStream(), new Inflater(true));
+                    return new InflaterInputStream(connection.getInputStream(), new Inflater(true));
                 }
                 else
                 {
-                    inputStream = connection.getInputStream();
+                    return connection.getInputStream();
                 }
-
-                return inputStream;
             }
             else if (connection.getResponseCode() == HttpURLConnection.HTTP_UNAUTHORIZED)
             {

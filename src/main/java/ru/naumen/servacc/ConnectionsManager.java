@@ -20,8 +20,8 @@ public class ConnectionsManager
 
     public ConnectionsManager()
     {
-        cache = new ConcurrentHashMap<String, SSH2SimpleClient>();
-        connections = new ArrayList<SSH2SimpleClient>();
+        cache = new ConcurrentHashMap<>();
+        connections = new ArrayList<>();
     }
 
     public void put(String key, SSH2SimpleClient client)

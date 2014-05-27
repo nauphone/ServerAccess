@@ -32,14 +32,12 @@ public class ApplicationPropertiesTest
     @Rule
     public TemporaryFolder folder = new TemporaryFolder();
 
-    private ApplicationProperties applicationProperties;
-    private File configFolder;
     private File propertiesFile;
 
     @Before
     public void createConfigFolder() throws IOException
     {
-        configFolder = folder.newFolder();
+        File configFolder = folder.newFolder();
         propertiesFile = new File(configFolder, "file.properties");
     }
 
@@ -47,7 +45,7 @@ public class ApplicationPropertiesTest
     public void canReadPropertiesFile() throws IOException
     {
         write(propertiesFile, "key=value");
-        applicationProperties = new ApplicationProperties(propertiesFile);
+        ApplicationProperties applicationProperties = new ApplicationProperties(propertiesFile);
         PropertiesFile appProperties = applicationProperties.getAppProperties();
 
         assertThat(appProperties.containsKey("key"), is(true));

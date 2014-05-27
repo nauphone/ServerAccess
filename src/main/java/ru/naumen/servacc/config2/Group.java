@@ -30,7 +30,7 @@ public class Group implements IConfigItem
     {
         this.comment = comment;
         this.name = name;
-        children = new ArrayList<IConfigItem>();
+        children = new ArrayList<>();
     }
 
     public String getName()

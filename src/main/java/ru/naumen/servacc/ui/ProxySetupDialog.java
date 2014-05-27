@@ -15,7 +15,7 @@ public class ProxySetupDialog extends DialogBase
 
     public ProxySetupDialog(Shell parent)
     {
-        super(parent, 0, 2);
+        super(parent, 2);
 
         GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
         gridData.horizontalSpan = 2;
@@ -31,7 +31,7 @@ public class ProxySetupDialog extends DialogBase
 
     public int getPort()
     {
-        return port.intValue();
+        return port;
     }
 
     @Override

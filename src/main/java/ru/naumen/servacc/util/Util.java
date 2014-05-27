@@ -31,12 +31,12 @@ public final class Util
         return string.matches(regexp);
     }
 
-    public static final String base64encode(String string)
+    public static String base64encode(String string)
     {
         return base64encode(string.getBytes());
     }
 
-    public static final String base64encode(byte[] bytes)
+    public static String base64encode(byte[] bytes)
     {
         return new String(Base64.encode(bytes));
     }

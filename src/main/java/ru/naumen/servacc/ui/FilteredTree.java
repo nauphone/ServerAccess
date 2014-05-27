@@ -34,9 +34,9 @@ public class FilteredTree extends Composite
         return tree;
     }
 
-    public FilteredTree(Composite parent, int style, boolean useSystemSearchWidget)
+    public FilteredTree(Composite parent, boolean useSystemSearchWidget)
     {
-        super(parent, style);
+        super(parent, SWT.NONE);
         // Setup layout
         GridLayout layout = new GridLayout();
         layout.marginHeight = 0;

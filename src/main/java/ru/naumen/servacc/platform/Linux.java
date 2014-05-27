@@ -9,7 +9,6 @@
 package ru.naumen.servacc.platform;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @author Andrey Hitrin
@@ -17,7 +16,7 @@ import java.io.IOException;
 public class Linux implements Platform
 {
     @Override
-    public File getConfigDirectory() throws IOException
+    public File getConfigDirectory()
     {
         final String userHome = System.getProperty("user.home");
         return new File(userHome, ".serveraccess");

@@ -9,7 +9,6 @@
 package ru.naumen.servacc.platform;
 
 import java.io.File;
-import java.io.IOException;
 
 import ru.naumen.servacc.util.Util;
 
@@ -20,7 +19,7 @@ import ru.naumen.servacc.util.Util;
 public class Windows implements Platform
 {
     @Override
-    public File getConfigDirectory() throws IOException
+    public File getConfigDirectory()
     {
         String appData = System.getenv("APPDATA");
         if (!Util.isEmptyOrNull(appData))

@@ -327,11 +327,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         {
             throw new FTPException(FILE_UNAVAILABLE, file + ": No such file or directory.");
         }
-        catch (SSH2SFTP.SFTPException e)
-        {
-            throw new FTPException(FILE_UNAVAILABLE, file + ": Error in sftp connection, " + e.getMessage());
-        }
-        catch (IOException e)
+        catch (SSH2SFTP.SFTPException | IOException e)
         {
             throw new FTPException(FILE_UNAVAILABLE, file + ": Error in sftp connection, " + e.getMessage());
         }

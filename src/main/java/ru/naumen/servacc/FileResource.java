@@ -53,12 +53,7 @@ public final class FileResource
             content = new StringEncrypter("DESede", password).decrypt(content);
             return new ByteArrayInputStream(content.getBytes());
         }
-        catch (EncryptionException e)
-        {
-            stream.close();
-            throw e;
-        }
-        catch (IOException e)
+        catch (EncryptionException | IOException e)
         {
             stream.close();
             throw e;

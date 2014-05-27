@@ -36,7 +36,7 @@ public class FileUtils
 
     public static List<String> contents(File file) throws Exception
     {
-        List<String> contents = new ArrayList<String>();
+        List<String> contents = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String s;
         while((s = reader.readLine()) != null)

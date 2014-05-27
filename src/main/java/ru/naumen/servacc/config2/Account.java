@@ -30,7 +30,7 @@ public class Account implements IConfigItem
 
     public Account()
     {
-        this.params = new HashMap<String, String>();
+        this.params = new HashMap<>();
     }
 
     public String getLogin()

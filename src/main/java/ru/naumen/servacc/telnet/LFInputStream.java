@@ -68,7 +68,6 @@ public class LFInputStream extends PushbackInputStream
     public int read(byte buffer[], int offset, int length) throws IOException
     {
         int ch;
-        int start = offset;
         int end = offset;
 
         if (length < 1)
@@ -99,7 +98,7 @@ public class LFInputStream extends PushbackInputStream
         while (--readLength > 0 && (ch = readInternal()) != -1);
 
 
-        return (end - start);
+        return (end - offset);
     }
 
     @Override

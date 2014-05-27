@@ -31,7 +31,7 @@ import org.apache.log4j.Logger;
 public final class ImageCache
 {
     private static final Logger LOGGER = Logger.getLogger(ImageCache.class);
-    private static Map<ImageKey, Image> images = new HashMap<ImageKey, Image>();
+    private static Map<ImageKey, Image> images = new HashMap<>();
 
     private ImageCache()
     {
@@ -89,11 +89,7 @@ public final class ImageCache
 
         public boolean equals(Object other)
         {
-            if (other instanceof ImageKey)
-            {
-                return compareTo((ImageKey) other) == 0;
-            }
-            return false;
+            return other instanceof ImageKey && compareTo((ImageKey) other) == 0;
         }
 
         public int hashCode()

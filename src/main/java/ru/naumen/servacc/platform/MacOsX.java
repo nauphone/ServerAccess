@@ -9,7 +9,6 @@
 package ru.naumen.servacc.platform;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * @author Andrey Hitrin
@@ -18,7 +17,7 @@ import java.io.IOException;
 public class MacOsX implements Platform
 {
     @Override
-    public File getConfigDirectory() throws IOException
+    public File getConfigDirectory()
     {
         final String userHome = System.getProperty("user.home");
         File appDirectory = new File(userHome, "Library/Application Support");

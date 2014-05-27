@@ -92,7 +92,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
             uniqueIdentity = getSignature();
             // follow 'through' links
             SSHAccount cur = this;
-            List<String> ids = new ArrayList<String>();
+            List<String> ids = new ArrayList<>();
             while (cur.getThrough() instanceof SSHAccount)
             {
                 cur = (SSHAccount) cur.getThrough();

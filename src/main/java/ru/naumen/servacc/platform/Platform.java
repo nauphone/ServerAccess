@@ -9,7 +9,6 @@
 package ru.naumen.servacc.platform;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Hides platform-specific code behind abstraction.
@@ -19,7 +18,7 @@ import java.io.IOException;
  */
 public interface Platform
 {
-    File getConfigDirectory() throws IOException;
+    File getConfigDirectory();
 
     boolean isTraySupported();
 

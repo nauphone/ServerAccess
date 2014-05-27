@@ -26,7 +26,7 @@ public class ApplicationProperties
     private static final Logger LOGGER = Logger.getLogger(ApplicationProperties.class);
     private final File configFile;
 
-    public ApplicationProperties(File configFile) throws IOException
+    public ApplicationProperties(File configFile)
     {
         this.configFile = configFile;
     }

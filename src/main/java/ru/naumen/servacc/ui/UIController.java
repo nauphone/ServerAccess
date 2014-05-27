@@ -268,7 +268,7 @@ public class UIController implements GlobalThroughView
 
     private void createFilteredTree(boolean useSystemSearchWidget)
     {
-        filteredTree = new FilteredTree(shell, SWT.NONE, useSystemSearchWidget);
+        filteredTree = new FilteredTree(shell, useSystemSearchWidget);
         // Selection handling
         filteredTree.getTree().addSelectionListener(new SelectionListener()
         {
@@ -681,7 +681,7 @@ public class UIController implements GlobalThroughView
     // Fill tree with data
     private void updateTree(String filter)
     {
-        List<String> filters = new ArrayList<String>();
+        List<String> filters = new ArrayList<>();
         if (!Util.isEmptyOrNull(filter))
         {
             for (String substr : filter.split(" "))

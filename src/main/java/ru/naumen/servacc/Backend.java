@@ -267,7 +267,7 @@ public class Backend
     {
         URL url = new URL(account.getURL());
         // Construct URL
-        StringBuffer targetURL = new StringBuffer();
+        StringBuilder targetURL = new StringBuilder();
         // protocol
         targetURL.append(url.getProtocol()).append("://");
         // user (authentication) info
@@ -339,7 +339,7 @@ public class Backend
             return getConnection(account);
         }
         // follow the 'through' chain
-        List<SSHAccount> throughChain = new ArrayList<SSHAccount>();
+        List<SSHAccount> throughChain = new ArrayList<>();
         SSHAccount cur = getThrough(account);
         while (cur != null)
         {

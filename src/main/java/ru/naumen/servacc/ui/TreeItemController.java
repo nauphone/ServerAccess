@@ -35,7 +35,7 @@ public class TreeItemController
     {
         this.parent = parent;
         this.data = data;
-        children = new ArrayList<TreeItemController>();
+        children = new ArrayList<>();
     }
 
     public IConfigItem getData()

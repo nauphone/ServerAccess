@@ -27,7 +27,7 @@ import ru.naumen.servacc.platform.CommandBuilder;
 public class CommandBuilderTest
 {
     private CommandBuilder builder;
-    private Map<String,String> options = new HashMap<String, String>();
+    private Map<String,String> options = new HashMap<>();
 
     @Test
     public void commandStringMustBeSplitByDoubleWhitespace()

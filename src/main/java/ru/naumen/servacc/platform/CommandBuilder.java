@@ -30,7 +30,7 @@ public class CommandBuilder
 
     public List<String> build(int port, Map<String, String> options)
     {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         String[] commandParts = command.
             replaceAll("[{]host[}]", "127.0.0.1").
             replaceAll("[{]port[}]", "" + port).
@@ -38,17 +38,17 @@ public class CommandBuilder
         String optionsKey = commandParts[0] + "_options";
         for (String part : commandParts)
         {
-            if ("{options}".equals(part))
+            switch (part)
             {
-                result.addAll(extractOptions(options, optionsKey));
-            }
-            else if ("{name}".equals(part))
-            {
-                result.add(options.get("name"));
-            }
-            else
-            {
-                result.add(part);
+                case "{options}":
+                    result.addAll(extractOptions(options, optionsKey));
+                    break;
+                case "{name}":
+                    result.add(options.get("name"));
+                    break;
+                default:
+                    result.add(part);
+                    break;
             }
         }
         return result;
@@ -68,6 +68,6 @@ public class CommandBuilder
         {
             return Arrays.asList(options.get(optionsKey).split(" "));
         }
-        return new ArrayList<String>();
+        return new ArrayList<>();
     }
 }

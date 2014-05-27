@@ -26,7 +26,7 @@ public class PropertiesFilter implements ListProvider
     @Override
     public Collection<String> list()
     {
-        List<String> result = new ArrayList<String>();
+        List<String> result = new ArrayList<>();
         String[] keys = properties.keySet().toArray(new String[properties.size()]);
         Arrays.sort(keys);
         for (String key : keys)
