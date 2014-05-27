@@ -67,14 +67,9 @@ public final class FileResource
 
     public static boolean isConfigEncrypted(String config) throws IOException
     {
-        PushbackInputStream stream = openConfigStream(config);
-        try
+        try (PushbackInputStream stream = openConfigStream(config))
         {
             return isConfigEncrypted(stream);
-        }
-        finally
-        {
-            stream.close();
         }
     }
 

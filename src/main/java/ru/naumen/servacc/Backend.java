@@ -252,19 +252,14 @@ public class Backend
 
     private Socket openTerminal(SSHAccount account, String path) throws IOException
     {
-        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
-        Map<String, String> params = new HashMap<String, String>(account.getParams());
-        params.put("name", path);
-        try
+        try (ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST))
         {
+            Map<String, String> params = new HashMap<>(account.getParams());
+            params.put("name", path);
             server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
             terminal.connect(server.getLocalPort(), params);
             // FIXME: collect children and kill it on (on?)
             return server.accept();
-        }
-        finally
-        {
-            server.close();
         }
     }
 
@@ -321,16 +316,11 @@ public class Backend
 
     private Socket openFTPBrowser() throws IOException
     {
-        ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST);
-        try
+        try (ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST))
         {
             server.setSoTimeout(SocketUtils.COLD_TIMEOUT);
             ftpBrowser.connect(server.getLocalPort(), Collections.<String, String>emptyMap());
             return server.accept();
-        }
-        finally
-        {
-            server.close();
         }
     }
 
