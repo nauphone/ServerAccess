@@ -9,11 +9,11 @@
  */
 package ru.naumen.servacc.test;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assume.assumeThat;
-import static org.junit.internal.matchers.StringContains.containsString;
 
 import java.io.IOException;
 import java.io.InputStream;
