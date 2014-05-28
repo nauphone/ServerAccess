@@ -750,7 +750,7 @@ public class UIController implements GlobalThroughView
         }
         item.setExpanded(data.isExpanded());
         // update selection
-        if (data == selection)
+        if (data.equals(selection))
         {
             item.getParent().setSelection(item);
         }
