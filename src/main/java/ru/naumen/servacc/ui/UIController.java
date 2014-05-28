@@ -638,9 +638,9 @@ public class UIController implements GlobalThroughView
 
     private void passwordCopyRequested(TreeItem item)
     {
-        TreeItemController tic = getConfigTreeItem(item);
-        if (tic != null && tic.getData() instanceof Account)
+        if (isAccount(item))
         {
+            TreeItemController tic = getConfigTreeItem(item);
             try
             {
                 final String password = ((Account) tic.getData()).getPassword();
