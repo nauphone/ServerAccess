@@ -134,7 +134,7 @@ public class ConfigLoader
         }
     }
 
-    public InputStream getConfigStream(String source) throws IOException
+    private InputStream getConfigStream(String source) throws IOException
     {
         String password = null;
         String[] auth = authCache.get(source);
