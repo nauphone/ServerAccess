@@ -11,7 +11,12 @@ package ru.naumen.servacc;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public final class SocketUtils
 {
@@ -56,5 +61,19 @@ public final class SocketUtils
         int nextFreePort = sock.getLocalPort();
         sock.close();
         return nextFreePort;
+    }
+
+    public static List<String> getLocalAddresses() throws SocketException
+    {
+        List<String> addresses = new ArrayList<>();
+        for (NetworkInterface i: Collections.list(NetworkInterface.getNetworkInterfaces()))
+        {
+            ArrayList<InetAddress> list = Collections.list(i.getInetAddresses());
+            for (InetAddress address: list)
+            {
+                addresses.add(address.getHostAddress());
+            }
+        }
+        return addresses;
     }
 }

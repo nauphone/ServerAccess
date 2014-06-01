@@ -9,6 +9,8 @@
  */
 package ru.naumen.servacc.ui;
 
+import java.util.List;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -17,11 +19,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.program.Program;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import ru.naumen.servacc.util.Util;
 
 public class DialogBase
@@ -121,6 +123,17 @@ public class DialogBase
             }
         });
         return link;
+    }
+
+    protected Combo createCombo(List<String> items)
+    {
+        final Combo combo = new Combo(shell, SWT.READ_ONLY);
+        combo.setLayoutData(new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL));
+        for (String item: items)
+        {
+            combo.add(item);
+        }
+        return combo;
     }
 
     protected boolean validate()

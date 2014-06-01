@@ -14,10 +14,10 @@ import java.io.IOException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.util.Util;
 
@@ -28,8 +28,8 @@ public class PortForwardingDialog extends DialogBase
     private Label remotePortLabel;
     private Label remoteHostLabel;
 
+    private Combo localHostText;
     private Text localPortText;
-    private Text localHostText;
     private Text remotePortText;
     private Text remoteHostText;
 
@@ -47,7 +47,7 @@ public class PortForwardingDialog extends DialogBase
         remoteHostLabel = createLabel("Remote Host");
         remotePortLabel = createLabel("Remote Port");
 
-        localHostText = createTextField();
+        localHostText = createCombo(SocketUtils.getLocalAddresses());
         localPortText = createTextField();
         remoteHostText = createTextField();
         remotePortText = createTextField();
