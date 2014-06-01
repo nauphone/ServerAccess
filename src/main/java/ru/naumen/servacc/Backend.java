@@ -110,10 +110,10 @@ public class Backend
         browser.open(buildUrl(account));
     }
 
-    public void localPortForward(SSHAccount account, int localPort, String remoteHost, int remotePort) throws Exception
+    public void localPortForward(SSHAccount account, String localHost, int localPort, String remoteHost, int remotePort) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
-        client.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, remoteHost, remotePort);
+        client.getConnection().newLocalForward(localHost, localPort, remoteHost, remotePort);
     }
 
     public void browseViaFTP(SSHAccount account) throws Exception
@@ -296,7 +296,7 @@ public class Backend
         {
             targetHost = SocketUtils.LOCALHOST;
             targetPort = SocketUtils.getFreePort();
-            localPortForward(throughAccount, targetPort, remoteHost, remotePort);
+            localPortForward(throughAccount, SocketUtils.LOCALHOST, targetPort, remoteHost, remotePort);
         }
         else
         {

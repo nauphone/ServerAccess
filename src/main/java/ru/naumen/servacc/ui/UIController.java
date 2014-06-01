@@ -55,7 +55,6 @@ import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
-import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
@@ -587,14 +586,11 @@ public class UIController implements GlobalThroughView
             try
             {
                 PortForwardingDialog dialog = new PortForwardingDialog(shell);
-                dialog.setLocalPort(SocketUtils.getFreePort());
-                dialog.setRemoteHost(SocketUtils.LOCALHOST);
                 if (dialog.show())
                 {
                     backend.localPortForward((SSHAccount) tic.getData(),
-                        dialog.getLocalPort(),
-                        dialog.getRemoteHost(),
-                        dialog.getRemotePort());
+                        dialog.getLocalHost(), dialog.getLocalPort(),
+                        dialog.getRemoteHost(), dialog.getRemotePort());
                 }
             }
             catch (Exception e)
