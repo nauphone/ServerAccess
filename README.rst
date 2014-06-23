@@ -191,12 +191,14 @@ By default, ServerAccess uses ``xterm`` on Linux, ``putty`` on Windows, and ``op
 
     terminal=guake  -n  1  -T  {name}  -e  telnet {host} {port}
 
-Words placed in braces are called "templates". You must use them to determine places where runtime data is being put. Supported templates are:
+Words placed in braces are called "placeholders". You must use them to determine places where runtime data is being put. Supported placeholders are:
 
 * host - here ServerAccess inserts host to connect to. Usually it is equal to 127.0.0.1, but you'd better use template for further compatibility.
 * port - here ServerAccess inserts port number. Port number is being generated dynamically, hence you cannot skip this template.
 * name - optional. When it is provided, ServerAccess inserts remote host name that you can use to distinguish between different terminals.
 * options - optional template that is used for backward compatibility with older versions
+
+**Important**: please do not forget about double whitespace between launcher options!
 
 FTP launcher
 ------------
@@ -205,7 +207,9 @@ Sadly, we have troubles in compatibility with different FTP clients. GFTP proved
 
     ftp=gftp  ftp://anonymous@{host}:{port}
 
-Supported templates are the same as in "Terminal launcher" section.
+Supported placeholders are the same as in "Terminal launcher" section.
+
+**Important**: please do not forget about double whitespace between launcher options!
 
 Web browser launcher
 --------------------
@@ -214,7 +218,9 @@ An example (you chould use such a string in your ``serveraccess.properties`` fil
 
     browser=chromium-browser  {url}
 
-The main and the only supported terminal is ``url``. It is used to insert link to the given location.
+The main and the only supported placeholder is ``url``. It is used to insert link to the given location.
+
+**Important**: please do not forget about double whitespace between launcher options!
 
 Encryption
 ==========
