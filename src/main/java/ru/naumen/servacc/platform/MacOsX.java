@@ -16,13 +16,20 @@ import java.io.File;
  */
 public class MacOsX implements Platform
 {
+    private final String userHome = System.getProperty("user.home");
+
     @Override
     public File getConfigDirectory()
     {
-        final String userHome = System.getProperty("user.home");
         File appDirectory = new File(userHome, "Library/Application Support");
         appDirectory = new File(appDirectory, "Server Access");
         return appDirectory;
+    }
+
+    @Override
+    public File getKeyStoreDirectory()
+    {
+        return new File(userHome, ".ssh");
     }
 
     @Override

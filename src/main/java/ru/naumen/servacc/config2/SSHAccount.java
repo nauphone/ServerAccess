@@ -125,4 +125,21 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     {
         return getParams().containsKey("sudologin");
     }
+
+    public SSHKey getSecureKey()
+    {
+        if (getParams().containsKey("rsaKey")) {
+
+            final String path = getParams().get("rsaKey");
+            final String pass = getParams().get("rsaPassword");
+            return new SSHKey("ssh-rsa", path, pass);
+        }
+        else if(getParams().containsKey("dsaKey"))
+        {
+            final String path = getParams().get("dsaKey");
+            final String pass = getParams().get("dsaPassword");
+            return new SSHKey("ssh-dss", path, pass);
+        }
+        return null;
+    }
 }

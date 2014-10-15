@@ -9,6 +9,7 @@
  */
 package ru.naumen.servacc;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -25,12 +26,16 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import com.mindbright.jca.security.KeyPair;
 import com.mindbright.jca.security.SecureRandom;
 import com.mindbright.ssh2.SSH2AuthKbdInteract;
 import com.mindbright.ssh2.SSH2AuthPassword;
+import com.mindbright.ssh2.SSH2AuthPublicKey;
 import com.mindbright.ssh2.SSH2Authenticator;
 import com.mindbright.ssh2.SSH2InternalChannel;
+import com.mindbright.ssh2.SSH2KeyPairFile;
 import com.mindbright.ssh2.SSH2SessionChannel;
+import com.mindbright.ssh2.SSH2Signature;
 import com.mindbright.ssh2.SSH2SimpleClient;
 import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
@@ -40,6 +45,7 @@ import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.config2.SSHAccount;
+import ru.naumen.servacc.config2.SSHKey;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.OS;
@@ -58,6 +64,7 @@ public class Backend
     private final Command browser;
     private final Command terminal;
     private final Command ftpBrowser;
+    private final File keyStoreDir;
     private final ExecutorService executor;
     private final ConnectionsManager connections;
     private SSHAccount globalThrough;
@@ -69,6 +76,7 @@ public class Backend
         this.ftpBrowser = system.getFTPBrowser();
         this.terminal = system.getTerminal();
         this.executor = executorService;
+        keyStoreDir = system.getKeyStoreDirectory();
         connections = new ConnectionsManager();
     }
 
@@ -416,7 +424,23 @@ public class Backend
             }
         };
         SSH2Authenticator auth = new SSH2Authenticator(account.getLogin());
-        auth.addModule(new SSH2AuthPassword(account.getPassword()));
+        if (account.getPassword() != null)
+        {
+            auth.addModule(new SSH2AuthPassword(account.getPassword()));
+        }
+        else
+        {
+            final SSHKey key = account.getSecureKey();
+            final File keyFile = new File(keyStoreDir, key.path);
+            SSH2KeyPairFile ssh2KeyPairFile = new SSH2KeyPairFile();
+            ssh2KeyPairFile.load(keyFile.getAbsolutePath(), key.password);
+            KeyPair keyPair = ssh2KeyPairFile.getKeyPair();
+
+            SSH2Signature rsaKey = SSH2Signature.getInstance(key.protocolType);
+            rsaKey.setPublicKey(keyPair.getPublic());
+            rsaKey.initSign(keyPair.getPrivate());
+            auth.addModule(new SSH2AuthPublicKey(rsaKey));
+        }
         auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(account.getPassword())));
         return new SSH2SimpleClient(transport, auth);
     }

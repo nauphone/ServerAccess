@@ -21,10 +21,21 @@ public class Windows implements Platform
     @Override
     public File getConfigDirectory()
     {
-        String appData = System.getenv("APPDATA");
+        return getDirectory("APPDATA", "Server Access");
+    }
+
+    @Override
+    public File getKeyStoreDirectory()
+    {
+        return getDirectory("USERPROFILE", ".ssh");
+    }
+
+    private File getDirectory(String parentProperty, String subdirectory)
+    {
+        String appData = System.getenv(parentProperty);
         if (!Util.isEmptyOrNull(appData))
         {
-            return new File(new File(appData), "Server Access");
+            return new File(new File(appData), subdirectory);
         }
         return null;
     }

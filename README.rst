@@ -169,6 +169,13 @@ Sample configuration file contents::
                     <Param name="through" value="1" />
                 </Account>
 
+                <Account type="ssh" comment="SSH account accessed by passwordless RSA key">
+                    <Param name="login" value="cryptoguru" />
+                    <Param name="rsaKey" value="id_rsa_nopass"/>
+                    <Param name="rsaPassword" value=""/>
+                    <Param name="address" value="node2.example.com:22" />
+                </Account>
+
             </Group>
 
         </Group>
@@ -176,6 +183,13 @@ Sample configuration file contents::
     </Accounts>
 
 On the first launch an empty configuration file named ``accounts.xml`` will be created near the ``serveraccess.properties`` file.
+
+Key authentication
+---
+
+At the current moment, you could use passwordless RSA or DSA keys for authentication instead of password. To do this, please use either `rsaKey` or `dsaKey` params (with optional *empty* `rsaPassword` or `dsaPassword` params respectively). Params `rsaPassword` and `dsaPassword` are reserved for the forward compatibility.
+
+Keys must be stored in your default SSH key directory. It usually depends on your Operating System defaults.
 
 Launchers
 =========

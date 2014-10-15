@@ -1,5 +1,6 @@
 package ru.naumen.servacc.platform;
 
+import java.io.File;
 import java.util.Iterator;
 
 import ru.naumen.servacc.settings.ListProvider;
@@ -81,5 +82,10 @@ public class OS
             return new Command(iterator.next());
         }
         return defaultCommand;
+    }
+
+    public File getKeyStoreDirectory()
+    {
+        return platform.getKeyStoreDirectory();
     }
 }

@@ -9,7 +9,13 @@
  */
 package ru.naumen.servacc.test.config2;
 
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -18,6 +24,7 @@ import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
 import ru.naumen.servacc.config2.SSHAccount;
+import ru.naumen.servacc.config2.SSHKey;
 
 public class ConfigTest
 {
@@ -54,6 +61,7 @@ public class ConfigTest
         Assert.assertEquals("SSHAccount: attribute password", "bar", sshAccount.getPassword());
         Assert.assertEquals("SSHAccount: attribute through", null, sshAccount.getParams().get("through"));
         Assert.assertEquals("SSHAccount: attribute comment", "example server", sshAccount.getComment());
+        assertThat(sshAccount.getSecureKey(), is(nullValue()));
 
         Assert.assertTrue("Second one is Account", group.getChildren().get(1) instanceof Account);
         Account account = (Account)group.getChildren().get(1);
@@ -67,5 +75,51 @@ public class ConfigTest
         Assert.assertEquals("HTTPAccount: attribute login", "foo2", httpAccount.getLogin());
         Assert.assertEquals("HTTPAccount: attribute password", "bar2", httpAccount.getPassword());
         Assert.assertEquals("HTTPAccount: attribute through", "1", httpAccount.getParams().get("through"));
+    }
+
+    @Test
+    public void allowRSAKeyInSSHAccountConfig() throws Exception
+    {
+        String accountWithRSAKey = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" +
+                                   "<Accounts version=\"2\">" +
+                                   "<Account id=\"1\" type=\"ssh\" comment=\"example server\">" +
+                                       "<Param name=\"login\" value=\"honey\" />" +
+                                       "<Param name=\"rsaKey\" value=\"id_rsa.pub\" />" +
+                                       "<Param name=\"rsaPassword\" value=\"princess\" />" +
+                                       "<Param name=\"address\" value=\"192.168.1.1\" />" +
+                                   "</Account>" +
+                                   "</Accounts>";
+        Config config = new Config(new ByteArrayInputStream(accountWithRSAKey.getBytes(StandardCharsets.UTF_8)));
+        SSHAccount account = (SSHAccount) config.getChildren().get(0);
+        SSHKey key = account.getSecureKey();
+
+        assertThat(account.getLogin(), is("honey"));
+        assertThat(account.getPassword(), is(nullValue()));
+        assertThat(key.protocolType, is("ssh-rsa"));
+        assertThat(key.path, is("id_rsa.pub"));
+        assertThat(key.password, is("princess"));
+    }
+
+    @Test
+    public void allowDSAKeyInSSHAccountConfig() throws Exception
+    {
+        String accountWithRSAKey = "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>" +
+            "<Accounts version=\"2\">" +
+            "<Account id=\"1\" type=\"ssh\" comment=\"example server\">" +
+            "<Param name=\"login\" value=\"honey\" />" +
+            "<Param name=\"dsaKey\" value=\"id_dsa.pub\" />" +
+            "<Param name=\"dsaPassword\" value=\"ebola\" />" +
+            "<Param name=\"address\" value=\"192.168.1.1\" />" +
+            "</Account>" +
+            "</Accounts>";
+        Config config = new Config(new ByteArrayInputStream(accountWithRSAKey.getBytes(StandardCharsets.UTF_8)));
+        SSHAccount account = (SSHAccount) config.getChildren().get(0);
+        SSHKey key = account.getSecureKey();
+
+        assertThat(account.getLogin(), is("honey"));
+        assertThat(account.getPassword(), is(nullValue()));
+        assertThat(key.protocolType, is("ssh-dss"));
+        assertThat(key.path, is("id_dsa.pub"));
+        assertThat(key.password, is("ebola"));
     }
 }

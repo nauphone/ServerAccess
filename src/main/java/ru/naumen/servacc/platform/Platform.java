@@ -20,6 +20,8 @@ public interface Platform
 {
     File getConfigDirectory();
 
+    File getKeyStoreDirectory();
+
     Command defaultBrowser();
 
     Command defaultFTPBrowser();

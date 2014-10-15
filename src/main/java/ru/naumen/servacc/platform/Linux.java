@@ -16,11 +16,18 @@ import java.io.File;
  */
 public class Linux implements Platform
 {
+    private final String userHome = System.getProperty("user.home");
+
     @Override
     public File getConfigDirectory()
     {
-        final String userHome = System.getProperty("user.home");
         return new File(userHome, ".serveraccess");
+    }
+
+    @Override
+    public File getKeyStoreDirectory()
+    {
+        return new File(userHome, ".ssh");
     }
 
     @Override
