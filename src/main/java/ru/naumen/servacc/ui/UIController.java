@@ -536,7 +536,8 @@ public class UIController implements GlobalThroughView
                         catch (Exception e)
                         {
                             LOGGER.error("Cannot open SSH account", e);
-                            showAlertAsync(e.getMessage());
+                            String message = e.getMessage() == null ? "Cannot open SSH account" : e.getMessage();
+                            showAlertAsync(message);
                         }
                     }
                 });
