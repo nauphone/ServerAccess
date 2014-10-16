@@ -38,7 +38,7 @@ import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.SSHAccount;
-import ru.naumen.servacc.platform.Command;
+import ru.naumen.servacc.platform.OS;
 
 /**
  * @author Andrey Hitrin
@@ -55,8 +55,7 @@ public class HTTPProxyConnectionTest
     private final HttpHost proxyForHttpClient = new HttpHost("127.0.0.1", PORT);
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final SSHAccount account = new SSHAccount();
-    private final Command dummyCommand = new Command("false");
-    private final Backend backend = new Backend(dummyCommand, dummyCommand, dummyCommand, executorService);
+    private final Backend backend = new Backend(new OS(), executorService);
     private final MessageListener messageListener = new MessageListener()
     {
         @Override

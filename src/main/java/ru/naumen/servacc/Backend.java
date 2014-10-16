@@ -42,6 +42,7 @@ import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.platform.Command;
+import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
 
@@ -62,11 +63,11 @@ public class Backend
     private SSHAccount globalThrough;
     private GlobalThroughView globalThroughView;
 
-    public Backend(Command browser, Command ftpBrowser, Command terminal, ExecutorService executorService)
+    public Backend(OS system, ExecutorService executorService)
     {
-        this.browser = browser;
-        this.ftpBrowser = ftpBrowser;
-        this.terminal = terminal;
+        this.browser = system.getBrowser();
+        this.ftpBrowser = system.getFTPBrowser();
+        this.terminal = system.getTerminal();
         this.executor = executorService;
         connections = new ConnectionsManager();
     }

@@ -21,12 +21,11 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.HTTPProxy;
-import ru.naumen.servacc.platform.Command;
+import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ShellConfiguration;
 import ru.naumen.servacc.settings.impl.DefaultConfiguration;
-import ru.naumen.servacc.platform.OS;
 
 public class Main implements Runnable
 {
@@ -44,14 +43,11 @@ public class Main implements Runnable
         OS system = new OS();
         Platform platform = system.getPlatform();
         DefaultConfiguration configuration = system.getConfiguration();
-        Command browser = system.getBrowser();
-        Command ftpBrowser = system.getFTPBrowser();
-        Command terminal = system.getTerminal();
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
-        Backend backend = new Backend(browser, ftpBrowser, terminal, executor);
+        Backend backend = new Backend(system, executor);
         HTTPProxy httpProxy = new HTTPProxy(backend, executor);
         UIController controller = new UIController(shell, platform, backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"));
