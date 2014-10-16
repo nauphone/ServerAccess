@@ -3,15 +3,24 @@ package ru.naumen.servacc.platform;
 import java.util.Iterator;
 
 import ru.naumen.servacc.settings.ListProvider;
+import ru.naumen.servacc.settings.impl.DefaultConfiguration;
 
-public final class OS
+/**
+ * @author Andrey Hitrin
+ * @since 31.01.13
+ */
+public class OS
 {
-    private OS()
+    private final Platform platform;
+    private final DefaultConfiguration configuration;
+
+    public OS()
     {
-        // Utility class should not have public constructor
+        platform = detectPlatform();
+        configuration = DefaultConfiguration.create(platform);
     }
 
-    public static Platform platform()
+    private Platform detectPlatform()
     {
         if (isMacOSX())
         {
@@ -24,23 +33,6 @@ public final class OS
         return new Linux();
     }
 
-    /**
-     * In Java 8, this method should be moved directly to the Platform interface
-     *
-     * @param settingsProvider
-     * @param defaultCommand
-     * @return
-     */
-    public static Command buildCommand(ListProvider settingsProvider, Command defaultCommand)
-    {
-        Iterator<String> iterator = settingsProvider.list().iterator();
-        if (iterator.hasNext())
-        {
-            return new Command(iterator.next());
-        }
-        return defaultCommand;
-    }
-
     private static boolean isMacOSX()
     {
         return "Mac OS X".equalsIgnoreCase(System.getProperty("os.name"));
@@ -49,5 +41,40 @@ public final class OS
     private static boolean isWindows()
     {
         return System.getProperty("os.name").startsWith("Windows");
+    }
+
+    public Platform getPlatform()
+    {
+        return platform;
+    }
+
+    public DefaultConfiguration getConfiguration()
+    {
+        return configuration;
+    }
+
+    public Command getBrowser()
+    {
+        return buildCommand(configuration.filterProperties("browser"), platform.defaultBrowser());
+    }
+
+    public Command getFTPBrowser()
+    {
+        return buildCommand(configuration.filterProperties("ftp"), platform.defaultFTPBrowser());
+    }
+
+    public Command getTerminal()
+    {
+        return buildCommand(configuration.filterProperties("terminal"), platform.defaultTerminal());
+    }
+
+    private Command buildCommand(ListProvider settingsProvider, Command defaultCommand)
+    {
+        Iterator<String> iterator = settingsProvider.list().iterator();
+        if (iterator.hasNext())
+        {
+            return new Command(iterator.next());
+        }
+        return defaultCommand;
     }
 }

@@ -41,11 +41,12 @@ public class Main implements Runnable
     public void run()
     {
         // Create GUI
-        Platform platform = OS.platform();
-        DefaultConfiguration configuration = DefaultConfiguration.create(platform);
-        Command browser = OS.buildCommand(configuration.filterProperties("browser"), platform.defaultBrowser());
-        Command ftpBrowser = OS.buildCommand(configuration.filterProperties("ftp"), platform.defaultFTPBrowser());
-        Command terminal = OS.buildCommand(configuration.filterProperties("terminal"), platform.defaultTerminal());
+        OS system = new OS();
+        Platform platform = system.getPlatform();
+        DefaultConfiguration configuration = system.getConfiguration();
+        Command browser = system.getBrowser();
+        Command ftpBrowser = system.getFTPBrowser();
+        Command terminal = system.getTerminal();
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
