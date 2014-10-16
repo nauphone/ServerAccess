@@ -26,24 +26,6 @@ public class MacOsX implements Platform
     }
 
     @Override
-    public boolean isTraySupported()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean isAppMenuSupported()
-    {
-        return true;
-    }
-
-    @Override
-    public boolean useSystemSearchWidget()
-    {
-        return true;
-    }
-
-    @Override
     public Command defaultBrowser()
     {
         return new Command("open  {url}");

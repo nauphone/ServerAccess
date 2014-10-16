@@ -66,7 +66,7 @@ import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.exception.ServerAccessException;
-import ru.naumen.servacc.platform.Platform;
+import ru.naumen.servacc.platform.GUIOptions;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.Util;
 
@@ -99,7 +99,7 @@ public class UIController implements GlobalThroughView
 
     private Timer refreshTimer;
 
-    public UIController(Shell shell, Platform platform, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider)
+    public UIController(Shell shell, GUIOptions guiOptions, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider)
     {
         this.shell = shell;
         this.clipboard = new Clipboard(shell.getDisplay());
@@ -111,13 +111,13 @@ public class UIController implements GlobalThroughView
         this.httpProxy = httpProxy;
         backend.setGlobalThroughView(this);
         createToolBar();
-        createFilteredTree(platform.useSystemSearchWidget());
+        createFilteredTree(guiOptions.useSystemSearchWidget());
         createGlobalThroughWidget();
-        if (platform.isTraySupported())
+        if (guiOptions.isTraySupported())
         {
             createTrayItem();
         }
-        else if (platform.isAppMenuSupported())
+        else if (guiOptions.isAppMenuSupported())
         {
             createAppMenu();
         }

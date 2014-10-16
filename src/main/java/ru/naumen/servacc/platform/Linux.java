@@ -12,6 +12,7 @@ import java.io.File;
 
 /**
  * @author Andrey Hitrin
+ * @since 08.02.12
  */
 public class Linux implements Platform
 {
@@ -20,24 +21,6 @@ public class Linux implements Platform
     {
         final String userHome = System.getProperty("user.home");
         return new File(userHome, ".serveraccess");
-    }
-
-    @Override
-    public boolean isTraySupported()
-    {
-        return true;
-    }
-
-    @Override
-    public boolean isAppMenuSupported()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean useSystemSearchWidget()
-    {
-        return false;
     }
 
     @Override

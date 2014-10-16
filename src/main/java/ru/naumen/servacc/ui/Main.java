@@ -22,7 +22,6 @@ import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.platform.OS;
-import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ShellConfiguration;
 import ru.naumen.servacc.settings.impl.DefaultConfiguration;
@@ -41,7 +40,6 @@ public class Main implements Runnable
     {
         // Create GUI
         OS system = new OS();
-        Platform platform = system.getPlatform();
         DefaultConfiguration configuration = system.getConfiguration();
 
         Display display = new Display();
@@ -49,7 +47,7 @@ public class Main implements Runnable
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
         Backend backend = new Backend(system, executor);
         HTTPProxy httpProxy = new HTTPProxy(backend, executor);
-        UIController controller = new UIController(shell, platform, backend, executor, httpProxy,
+        UIController controller = new UIController(shell, system.getGUIOptions(), backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"));
         controller.start();
         // Start proxy server

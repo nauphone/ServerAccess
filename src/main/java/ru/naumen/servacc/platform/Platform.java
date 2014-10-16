@@ -20,12 +20,6 @@ public interface Platform
 {
     File getConfigDirectory();
 
-    boolean isTraySupported();
-
-    boolean isAppMenuSupported();
-
-    boolean useSystemSearchWidget();
-
     Command defaultBrowser();
 
     Command defaultFTPBrowser();

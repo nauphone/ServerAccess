@@ -11,26 +11,31 @@ import ru.naumen.servacc.settings.impl.DefaultConfiguration;
  */
 public class OS
 {
+    private static final GUIOptions MAC_OS_X_LOOK = new GUIOptions(false, true, true);
+    private static final GUIOptions MAINSTREAM_LOOK = new GUIOptions(true, false, false);
+
     private final Platform platform;
     private final DefaultConfiguration configuration;
+    private final GUIOptions guiOptions;
 
     public OS()
     {
-        platform = detectPlatform();
-        configuration = DefaultConfiguration.create(platform);
-    }
-
-    private Platform detectPlatform()
-    {
         if (isMacOSX())
         {
-            return new MacOsX();
+            platform = new MacOsX();
+            guiOptions = MAC_OS_X_LOOK;
         }
         else if (isWindows())
         {
-            return new Windows();
+            platform = new Windows();
+            guiOptions = MAINSTREAM_LOOK;
         }
-        return new Linux();
+        else
+        {
+            platform = new Linux();
+            guiOptions = MAINSTREAM_LOOK;
+        }
+        configuration = DefaultConfiguration.create(platform);
     }
 
     private static boolean isMacOSX()
@@ -43,9 +48,9 @@ public class OS
         return System.getProperty("os.name").startsWith("Windows");
     }
 
-    public Platform getPlatform()
+    public GUIOptions getGUIOptions()
     {
-        return platform;
+        return guiOptions;
     }
 
     public DefaultConfiguration getConfiguration()

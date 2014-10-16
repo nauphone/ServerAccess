@@ -30,24 +30,6 @@ public class Windows implements Platform
     }
 
     @Override
-    public boolean isTraySupported()
-    {
-        return true;
-    }
-
-    @Override
-    public boolean isAppMenuSupported()
-    {
-        return false;
-    }
-
-    @Override
-    public boolean useSystemSearchWidget()
-    {
-        return false;
-    }
-
-    @Override
     public Command defaultBrowser()
     {
         return new Command("cmd  /C  start {url}");
