@@ -393,7 +393,8 @@ public class Backend
         if (through != null)
         {
             int localPort = SocketUtils.getFreePort();
-            through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port); //FIXME: localize newLocalForward usage in localPortForward
+            //FIXME: localize newLocalForward usage in localPortForward
+            through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port);
             host = SocketUtils.LOCALHOST;
             port = localPort;
         }
