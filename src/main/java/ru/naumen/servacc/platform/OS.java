@@ -35,7 +35,7 @@ public class OS
             platform = new Linux();
             guiOptions = MAINSTREAM_LOOK;
         }
-        configuration = DefaultConfiguration.create(platform);
+        configuration = DefaultConfiguration.create(platform.getConfigDirectory());
     }
 
     private static boolean isMacOSX()

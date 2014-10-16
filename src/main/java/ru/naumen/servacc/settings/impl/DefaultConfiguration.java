@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.IOException;
 
 import ru.naumen.servacc.exception.ServerAccessException;
-import ru.naumen.servacc.platform.Platform;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ListProvider;
 
@@ -42,11 +41,10 @@ public class DefaultConfiguration
         return windowProperties;
     }
 
-    public static DefaultConfiguration create(Platform platform)
+    public static DefaultConfiguration create(File configDirectory)
     {
         try
         {
-            File configDirectory = platform.getConfigDirectory();
             configDirectory.mkdirs();
             file(configDirectory, "accounts.xml", new FileCopy("/defaults/accounts.xml"));
             return new DefaultConfiguration(
