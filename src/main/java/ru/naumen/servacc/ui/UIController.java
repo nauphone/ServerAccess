@@ -111,13 +111,13 @@ public class UIController implements GlobalThroughView
         this.httpProxy = httpProxy;
         backend.setGlobalThroughView(this);
         createToolBar();
-        createFilteredTree(guiOptions.useSystemSearchWidget());
+        createFilteredTree(guiOptions.useSystemSearchWidget);
         createGlobalThroughWidget();
-        if (guiOptions.isTraySupported())
+        if (guiOptions.isTraySupported)
         {
             createTrayItem();
         }
-        else if (guiOptions.isAppMenuSupported())
+        else if (guiOptions.isAppMenuSupported)
         {
             createAppMenu();
         }
