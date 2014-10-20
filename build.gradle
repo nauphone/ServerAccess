@@ -5,6 +5,17 @@ group = 'ru.naumen'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
 
+// Install pitest plugin to measure test quality
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.1'
+    }
+}
+apply plugin: 'info.solidsoft.pitest'
+
 def detectVersion() {
     def rawVersion = "git describe".execute().text.trim()
     def extractedVersion = rawVersion =~ /serveraccess-([0-9.]*(-[0-9]+)?)/
@@ -21,11 +32,11 @@ dependencies {
     compile (
         files('lib/mindterm.jar', 'lib/swt.jar'),
         'org.apache.httpcomponents:httpclient:4.2.5',
-        'log4j:log4j:1.2.17'
+        'log4j:log4j:1.2.17',
     )
     testCompile (
         'junit:junit:4.11',
-        'org.hamcrest:hamcrest-all:1.3'
+        'org.hamcrest:hamcrest-all:1.3',
     )
 }
 
@@ -41,10 +52,6 @@ sonarRunner {
         property "sonar.jdbc.driverClassName", "org.postgresql.Driver"
         property "sonar.projectVersion", currentVersion
     }
-}
-
-task mutationCoverage << {
-    println "TODO: use pitest plugin"
 }
 
 task prepareRelease(dependsOn: build) << {
