@@ -185,7 +185,7 @@ Sample configuration file contents::
 On the first launch an empty configuration file named ``accounts.xml`` will be created near the ``serveraccess.properties`` file.
 
 Key authentication
----
+------------------
 
 At the current moment, you could use passwordless RSA or DSA keys for authentication instead of password. To do this, please use either `rsaKey` or `dsaKey` params (with optional *empty* `rsaPassword` or `dsaPassword` params respectively). Params `rsaPassword` and `dsaPassword` are reserved for the forward compatibility.
 
