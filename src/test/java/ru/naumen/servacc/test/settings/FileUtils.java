@@ -34,7 +34,7 @@ public class FileUtils
         writer.flush();
     }
 
-    public static List<String> contents(File file) throws Exception
+    public static List<String> contents(File file) throws IOException
     {
         List<String> contents = new ArrayList<>();
         BufferedReader reader = new BufferedReader(new FileReader(file));

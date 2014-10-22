@@ -15,6 +15,7 @@ import static ru.naumen.servacc.test.settings.FileUtils.contents;
 import static ru.naumen.servacc.test.settings.FileUtils.write;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.Before;
@@ -36,14 +37,14 @@ public class PropertiesFileTest
     private PropertiesFile propertiesFile;
 
     @Before
-    public void createFile() throws Exception
+    public void createFile() throws IOException
     {
         file = folder.newFile();
         propertiesFile = new PropertiesFile(file);
     }
 
     @Test
-    public void canLoadFromXml() throws Exception
+    public void canLoadFromXml() throws IOException
     {
         write(file, "<!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\">\n" +
             "<properties>\n" +
@@ -55,7 +56,7 @@ public class PropertiesFileTest
     }
 
     @Test
-    public void canLoadFromProperties() throws Exception
+    public void canLoadFromProperties() throws IOException
     {
         write(file, "# comment here\n" +
             "key=456\n" +
@@ -67,7 +68,7 @@ public class PropertiesFileTest
     }
 
     @Test
-    public void writesDownAsXmlWhenLoadedAsXml() throws Exception
+    public void writesDownAsXmlWhenLoadedAsXml() throws IOException
     {
         write(file, "<!DOCTYPE properties SYSTEM \"http://java.sun.com/dtd/properties.dtd\">\n<properties></properties>");
         propertiesFile.load();
@@ -85,7 +86,7 @@ public class PropertiesFileTest
     }
 
     @Test
-    public void writesDownAsPropertiesWhenLoadedAsProperties() throws Exception
+    public void writesDownAsPropertiesWhenLoadedAsProperties() throws IOException
     {
         write(file, "");
         propertiesFile.load();
