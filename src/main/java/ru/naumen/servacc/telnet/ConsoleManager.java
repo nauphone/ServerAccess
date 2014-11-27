@@ -25,32 +25,37 @@ public class ConsoleManager
 {
     private static final Logger LOGGER = Logger.getLogger(ConsoleManager.class);
 
-    // Telnet protocol commands:
-    public static final int ABORT = 238;    // Abort
-    public static final int AO = 245;       // Abort Output
-    public static final int AYT = 246;      // Are You There
-    public static final int BREAK = 243;    // Break
-    public static final int DM = 242;       // Data Mark
-    public static final int DO = 253;       // Request to use option
-    public static final int DONT = 254;     // Don't use option
-    public static final int EC = 247;       // Erase Character
-    public static final int EL = 248;       // Erase Line
-    public static final int EOF = 236;      // End Of File
-    public static final int EOR = 239;      // End Of Record
-    public static final int GA = 249;       // Go Ahead
-    public static final int IAC = 255;      // Interpret As Command
-    public static final int IP = 244;       // Interrupt Process
-    public static final int NOP = 241;      // No Operation
-    public static final int SB = 250;       // Start subnegotiation
-    public static final int SE = 240;       // End subnegotiation
-    public static final int SUSP = 237;     // Suspend process
-    public static final int SYNCH = 242;    // Synchronize
-    public static final int WILL = 251;     // Agree to use option
-    public static final int WONT = 252;     // Refuse to use option
-    // Telnet protocol options:
-    public static final int O_ECHO = 1;             // Echo
-    public static final int O_SUPPRESS_GA = 3;      // Suppress Go Ahead
-    public static final int O_WINDOW_SIZE_NEG = 31; // Window Size Negotiation
+    /*
+     * Telnet protocol commands
+     * Refer to RFC 854 [1]
+     * [1]: https://tools.ietf.org/html/rfc854
+     */
+
+    // Request to use option
+    public static final int DO = 253;
+    // Don't use option
+    public static final int DONT = 254;
+    // End Of File
+    public static final int EOF = 236;
+    // Interpret As Command
+    public static final int IAC = 255;
+    // Start sub-negotiation
+    public static final int SB = 250;
+    // Agree to use option
+    public static final int WILL = 251;
+    // Refuse to use option
+    public static final int WONT = 252;
+
+    /*
+     * Telnet protocol options
+     */
+
+    // Echo
+    public static final int O_ECHO = 1;
+    // Suppress Go Ahead
+    public static final int O_SUPPRESS_GA = 3;
+    // Window Size Negotiation
+    public static final int O_WINDOW_SIZE_NEG = 31;
 
     class ConsoleManagerInputStream extends PushbackInputStream
     {
