@@ -23,7 +23,7 @@ import org.apache.log4j.Logger;
 
 public class ConsoleManager
 {
-    private static final Logger LOGGER = Logger.getLogger("ru.naumen.servacc");
+    private static final Logger LOGGER = Logger.getLogger(ConsoleManager.class);
 
     // Telnet protocol commands:
     public static final int ABORT = 238;    // Abort
@@ -69,11 +69,9 @@ public class ConsoleManager
             {
                 case O_ECHO:
                     say(IAC, WILL, O_ECHO);
-                    LOGGER.info("IAC DO ECHO");
                     break;
                 case O_SUPPRESS_GA:
                     say(IAC, WILL, O_SUPPRESS_GA);
-                    LOGGER.info("IAC DO SUPPRESS GO AHEAD");
                     break;
                 default:
                     say(IAC, WONT, option);
@@ -120,7 +118,6 @@ public class ConsoleManager
                     session.sendWindowChange(
                         arr[2] * 256 + arr[3],
                         arr[0] * 256 + arr[1]);
-                    LOGGER.info("IAC SB WINDOW SIZE NEG");
                     break;
                 default:
                     LOGGER.warn("IAC SB UNKNOWN(" + command + ")");
@@ -135,11 +132,9 @@ public class ConsoleManager
             {
                 case O_SUPPRESS_GA:
                     say(IAC, DO, O_SUPPRESS_GA);
-                    LOGGER.info("IAC WILL SUPPRESS GO AHEAD");
                     break;
                 case O_WINDOW_SIZE_NEG:
                     say(IAC, DO, O_WINDOW_SIZE_NEG);
-                    LOGGER.info("IAC WILL WINDOW SIZE NEG");
                     break;
                 default:
                     say(IAC, DONT, command);
@@ -184,7 +179,6 @@ public class ConsoleManager
                 {
                     res = super.read(b, off, len);
                 }
-                LOGGER.trace(res);
                 if (res == -1)
                 {
                     return -1;
