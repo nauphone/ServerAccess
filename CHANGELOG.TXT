@@ -1,3 +1,26 @@
+New in 0.10.1:
+-------
+
+New features/changes:
+
+ * Select the interface for local port forwarding #30
+ * Basic RSA/DSA keypair authentication #43
+
+Bug fixes:
+
+ * SA should not fail when NPE occurs during connection establishment
+
+Code cleanup and refactoring:
+
+ * Use newer Gradle version and Gradle wrapper
+ * Use pitest plugin to measure tests quality
+ * Remove unused constants from ConsoleManager
+ * Remove excessive logging from ConsoleManager
+ * Add some tests on DefaultConfiguration
+ * Fix a lot of static analysis issues
+ * Close some resources automatically
+
+
 New in 0.10:
 -------
 
