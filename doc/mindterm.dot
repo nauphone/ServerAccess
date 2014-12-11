@@ -1,0 +1,39 @@
+digraph g {
+
+// Test classes
+BackendTest [color="green"];
+HTTPProxyConnectionTest [color="green"];
+HTTPProxyTest [color="green"];
+
+// MindTerm dependencies
+ConsoleManager -> mindterm [color="red"];
+Backend -> mindterm [color="red"];
+Util -> mindterm [color="red"];
+HTTPProxy -> mindterm [color="red"];
+FTP2SFTPProxy -> mindterm [color="red"];
+SSH2PasswordInteractor -> mindterm [color="red"];
+ConnectionsManager -> mindterm [color="red"];
+
+// Class cross-dependencies
+
+Backend -> ConsoleManager;
+
+HTTPProxy -> Backend;
+Main -> Backend;
+UIController -> Backend;
+BackendTest -> Backend;
+HTTPProxyConnectionTest -> Backend;
+
+Backend -> Util;
+HTTPResource -> Util;
+StringEncrypter -> Util;
+
+Main -> HTTPProxy;
+UIController -> HTTPProxy;
+HTTPProxyConnectionTest -> HTTPProxy;
+HTTPProxyTest -> HTTPProxy;
+
+Backend -> FTP2SFTPProxy;
+Backend -> SSH2PasswordInteractor;
+Backend -> ConnectionsManager;
+}
