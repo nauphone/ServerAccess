@@ -28,8 +28,8 @@ ServerAccess is a tool to provide easy and seamless access to multiple servers. 
 Prerequisites
 =============
 
-* Requires JRE 1.7 to run.
-* Requires JDK 1.7 and Gradle to build.
+* Requires JRE 1.8 to run.
+* Requires JDK 1.8 and Gradle to build.
 * Requires makensis to build Windows executables.
 
 Build and install

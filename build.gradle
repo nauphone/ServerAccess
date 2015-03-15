@@ -6,8 +6,8 @@ plugins {
 }
 
 group = 'ru.naumen'
-sourceCompatibility = '1.7'
-targetCompatibility = '1.7'
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 def detectVersion() {
     def rawVersion = "git describe".execute().text.trim()
