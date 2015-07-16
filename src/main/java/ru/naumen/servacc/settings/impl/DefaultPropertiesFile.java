@@ -26,7 +26,7 @@ public class DefaultPropertiesFile implements DefaultFile
     public void fill(File configFile) throws IOException
     {
         File accountsFile = new File(configFile.getParentFile(), "accounts.xml");
-        String path = accountsFile.getCanonicalPath().replaceAll("\\\\", "/");
+        String path = accountsFile.getAbsolutePath().replaceAll("\\\\", "/");
         PrintStream outputStream = new PrintStream(new FileOutputStream(configFile));
         outputStream.println("# You can define several sources, with different number each");
         outputStream.println("source=" + FileResource.URI_PREFIX + path);
