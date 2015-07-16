@@ -39,11 +39,11 @@ Windows
 -------
 Use one of the following commands to build the installer (depending of the target architecture):
 
-    ``gradle win32``
+    ``gradlew.bat win32``
 
 or:
 
-    ``gradle win64``
+    ``gradlew.bat win64``
 
 Run the resulting ``build/sa_install-<version>.exe`` which will guide you through the rest of install process.
 
@@ -51,7 +51,7 @@ Mac OS X
 --------
 Use the following command to build the application bundle for 64-bit architecture:
 
-    ``gradle macosx``
+    ``./gradlew macosx``
 
 Copy ``ServerAccess.app`` (from ``build/libs`` subdirectory) to your ``/Applications`` folder.
 
@@ -73,7 +73,7 @@ Static analysis
 
 You may want to launch static analysis upon ServerAccess code. The best way to do it is to use Sonar Qube. Download and install it, and then run following command:
 
-    ``gradle sonarRunner``
+    ``./gradlew sonarRunner``
 
 Currently, it expects that Sonar uses local PostgreSQL database named 'sonar'. If your settings differ, please refer to plugin `documentation <http://www.gradle.org/docs/current/userguide/sonar_runner_plugin.html>`_ for ways you can change them.
 
