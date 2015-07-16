@@ -308,8 +308,8 @@ public class UIController implements GlobalThroughView
             @Override
             public void handleEvent(Event event)
             {
-                // Focus on Ctrl+C
-                if (event.stateMask == SWT.CTRL && event.keyCode == (int) 'c')
+                // Focus on Ctrl+F
+                if (event.stateMask == SWT.CTRL && event.keyCode == (int) 'f')
                 {
                     filteredTree.focusOnFilterField();
                 }
