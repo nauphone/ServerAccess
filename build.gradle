@@ -1,20 +1,12 @@
-apply plugin: 'java'
-apply plugin: 'sonar-runner'
+plugins {
+    id 'java'
+    id 'sonar-runner'
+    id 'info.solidsoft.pitest' version '1.1.1'
+}
 
 group = 'ru.naumen'
 sourceCompatibility = '1.7'
 targetCompatibility = '1.7'
-
-// Install pitest plugin to measure test quality
-buildscript {
-    repositories {
-        jcenter()
-    }
-    dependencies {
-        classpath 'info.solidsoft.gradle.pitest:gradle-pitest-plugin:1.1.1'
-    }
-}
-apply plugin: 'info.solidsoft.pitest'
 
 def detectVersion() {
     def rawVersion = "git describe".execute().text.trim()
