@@ -37,9 +37,7 @@ mkdir -p $tmpdir/usr/share/pixmaps/naumen-server-access
 
 echo copying files
 
-cp ./build/libs/ServerAccess.jar $TARGET/
-cp ./build/libs/lib/log4j-1.2.17.jar $TARGET/lib
-cp ./build/libs/lib/mindterm.jar $TARGET/lib
+cp ./build/libs/ServerAccess-all.jar $TARGET/
 cp ./resource/log4j.properties $TARGET/
 cp ./resource/server-access $TARGET/
 cp -R ./src/main/resources/icons/ $tmpdir/usr/share/pixmaps/naumen-server-access

@@ -54,10 +54,7 @@ InstallDir   "$PROGRAMFILES\NAUMEN\ServerAccess"
 Section -Main
     ;SectionIn RO
     SetOutPath "$INSTDIR"
-    File "..\build\libs\ServerAccess.jar"
-    File "..\build\libs\lib\mindterm.jar"
-    File "..\build\libs\lib\log4j-1.2.17.jar"
-    File "..\lib\win_${Arch}\swt.jar"
+    File "..\build\libs\ServerAccess-all.jar"
     File "..\resource\log4j.properties"
     File "..\resource\putty.exe"
     File "..\resource\rdesktop.exe"
@@ -68,12 +65,12 @@ Section -Registry
 SectionEnd
 
 Section -Shortcut
-    CreateShortCut "$INSTDIR\Server Access.lnk" "javaw.exe" "-classpath $\"mindterm.jar;ServerAccess.jar;swt.jar;log4j-1.2.17.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
+    CreateShortCut "$INSTDIR\Server Access.lnk" "javaw.exe" "-classpath $\"ServerAccess-all.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
 SectionEnd
 
 Section "$(TEXT_DesktopShortcut)"
     SetOutPath "$INSTDIR"
-    CreateShortCut "$DESKTOP\Server Access.lnk" "javaw.exe" "-classpath $\"mindterm.jar;ServerAccess.jar;swt.jar;log4j-1.2.17.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
+    CreateShortCut "$DESKTOP\Server Access.lnk" "javaw.exe" "-classpath $\"ServerAccess-all.jar;$INSTDIR$\" ru.naumen.servacc.ui.Main" "$INSTDIR\prog.ico" 0
 SectionEnd
 
 Section "$(TEXT_EnableBasicAuthorization)"

@@ -20,7 +20,7 @@ unset CDPATH
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 SWT=`detect_swt`
-FLAGS="-Dswt.library.path=/usr/lib/jni -cp ServerAccess.jar:lib/mindterm.jar:lib/log4j-1.2.17.jar:$SWT:."
+FLAGS="-Dswt.library.path=/usr/lib/jni -cp $SWT:ServerAccess-all.jar"
 ARCH=`uname -i`
 
 if [ "$ARCH" == "x86_64" ] ;then
