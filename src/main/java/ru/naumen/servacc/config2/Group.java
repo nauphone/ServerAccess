@@ -45,7 +45,11 @@ public class Group implements IConfigItem
 
     public String toString()
     {
-        return name;
+        String result = name;
+        if (!Util.isEmptyOrNull(comment)) {
+            result += " (" + comment + ")";
+        }
+        return result;
     }
 
     public boolean matches(String filter)
