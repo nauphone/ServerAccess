@@ -9,6 +9,10 @@
  */
 package ru.naumen.servacc;
 
+import org.apache.log4j.Logger;
+import ru.naumen.servacc.backend.DualChannel;
+import ru.naumen.servacc.config2.SSHAccount;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -19,10 +23,6 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
-
-import com.mindbright.ssh2.SSH2InternalChannel;
-import org.apache.log4j.Logger;
-import ru.naumen.servacc.config2.SSHAccount;
 
 /**
  * @author Andrey Hitrin
@@ -139,7 +139,7 @@ public class HTTPProxy
                     // TODO: maybe it should be redesigned like:
                     // backend.openProxyConnection(host, port, account, socket)
                     // this will allow us break dependency on MindTerm in this class
-                    SSH2InternalChannel channel = backend.openProxyConnection(host, port, account);
+                    DualChannel channel = backend.openProxyConnection(host, port, account);
                     crossConnectStreams(channel, socket);
                 }
             }
@@ -188,7 +188,7 @@ public class HTTPProxy
             return "http".equals(protocol) || "".equals(protocol);
         }
 
-        private void crossConnectStreams(SSH2InternalChannel channel, Socket socket) throws IOException
+        private void crossConnectStreams(DualChannel channel, Socket socket) throws IOException
         {
             final OutputStream channelOutputStream = channel.getOutputStream();
             final InputStream channelInputStream = channel.getInputStream();

@@ -9,6 +9,33 @@
  */
 package ru.naumen.servacc;
 
+import com.mindbright.jca.security.KeyPair;
+import com.mindbright.jca.security.SecureRandom;
+import com.mindbright.ssh2.SSH2AuthKbdInteract;
+import com.mindbright.ssh2.SSH2AuthPassword;
+import com.mindbright.ssh2.SSH2AuthPublicKey;
+import com.mindbright.ssh2.SSH2Authenticator;
+import com.mindbright.ssh2.SSH2KeyPairFile;
+import com.mindbright.ssh2.SSH2SessionChannel;
+import com.mindbright.ssh2.SSH2Signature;
+import com.mindbright.ssh2.SSH2SimpleClient;
+import com.mindbright.ssh2.SSH2Transport;
+import com.mindbright.util.RandomSeed;
+import com.mindbright.util.SecureRandomAndPad;
+import org.apache.log4j.Logger;
+import ru.naumen.servacc.backend.DualChannel;
+import ru.naumen.servacc.backend.mindterm.MindTermChannel;
+import ru.naumen.servacc.config2.Account;
+import ru.naumen.servacc.config2.HTTPAccount;
+import ru.naumen.servacc.config2.Path;
+import ru.naumen.servacc.config2.SSHAccount;
+import ru.naumen.servacc.config2.SSHKey;
+import ru.naumen.servacc.config2.i.IConfig;
+import ru.naumen.servacc.platform.Command;
+import ru.naumen.servacc.platform.OS;
+import ru.naumen.servacc.telnet.ConsoleManager;
+import ru.naumen.servacc.util.Util;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -25,32 +52,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-
-import com.mindbright.jca.security.KeyPair;
-import com.mindbright.jca.security.SecureRandom;
-import com.mindbright.ssh2.SSH2AuthKbdInteract;
-import com.mindbright.ssh2.SSH2AuthPassword;
-import com.mindbright.ssh2.SSH2AuthPublicKey;
-import com.mindbright.ssh2.SSH2Authenticator;
-import com.mindbright.ssh2.SSH2InternalChannel;
-import com.mindbright.ssh2.SSH2KeyPairFile;
-import com.mindbright.ssh2.SSH2SessionChannel;
-import com.mindbright.ssh2.SSH2Signature;
-import com.mindbright.ssh2.SSH2SimpleClient;
-import com.mindbright.ssh2.SSH2Transport;
-import com.mindbright.util.RandomSeed;
-import com.mindbright.util.SecureRandomAndPad;
-import org.apache.log4j.Logger;
-import ru.naumen.servacc.config2.Account;
-import ru.naumen.servacc.config2.HTTPAccount;
-import ru.naumen.servacc.config2.Path;
-import ru.naumen.servacc.config2.SSHAccount;
-import ru.naumen.servacc.config2.SSHKey;
-import ru.naumen.servacc.config2.i.IConfig;
-import ru.naumen.servacc.platform.Command;
-import ru.naumen.servacc.platform.OS;
-import ru.naumen.servacc.telnet.ConsoleManager;
-import ru.naumen.servacc.util.Util;
 
 /**
  * @author tosha
@@ -144,12 +145,12 @@ public class Backend
      * @param port
      * @param account
      */
-    public synchronized SSH2InternalChannel openProxyConnection(String host, int port, SSHAccount account) throws Exception
+    public synchronized DualChannel openProxyConnection(String host, int port, SSHAccount account) throws Exception
     {
         if (account != null)
         {
             SSH2SimpleClient client = getSSH2Client(account);
-            return client.getConnection().newLocalInternalForward(host, port);
+            return new MindTermChannel(client.getConnection().newLocalInternalForward(host, port));
         }
         return null;
     }
