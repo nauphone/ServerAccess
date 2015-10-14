@@ -1,4 +1,4 @@
-SSH backend migration plan
+SSH backend migration plan #57
 ===
 
 Currently, we have following classes that depend on `mindterm` library:
@@ -7,7 +7,7 @@ Currently, we have following classes that depend on `mindterm` library:
 
 Refactoring should move along with the plan:
 
- - [ ] remove dependency from `HTTPProxy` class
+ - [x] remove dependency from `HTTPProxy` class
  - [ ] remove dependency from `Util` class
  - [ ] extract interface from `Backend` class
  - [ ] use new interface everywhere
