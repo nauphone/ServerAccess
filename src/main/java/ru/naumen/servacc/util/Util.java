@@ -32,17 +32,17 @@ public final class Util
 
     public static String base64encode(String string)
     {
-        return base64encode(string.getBytes());
+        return Base64.getEncoder().encodeToString(string.getBytes());
     }
 
     public static String base64encode(byte[] bytes)
     {
-        return new String(Base64.getEncoder().encode(bytes));
+        return Base64.getEncoder().encodeToString(bytes);
     }
 
     public static byte[] base64decode(String encryptedString)
     {
-        return base64decode(encryptedString.getBytes());
+        return Base64.getDecoder().decode(encryptedString);
     }
 
     public static byte[] base64decode(byte[] bytes)
