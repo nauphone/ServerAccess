@@ -9,6 +9,8 @@
  */
 package ru.naumen.servacc;
 
+import ru.naumen.servacc.util.Util;
+
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -19,11 +21,10 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
-
-import ru.naumen.servacc.util.Util;
 
 public class HTTPResource
 {
@@ -78,7 +79,7 @@ public class HTTPResource
         if (!Util.isEmptyOrNull(login))
         {
             String passwordToEncode = this.password != null ? this.password : "";
-            String auth = "Basic " + Util.base64encode(login + ":" + passwordToEncode);
+            String auth = "Basic " + Base64.getEncoder().encodeToString((login + ":" + passwordToEncode).getBytes());
             connection.setRequestProperty("Authorization", auth);
         }
         connection.connect();

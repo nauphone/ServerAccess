@@ -21,6 +21,7 @@ import java.security.InvalidKeyException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.KeySpec;
+import java.util.Base64;
 
 public class StringEncrypter
 {
@@ -101,7 +102,7 @@ public class StringEncrypter
             cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] cleartext = unencryptedString.getBytes(UTF8);
             byte[] ciphertext = cipher.doFinal(cleartext);
-            return Util.base64encode(ciphertext);
+            return Base64.getEncoder().encodeToString(ciphertext);
         }
         catch (Exception e)
         {
@@ -119,7 +120,7 @@ public class StringEncrypter
         {
             SecretKey key = keyFactory.generateSecret(keySpec);
             cipher.init(Cipher.DECRYPT_MODE, key);
-            byte[] cleartext = Util.base64decode(encryptedString);
+            byte[] cleartext = Base64.getDecoder().decode(encryptedString);
             byte[] ciphertext = cipher.doFinal(cleartext);
             return new String(ciphertext, UTF8);
         }

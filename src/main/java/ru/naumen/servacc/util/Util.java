@@ -9,7 +9,6 @@
  */
 package ru.naumen.servacc.util;
 
-import java.util.Base64;
 import java.util.regex.Pattern;
 
 public final class Util
@@ -28,25 +27,5 @@ public final class Util
     {
         String regexp = "(?iu).*" + Pattern.quote(filter) + ".*";
         return string.matches(regexp);
-    }
-
-    public static String base64encode(String string)
-    {
-        return Base64.getEncoder().encodeToString(string.getBytes());
-    }
-
-    public static String base64encode(byte[] bytes)
-    {
-        return Base64.getEncoder().encodeToString(bytes);
-    }
-
-    public static byte[] base64decode(String encryptedString)
-    {
-        return Base64.getDecoder().decode(encryptedString);
-    }
-
-    public static byte[] base64decode(byte[] bytes)
-    {
-        return Base64.getDecoder().decode(bytes);
     }
 }
