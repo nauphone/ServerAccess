@@ -10,7 +10,7 @@ Currently, we have following classes that depend on `mindterm` library:
 Refactoring should move along with the plan:
 
  - [x] remove dependency from `HTTPProxy` class
- - [ ] remove dependency from `Util` class
+ - [x] remove dependency from `Util` class
  - [ ] extract interface from `Backend` class
  - [ ] use new interface everywhere
  - [ ] create (empty) alternative `Backend` implementation based on `sshj` or `jsch`

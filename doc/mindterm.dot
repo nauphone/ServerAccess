@@ -8,7 +8,6 @@ HTTPProxyTest [color="green"];
 // MindTerm dependencies
 ConsoleManager -> mindterm [color="red"];
 Backend -> mindterm [color="red"];
-Util -> mindterm [color="red"];
 FTP2SFTPProxy -> mindterm [color="red"];
 SSH2PasswordInteractor -> mindterm [color="red"];
 ConnectionsManager -> mindterm [color="red"];
