@@ -9,9 +9,8 @@
  */
 package ru.naumen.servacc.util;
 
+import java.util.Base64;
 import java.util.regex.Pattern;
-
-import com.mindbright.util.Base64;
 
 public final class Util
 {
@@ -38,7 +37,7 @@ public final class Util
 
     public static String base64encode(byte[] bytes)
     {
-        return new String(Base64.encode(bytes));
+        return new String(Base64.getEncoder().encode(bytes));
     }
 
     public static byte[] base64decode(String encryptedString)
@@ -48,6 +47,6 @@ public final class Util
 
     public static byte[] base64decode(byte[] bytes)
     {
-        return Base64.decode(bytes);
+        return Base64.getDecoder().decode(bytes);
     }
 }
