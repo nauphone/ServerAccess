@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
@@ -51,6 +52,7 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
@@ -522,7 +524,7 @@ public class UIController implements GlobalThroughView
             final IConfigItem data = tic.getData();
             if (data instanceof SSHAccount)
             {
-                this.executor.execute(new Runnable()
+                Future<?> connectionFuture = this.executor.submit(new Runnable()
                 {
                     @Override
                     public void run()
@@ -541,10 +543,11 @@ public class UIController implements GlobalThroughView
                         }
                     }
                 });
+                this.executor.execute(new WaitForConnectionTask(item, (SSHAccount)data, connectionFuture));
             }
             else if (data instanceof HTTPAccount)
             {
-                this.executor.execute(new Runnable()
+            	Future<?> connectionFuture = this.executor.submit(new Runnable()
                 {
                     @Override
                     public void run()
@@ -560,6 +563,7 @@ public class UIController implements GlobalThroughView
                         }
                     }
                 });
+                this.executor.execute(new WaitForConnectionTask(item, (HTTPAccount)data, connectionFuture));
             }
             else if (data instanceof Group) {
                 boolean expandedState = tic.isExpanded();

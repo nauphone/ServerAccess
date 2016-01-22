@@ -10,15 +10,16 @@
 package ru.naumen.servacc.ui;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
-
-import org.apache.log4j.Logger;
 
 /**
  * Load any image once and store it in cache.
@@ -37,6 +38,17 @@ public final class ImageCache
     {
         // Utility class should not have public constructor
     }
+    
+    public static boolean containsImage(String name)
+    {
+    	return containsImage(name, 0);
+    }
+    
+    public static boolean containsImage(String name, int index)
+    {
+    	ImageKey key = new ImageKey(name, index);
+    	return images.containsKey(key);
+    }
 
     public static Image getImage(String name)
     {
@@ -45,24 +57,148 @@ public final class ImageCache
 
     public static Image getImage(String name, int index)
     {
-        ImageKey key = new ImageKey(name, index);
-        if (images.containsKey(key))
+        if (!containsImage(name, index))
         {
-            return images.get(key);
+        	reloadImage(name);
+        	if (!containsImage(name, index))
+            {
+        		return null;
+            }
+        }
+        
+        ImageKey key = new ImageKey(name, index);
+        return images.get(key);
+    }
+    
+    public static List<Image> getImages(String name) throws ArrayIndexOutOfBoundsException
+    {
+    	return getImages(name, 0);
+    }
+    
+    public static List<Image> getImages(String name, int indexFrom) throws ArrayIndexOutOfBoundsException
+    {
+    	return getImages(name, indexFrom, Integer.MAX_VALUE);
+    }
+    
+    public static List<Image> getImages(String name, int indexFrom, int indexTo) throws ArrayIndexOutOfBoundsException
+    {
+    	if (indexFrom < 0 || indexTo < 0)
+    	{
+    		throw new ArrayIndexOutOfBoundsException(String.format("indexFrom: %s, indexTo: %s", indexFrom, indexTo));
+    	}
+    	
+    	List<Image> result = new ArrayList<Image>();
+    	if (indexFrom > indexTo)
+    	{
+    		return result;
+    	}
+    	
+    	if (!containsImage(name))
+    	{
+    		reloadImage(name);
+    		if (!containsImage(name))
+            {
+    			return result;
+            }
+    	}
+    	
+    	for (int index = indexFrom; index < indexTo; index++)
+    	{
+    		if (!containsImage(name, index))
+    		{
+    			break;
+    		}
+    		
+    		ImageKey key = new ImageKey(name, index);
+			result.add(images.get(key));
+    	}
+    	
+    	return result;
+    }
+    
+    public int getImagePartsCount(String name)
+    {
+    	if (!containsImage(name))
+    	{
+    		reloadImage(name);
+    		if (!containsImage(name))
+            {
+    			return 0;
+            }
+    	}
+    	
+    	int result = 0;
+
+    	for (int index = 0; ; index++)
+    	{
+    		if (!containsImage(name, index))
+    		{
+    			break;
+    		}
+    		result++;
+    	}
+    	return result;
+    }
+    
+    private static void reloadImage(String name)
+    {
+    	loadImage(name, true);
+    }
+    
+    private static void loadImage(String name)
+    {
+    	loadImage(name, false);
+    }
+    
+    private static void loadImage(String name, boolean reload)
+    {
+    	ImageLoader imageLoader = new ImageLoader();
+        InputStream is = ImageCache.class.getResourceAsStream(name);
+        if (is == null)
+        {
+            LOGGER.error("Cannot load image " + name);
+            return;
+        }
+        
+        if (!reload)
+        {
+        	ImageData[] data = imageLoader.load(is);
+	        for (int index = 0; index < data.length; index++)
+	        {
+	        	ImageKey key = new ImageKey(name, index);
+	        	if (!images.containsKey(key))
+	        	{
+	        		Image image = new Image(Display.getCurrent(), data[index]);
+	        		images.put(key, image);
+	        	}
+	        }
         }
         else
         {
-            ImageLoader imageLoader = new ImageLoader();
-            InputStream is = ImageCache.class.getResourceAsStream(name);
-            if (is == null)
-            {
-                LOGGER.error("Cannot load image " + name);
-                return null;
-            }
-            ImageData[] data = imageLoader.load(is);
-            Image image = new Image(Display.getCurrent(), data[index]);
-            images.put(key, image);
-            return image;
+        	Map<ImageKey, Image> newImages = new HashMap<>();
+        	
+	        ImageData[] data = imageLoader.load(is);
+	        for (int index = 0; index < data.length; index++)
+	        {
+	        	ImageKey key = new ImageKey(name, index);
+	        	Image image = new Image(Display.getCurrent(), data[index]);
+	        	newImages.put(key, image);
+	        }
+	        
+	        for (int i = 0; ; i++)
+	        {
+	        	ImageKey eachKey = new ImageKey(name, i);
+	        	if (!images.containsKey(eachKey))
+	        	{
+	        		break;
+	        	}
+	        	images.remove(eachKey);
+	        }
+	        
+	        for (ImageKey key : newImages.keySet())
+	        {
+	        	images.put(key, newImages.get(key));
+	        }
         }
     }
 

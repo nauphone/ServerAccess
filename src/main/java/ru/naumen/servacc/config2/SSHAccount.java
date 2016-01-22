@@ -12,14 +12,15 @@ package ru.naumen.servacc.config2;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import ru.naumen.servacc.config2.i.IConnectable;
+import ru.naumen.servacc.config2.i.IConnectableConfigItem;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.util.Util;
 
-import org.apache.log4j.Logger;
-
-public class SSHAccount extends Account implements IConnectable, IPortForwarder, IFTPBrowseable
+public class SSHAccount extends Account implements IConnectable, IPortForwarder, IFTPBrowseable, IConnectableConfigItem
 {
     private static final Logger LOGGER = Logger.getLogger(SSHAccount.class);
     public static final String SSHACCOUNT_TYPE = "ssh";
@@ -120,6 +121,12 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     {
         return "/icons/application-terminal.png";
     }
+    
+    @Override
+	public String getConnectionProcessIconName()
+	{
+		return "/icons/connect.gif";
+	}
 
     public boolean needSudoLogin()
     {
