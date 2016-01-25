@@ -41,13 +41,13 @@ public final class ImageCache
     
     public static boolean containsImage(String name)
     {
-    	return containsImage(name, 0);
+        return containsImage(name, 0);
     }
     
     public static boolean containsImage(String name, int index)
     {
-    	ImageKey key = new ImageKey(name, index);
-    	return images.containsKey(key);
+        ImageKey key = new ImageKey(name, index);
+        return images.containsKey(key);
     }
 
     public static Image getImage(String name)
@@ -59,10 +59,10 @@ public final class ImageCache
     {
         if (!containsImage(name, index))
         {
-        	reloadImage(name);
-        	if (!containsImage(name, index))
+            reloadImage(name);
+            if (!containsImage(name, index))
             {
-        		return null;
+                return null;
             }
         }
         
@@ -72,85 +72,32 @@ public final class ImageCache
     
     public static List<Image> getImages(String name) throws ArrayIndexOutOfBoundsException
     {
-    	return getImages(name, 0);
-    }
-    
-    public static List<Image> getImages(String name, int indexFrom) throws ArrayIndexOutOfBoundsException
-    {
-    	return getImages(name, indexFrom, Integer.MAX_VALUE);
-    }
-    
-    public static List<Image> getImages(String name, int indexFrom, int indexTo) throws ArrayIndexOutOfBoundsException
-    {
-    	if (indexFrom < 0 || indexTo < 0)
-    	{
-    		throw new ArrayIndexOutOfBoundsException(String.format("indexFrom: %s, indexTo: %s", indexFrom, indexTo));
-    	}
-    	
-    	List<Image> result = new ArrayList<Image>();
-    	if (indexFrom > indexTo)
-    	{
-    		return result;
-    	}
-    	
-    	if (!containsImage(name))
-    	{
-    		reloadImage(name);
-    		if (!containsImage(name))
+        List<Image> result = new ArrayList<Image>();
+        
+        if (!containsImage(name))
+        {
+            reloadImage(name);
+            if (!containsImage(name))
             {
-    			return result;
+                return result;
             }
     	}
-    	
-    	for (int index = indexFrom; index < indexTo; index++)
-    	{
-    		if (!containsImage(name, index))
-    		{
-    			break;
-    		}
-    		
-    		ImageKey key = new ImageKey(name, index);
-			result.add(images.get(key));
-    	}
-    	
-    	return result;
-    }
-    
-    public int getImagePartsCount(String name)
-    {
-    	if (!containsImage(name))
-    	{
-    		reloadImage(name);
-    		if (!containsImage(name))
+        
+        for (int index = 0; index < Integer.MAX_VALUE; index++)
+        {
+            if (!containsImage(name, index))
             {
-    			return 0;
+                break;
             }
-    	}
-    	
-    	int result = 0;
-
-    	for (int index = 0; ; index++)
-    	{
-    		if (!containsImage(name, index))
-    		{
-    			break;
-    		}
-    		result++;
-    	}
-    	return result;
+            
+            ImageKey key = new ImageKey(name, index);
+            result.add(images.get(key));
+        }
+        
+        return result;
     }
     
     private static void reloadImage(String name)
-    {
-    	loadImage(name, true);
-    }
-    
-    private static void loadImage(String name)
-    {
-    	loadImage(name, false);
-    }
-    
-    private static void loadImage(String name, boolean reload)
     {
     	ImageLoader imageLoader = new ImageLoader();
         InputStream is = ImageCache.class.getResourceAsStream(name);
@@ -160,45 +107,29 @@ public final class ImageCache
             return;
         }
         
-        if (!reload)
+        Map<ImageKey, Image> newImages = new HashMap<>();
+        
+        ImageData[] data = imageLoader.load(is);
+        for (int index = 0; index < data.length; index++)
         {
-        	ImageData[] data = imageLoader.load(is);
-	        for (int index = 0; index < data.length; index++)
-	        {
-	        	ImageKey key = new ImageKey(name, index);
-	        	if (!images.containsKey(key))
-	        	{
-	        		Image image = new Image(Display.getCurrent(), data[index]);
-	        		images.put(key, image);
-	        	}
-	        }
+            ImageKey key = new ImageKey(name, index);
+            Image image = new Image(Display.getCurrent(), data[index]);
+            newImages.put(key, image);
         }
-        else
+        
+        for (int i = 0; ; i++)
         {
-        	Map<ImageKey, Image> newImages = new HashMap<>();
-        	
-	        ImageData[] data = imageLoader.load(is);
-	        for (int index = 0; index < data.length; index++)
-	        {
-	        	ImageKey key = new ImageKey(name, index);
-	        	Image image = new Image(Display.getCurrent(), data[index]);
-	        	newImages.put(key, image);
-	        }
-	        
-	        for (int i = 0; ; i++)
-	        {
-	        	ImageKey eachKey = new ImageKey(name, i);
-	        	if (!images.containsKey(eachKey))
-	        	{
-	        		break;
-	        	}
-	        	images.remove(eachKey);
-	        }
-	        
-	        for (ImageKey key : newImages.keySet())
-	        {
-	        	images.put(key, newImages.get(key));
-	        }
+            ImageKey eachKey = new ImageKey(name, i);
+            if (!images.containsKey(eachKey))
+            {
+                break;
+            }
+            images.remove(eachKey);
+        }
+        
+        for (ImageKey key : newImages.keySet())
+        {
+            images.put(key, newImages.get(key));
         }
     }
 

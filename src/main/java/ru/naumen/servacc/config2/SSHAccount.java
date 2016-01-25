@@ -121,12 +121,6 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     {
         return "/icons/application-terminal.png";
     }
-    
-    @Override
-	public String getConnectionProcessIconName()
-	{
-		return "/icons/connect.gif";
-	}
 
     public boolean needSudoLogin()
     {

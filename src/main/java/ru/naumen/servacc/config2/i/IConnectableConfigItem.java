@@ -9,5 +9,8 @@ package ru.naumen.servacc.config2.i;
  */
 public interface IConnectableConfigItem extends IConnectable, IConfigItem
 {
-	String getConnectionProcessIconName();
+    default String getConnectionProcessIconName()
+    {
+        return "/icons/connect.gif";
+    }
 }

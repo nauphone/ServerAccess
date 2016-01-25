@@ -61,10 +61,4 @@ public class HTTPAccount extends Account implements IConnectable, IConnectableCo
     {
         return "/icons/application-browser.png";
     }
-
-	@Override
-	public String getConnectionProcessIconName()
-	{
-		return "/icons/connect.gif";
-	}
 }
