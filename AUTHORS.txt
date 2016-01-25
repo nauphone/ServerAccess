@@ -1,4 +1,5 @@
 Aleksandr Likulin <alikulin@naumen.ru>
+Andrey Arkaev <arkaevag@gmail.com>
 Andrey Hitrin <andrey.hitrin@gmail.com>
 Andrey Pinaev <apinaev@naumen.ru>
 Anton Patrushev <apatrushev@gmail.com>
@@ -6,3 +7,4 @@ Ilya Shabalin <ilja.shabalin@gmail.com>
 Nikita Vetoshkin <nvetoshkin@naumen.ru>
 Sergey Panov <spanov@naumen.ru>
 Vasiliy Kuznetsov <kvas@naumen.ru>
+Vladimir Tarasov <vtarasov@naumen.ru>
