@@ -1,7 +1,7 @@
 SSH backend migration plan
 ===
 
-Corresponding issue: [#57](https://github.com/apatrushev/ServerAccess/issues/57)
+Corresponding issue: [#57](https://github.com/nauphone/ServerAccess/issues/57)
 
 Currently, we have following classes that depend on `mindterm` library:
 

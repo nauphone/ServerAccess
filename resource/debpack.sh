@@ -66,7 +66,7 @@ Provides: $NAME
 Maintainer: Grigori Frolov <gfrolov@naumen.ru>
 Architecture: all
 Section: net
-Source: https://github.com/apatrushev/ServerAccess
+Source: https://github.com/nauphone/ServerAccess
 Description: An SSH,FTP and HTTP client.
  A tool for getting servers info from db and connecting to selected servers by ssh
  or others tools (uses ssh port mapping to local ports)

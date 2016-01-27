@@ -44,7 +44,7 @@ public class DefaultPropertiesFile implements DefaultFile
         outputStream.println("#ftp=open  ftp://anonymous@{host}:{port}");
         outputStream.println();
         outputStream.println("# Use 'terminal' variable to set custom terminal launcher.");
-        outputStream.println("# Seek for more documentation on http://github.com/apatrushev/ServerAccess");
+        outputStream.println("# Seek for more documentation on http://github.com/nauphone/ServerAccess");
         outputStream.println("#terminal=xterm  {options}  -e  telnet {host} {port}");
         outputStream.println("#terminal=putty  {options}  -telnet  {host}  -P  {port}");
         outputStream.println("#terminal=open  telnet://{host}:{port}");
