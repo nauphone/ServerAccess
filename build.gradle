@@ -43,6 +43,49 @@ jar {
     }
 }
 
+import com.github.jengelman.gradle.plugins.shadow.internal.DefaultDependencyFilter
+
+class WinDependencyFilter extends DefaultDependencyFilter {
+    private FileCollection exclude
+    private FileCollection include
+    
+    WinDependencyFilter(Project project, FileCollection exclude, FileCollection include) {
+        super(project)
+        this.exclude = exclude
+        this.include = include
+    }
+    
+    FileCollection resolve(Configuration configuration) {
+        FileCollection fc = super.resolve(configuration)
+        return (fc - this.exclude) + this.include
+    }
+}
+
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+task shadowJarWin64(type: ShadowJar) {
+    configureShadowJarWin(shadowJarWin64, 'win64')
+}
+
+task shadowJarWin32(type: ShadowJar) {
+    configureShadowJarWin(shadowJarWin32, 'win32')
+}
+
+def configureShadowJarWin(ShadowJar shadowJarWin, String platform) {
+    shadowJarWin.description = shadowJar.description + ' for ' + platform + ' platform'
+    shadowJarWin.conventionMapping.with {
+        map('classifier') {
+            'all'
+        }
+    }
+    shadowJarWin.destinationDir = file(shadowJar.destinationDir.getPath() + '/' + platform)
+    shadowJarWin.manifest.from shadowJar.manifest
+    shadowJarWin.from sourceSets.main.output
+    shadowJarWin.configurations = [project.configurations.runtime.copyRecursive()]
+    shadowJarWin.exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+    shadowJarWin.dependencyFilter = new WinDependencyFilter(getProject(), files('lib/swt.jar'), platform == 'win64' ? files('lib/win_64/swt.jar') : files('lib/win_32/swt.jar'))
+}
+
 sonarRunner {
     sonarProperties {
         property "sonar.jdbc.url", "jdbc:postgresql://localhost:5432/sonar"
@@ -51,11 +94,7 @@ sonarRunner {
     }
 }
 
-task prepareRelease {dependsOn build, shadowJar} << {
-    copy {
-        from configurations.runtime
-        into 'build/libs/lib'
-    }
+task prepareRelease {dependsOn build, shadowJarWin64, shadowJarWin32} << {
     copy {
         from 'resource/server-access'
         from 'resource/log4j.properties'
