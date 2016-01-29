@@ -9,7 +9,7 @@ import static ru.naumen.servacc.test.config2.ConfigStub.httpAccount;
 
 import org.junit.Before;
 import org.junit.Test;
-import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.MindtermBackend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.platform.OS;
@@ -19,11 +19,11 @@ import ru.naumen.servacc.test.config2.SSHAccountStub;
  * @author Andrey Hitrin
  * @since 10.01.13
  */
-public class BackendTest
+public class MindtermBackendTest
 {
     private GlobalThroughViewStub view = new GlobalThroughViewStub();
 
-    private Backend backend = new Backend(new OS(), null);
+    private MindtermBackend backend = new MindtermBackend(new OS(), null);
 
     @Before
     public void setGlobalThroughView()

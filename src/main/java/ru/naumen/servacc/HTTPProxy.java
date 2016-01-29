@@ -31,7 +31,7 @@ import java.util.concurrent.Future;
 public class HTTPProxy
 {
     private static final Logger LOG = Logger.getLogger(HTTPProxy.class);
-    private final Backend backend;
+    private final MindtermBackend backend;
     private final ExecutorService executor;
 
     private int port;
@@ -39,7 +39,7 @@ public class HTTPProxy
     private Future<?> serverTask;
     private MessageListener listener;
 
-    public HTTPProxy(Backend backend, ExecutorService executor)
+    public HTTPProxy(MindtermBackend backend, ExecutorService executor)
     {
         this.backend = backend;
         this.executor = executor;

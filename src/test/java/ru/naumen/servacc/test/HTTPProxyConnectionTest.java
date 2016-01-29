@@ -33,7 +33,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
-import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.MindtermBackend;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
 import ru.naumen.servacc.config2.Account;
@@ -55,7 +55,7 @@ public class HTTPProxyConnectionTest
     private final HttpHost proxyForHttpClient = new HttpHost("127.0.0.1", PORT);
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final SSHAccount account = new SSHAccount();
-    private final Backend backend = new Backend(new OS(), executorService);
+    private final MindtermBackend backend = new MindtermBackend(new OS(), executorService);
     private final MessageListener messageListener = new MessageListener()
     {
         @Override

@@ -56,10 +56,10 @@ import java.util.concurrent.TimeoutException;
 /**
  * @author tosha
  */
-public class Backend
+public class MindtermBackend
 {
     private static final int SSH_DEFAULT_PORT = 22;
-    private static final Logger LOGGER = Logger.getLogger(Backend.class);
+    private static final Logger LOGGER = Logger.getLogger(MindtermBackend.class);
     private static RandomSeed seed;
     private static SecureRandomAndPad secureRandom;
     private final Command browser;
@@ -71,7 +71,7 @@ public class Backend
     private SSHAccount globalThrough;
     private GlobalThroughView globalThroughView;
 
-    public Backend(OS system, ExecutorService executorService)
+    public MindtermBackend(OS system, ExecutorService executorService)
     {
         this.browser = system.getBrowser();
         this.ftpBrowser = system.getFTPBrowser();
@@ -412,7 +412,7 @@ public class Backend
 
     private SSH2SimpleClient createSSH2Client(String host, Integer port, final SSHAccount account) throws Exception
     {
-        SecureRandomAndPad secureRandomAndPad = Backend.nextSecure();
+        SecureRandomAndPad secureRandomAndPad = MindtermBackend.nextSecure();
         Socket sock = new Socket();
         sock.connect(new InetSocketAddress(host, port), SocketUtils.COLD_TIMEOUT);
         SSH2Transport transport = new SSH2Transport(sock, secureRandomAndPad)

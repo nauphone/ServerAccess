@@ -19,7 +19,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.MindtermBackend;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.settings.ApplicationProperties;
@@ -45,7 +45,7 @@ public class Main implements Runnable
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
-        Backend backend = new Backend(system, executor);
+        MindtermBackend backend = new MindtermBackend(system, executor);
         HTTPProxy httpProxy = new HTTPProxy(backend, executor);
         UIController controller = new UIController(shell, system.getGUIOptions(), backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"));
