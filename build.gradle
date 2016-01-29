@@ -107,8 +107,8 @@ task win32 {dependsOn prepareRelease, shadowJar32} << {
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
-        standardOutput = new FileOutputStream('build/nsis.out')
-        errorOutput = new FileOutputStream('build/nsis.err')
+        standardOutput = new FileOutputStream('build/nsis32.out')
+        errorOutput = new FileOutputStream('build/nsis32.err')
     }
 }
 
@@ -116,8 +116,8 @@ task win64 {dependsOn prepareRelease, shadowJar64} << {
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
-        standardOutput = new FileOutputStream('build/nsis.out')
-        errorOutput = new FileOutputStream('build/nsis.err')
+        standardOutput = new FileOutputStream('build/nsis64.out')
+        errorOutput = new FileOutputStream('build/nsis64.err')
     }
 }
 
