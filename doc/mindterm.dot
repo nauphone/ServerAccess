@@ -1,46 +1,46 @@
 digraph g {
 
 // Test classes
-BackendTest [color="green"];
+MindtermBackendTest [color="green"];
 HTTPProxyConnectionTest [color="green"];
 HTTPProxyTest [color="green"];
 
 // MindTerm dependencies
-ConsoleManager -> mindterm [color="red"];
-Backend -> mindterm [color="red"];
-FTP2SFTPProxy -> mindterm [color="red"];
-SSH2PasswordInteractor -> mindterm [color="red"];
-ConnectionsManager -> mindterm [color="red"];
+mindterm [color="red"];
+ConsoleManager -> mindterm;
+MindtermBackend -> mindterm;
+FTP2SFTPProxy -> mindterm;
+SSH2PasswordInteractor -> mindterm;
+ConnectionsManager -> mindterm;
 
 // New interfaces & dependencies
 DualChannel [color="blue"];
+Backend [color="blue"];
+Backend -> DualChannel;
 MindTermChannel;
 
 MindTermChannel -> DualChannel;
 MindTermChannel -> mindterm;
-Backend -> MindTermChannel [color="red"];
+MindtermBackend -> MindTermChannel;
 HTTPProxy -> DualChannel;
 
 // Class cross-dependencies
 
-Backend -> ConsoleManager;
+MindtermBackend -> ConsoleManager;
 
 HTTPProxy -> Backend;
 Main -> Backend;
+Main -> MindtermBackend [color="red"];
 UIController -> Backend;
-BackendTest -> Backend;
-HTTPProxyConnectionTest -> Backend;
-
-Backend -> Util;
-HTTPResource -> Util;
-StringEncrypter -> Util;
+MindtermBackendTest -> MindtermBackend;
+HTTPProxyConnectionTest -> MindtermBackend [color="red"];
 
 Main -> HTTPProxy;
 UIController -> HTTPProxy;
 HTTPProxyConnectionTest -> HTTPProxy;
 HTTPProxyTest -> HTTPProxy;
 
-Backend -> FTP2SFTPProxy;
-Backend -> SSH2PasswordInteractor;
-Backend -> ConnectionsManager;
+MindtermBackend -> FTP2SFTPProxy;
+MindtermBackend -> SSH2PasswordInteractor;
+MindtermBackend -> ConnectionsManager;
 }

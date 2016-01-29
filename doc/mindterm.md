@@ -18,8 +18,8 @@ Stage 1: isolate dependency upon MindTerm inside Backend class solely
 Stage 2: implement Backend feature toggle
 ---
 
- - [ ] extract interface from `Backend` class
- - [ ] use new interface everywhere
+ - [x] extract interface from `Backend` class
+ - [x] use new interface everywhere
  - [ ] create (empty) alternative `Backend` implementation based on `sshj` or `jsch`
  - [ ] impement (temporarily) config option that allows to choose alternative `Backend` implementation
 
