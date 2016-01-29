@@ -56,8 +56,7 @@ import java.util.concurrent.TimeoutException;
 /**
  * @author tosha
  */
-public class MindtermBackend
-{
+public class MindtermBackend implements Backend {
     private static final int SSH_DEFAULT_PORT = 22;
     private static final Logger LOGGER = Logger.getLogger(MindtermBackend.class);
     private static RandomSeed seed;
@@ -81,6 +80,7 @@ public class MindtermBackend
         connections = new ConnectionsManager();
     }
 
+    @Override
     public void openSSHAccount(final SSHAccount account, final String path) throws Exception
     {
         SSH2SimpleClient client;
@@ -115,17 +115,20 @@ public class MindtermBackend
         openSSHAccount(account, client, path);
     }
 
+    @Override
     public void openHTTPAccount(HTTPAccount account) throws Exception
     {
         browser.open(buildUrl(account));
     }
 
+    @Override
     public void localPortForward(SSHAccount account, String localHost, int localPort, String remoteHost, int remotePort) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
         client.getConnection().newLocalForward(localHost, localPort, remoteHost, remotePort);
     }
 
+    @Override
     public void browseViaFTP(SSHAccount account) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
@@ -145,6 +148,7 @@ public class MindtermBackend
      * @param port
      * @param account
      */
+    @Override
     public synchronized DualChannel openProxyConnection(String host, int port, SSHAccount account) throws Exception
     {
         if (account != null)
@@ -155,6 +159,7 @@ public class MindtermBackend
         return null;
     }
 
+    @Override
     public SSHAccount getThrough(Account account)
     {
         SSHAccount throughAccount = null;
@@ -170,22 +175,26 @@ public class MindtermBackend
         return throughAccount;
     }
 
+    @Override
     public void cleanup()
     {
         connections.cleanup();
     }
 
+    @Override
     public void setGlobalThrough(SSHAccount account)
     {
         globalThrough = account;
         connections.clearCache();
     }
 
+    @Override
     public void setGlobalThroughView(GlobalThroughView view)
     {
         globalThroughView = view;
     }
 
+    @Override
     public void selectNewGlobalThrough(String uniqueIdentity, IConfig config)
     {
         Path path = Path.find(config, uniqueIdentity);
@@ -200,6 +209,7 @@ public class MindtermBackend
         }
     }
 
+    @Override
     public void refresh(IConfig newConfig)
     {
         String identity = "";
@@ -210,6 +220,7 @@ public class MindtermBackend
         selectNewGlobalThrough(identity, newConfig);
     }
 
+    @Override
     public void clearGlobalThrough()
     {
         globalThroughView.clearGlobalThroughWidget();

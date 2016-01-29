@@ -52,10 +52,10 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
-import ru.naumen.servacc.MindtermBackend;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
@@ -79,7 +79,7 @@ public class UIController implements GlobalThroughView
     private final MessageListener asynchronousAlert;
 
     private Clipboard clipboard;
-    private MindtermBackend backend;
+    private Backend backend;
     private ExecutorService executor;
     private HTTPProxy httpProxy;
     private ConfigLoader configLoader;
@@ -100,7 +100,7 @@ public class UIController implements GlobalThroughView
 
     private Timer refreshTimer;
 
-    public UIController(Shell shell, GUIOptions guiOptions, MindtermBackend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider)
+    public UIController(Shell shell, GUIOptions guiOptions, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider)
     {
         this.shell = shell;
         this.clipboard = new Clipboard(shell.getDisplay());
