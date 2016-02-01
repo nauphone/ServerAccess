@@ -1,5 +1,5 @@
-How to release the new version
-==============================
+How to release a new version
+============================
 
 1. Make sure all issues for the current milestone are closed.
 
@@ -17,7 +17,7 @@ A list of changes in the current version will be extracted from git history and 
 
 5. Create annotated tag on this commit:
 
-    ``git tag -a serveraccess-<new_version_number> -m 'Release <new_version_number>``
+    ``git tag -a serveraccess-<new_version_number> -m 'Release <new_version_number>'``
 
 6. Push all changes. Don't forget to push the tag also!
 
