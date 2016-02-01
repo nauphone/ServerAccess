@@ -1,3 +1,29 @@
+New in 0.11:
+-------
+
+New features/changes:
+
+ * Repo ownership has been changed: apatrushev/ServerAccess → nauphone/ServerAccess
+ * Move to Java 8 #52
+ * Notification on connection attempt #13
+ * Show comments for groups
+ * Use shadow plugin to pack libs #55
+ * Change search keys to CTRL-F
+
+Bug fixes:
+
+ * Fix broken build for Windows 64-bit
+ * Fix MacOS X app launcher #55
+ * Fix new config creation on MacOS X #59
+ * Docs fix: use gradle wrapper everywhere
+
+Code cleanup and refactoring:
+
+ * Extract Backend interface (make it possible to implement new backends on different Java SSH libraries) #57
+ * Update gradle version to 2.5
+ * Use default version "devel" when git could not be found
+
+
 New in 0.10.1:
 -------
 
