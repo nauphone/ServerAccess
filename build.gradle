@@ -43,6 +43,50 @@ jar {
     }
 }
 
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import com.github.jengelman.gradle.plugins.shadow.internal.DefaultDependencyFilter
+
+class ArchDependencyFilter extends DefaultDependencyFilter {
+    private FileCollection exclude
+    private FileCollection include
+    
+    ArchDependencyFilter(Project project, FileCollection exclude, FileCollection include) {
+        super(project)
+        this.exclude = exclude
+        this.include = include
+    }
+    
+    FileCollection resolve(Configuration configuration) {
+        FileCollection fc = super.resolve(configuration)
+        return (fc - this.exclude) + this.include
+    }
+}
+
+task shadowJar64(type: ShadowJar) {
+    configureShadowJarArch(shadowJar64, '64')
+}
+
+task shadowJar32(type: ShadowJar) {
+    configureShadowJarArch(shadowJar32, '32')
+}
+
+def configureShadowJarArch(ShadowJar shadowJarArch, String arch) {
+    shadowJarArch.with {
+        description = "${shadowJar.description} for ${arch} platform"
+        conventionMapping.with {
+            map('classifier') {
+                'all'
+            }
+        }
+        destinationDir = file(shadowJar.destinationDir.getPath() + "/${arch}")
+        manifest.from shadowJar.manifest
+        from sourceSets.main.output
+        configurations = [project.configurations.runtime.copyRecursive()]
+        exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
+        dependencyFilter = new ArchDependencyFilter(getProject(), files('lib/swt.jar'), files("lib/win_${arch}/swt.jar"))
+    }
+}
+
 sonarRunner {
     sonarProperties {
         property "sonar.jdbc.url", "jdbc:postgresql://localhost:5432/sonar"
@@ -51,11 +95,7 @@ sonarRunner {
     }
 }
 
-task prepareRelease {dependsOn build, shadowJar} << {
-    copy {
-        from configurations.runtime
-        into 'build/libs/lib'
-    }
+task prepareRelease {dependsOn build, shadowJar64} << {
     copy {
         from 'resource/server-access'
         from 'resource/log4j.properties'
@@ -63,7 +103,7 @@ task prepareRelease {dependsOn build, shadowJar} << {
     }
 }
 
-task win32(dependsOn: prepareRelease) << {
+task win32 {dependsOn prepareRelease, shadowJar32} << {
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
@@ -72,7 +112,7 @@ task win32(dependsOn: prepareRelease) << {
     }
 }
 
-task win64(dependsOn: prepareRelease) << {
+task win64 {dependsOn prepareRelease, shadowJar64} << {
     exec {
         workingDir 'nsis'
         commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
@@ -81,7 +121,7 @@ task win64(dependsOn: prepareRelease) << {
     }
 }
 
-task macosx {dependsOn build, shadowJar} << {
+task macosx {dependsOn build, shadowJar64} << {
     copy {
         from zipTree('resource/ServerAccess.app.tmpl.zip')
         into 'build/libs'
@@ -92,7 +132,7 @@ task macosx {dependsOn build, shadowJar} << {
     }
     copy {
         from 'resource/log4j.properties'
-        from 'build/libs/ServerAccess-all.jar'
+        from 'build/libs/64/ServerAccess-all.jar'
         from 'resource/scripts/serveraccess'
         into 'build/libs/ServerAccess.app/Contents/MacOS'
     }
