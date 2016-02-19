@@ -9,6 +9,24 @@
  */
 package ru.naumen.servacc;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
+
+import org.apache.log4j.Logger;
+
 import com.mindbright.jca.security.KeyPair;
 import com.mindbright.jca.security.SecureRandom;
 import com.mindbright.ssh2.SSH2AuthKbdInteract;
@@ -22,7 +40,15 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
-import org.apache.log4j.Logger;
+
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
+import ru.naumen.servacc.activechannel.SSHActiveChannel;
+import ru.naumen.servacc.activechannel.SSHLocalForwardActiveChannel;
+import ru.naumen.servacc.activechannel.i.IActiveChannel;
+import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
+import ru.naumen.servacc.activechannel.sockets.FTPSocketWrapper;
+import ru.naumen.servacc.activechannel.sockets.TerminalSocketWrapper;
+import ru.naumen.servacc.activechannel.visitors.CloseActiveChannelVisitor;
 import ru.naumen.servacc.backend.DualChannel;
 import ru.naumen.servacc.backend.mindterm.MindTermChannel;
 import ru.naumen.servacc.config2.Account;
@@ -35,23 +61,6 @@ import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * @author tosha
@@ -106,6 +115,7 @@ public class MindtermBackend implements Backend {
             }
             catch (TimeoutException e)
             {
+                removeSSHActiveChannel(account);
                 removeConnection(account);
                 LOGGER.error("Connection is broken, retrying", e);
             }
@@ -126,13 +136,14 @@ public class MindtermBackend implements Backend {
     {
         SSH2SimpleClient client = getSSH2Client(account);
         client.getConnection().newLocalForward(localHost, localPort, remoteHost, remotePort);
+        createSSHLocalForwardActiveChannel(account, localPort);
     }
 
     @Override
     public void browseViaFTP(SSHAccount account) throws Exception
     {
         SSH2SimpleClient client = getSSH2Client(account);
-        Socket socket = openFTPBrowser();
+        Socket socket = openFTPBrowser(account);
         new FTP2SFTPProxy(
             client.getConnection(),
             socket.getInputStream(),
@@ -186,6 +197,7 @@ public class MindtermBackend implements Backend {
     {
         globalThrough = account;
         connections.clearCache();
+        ActiveChannelsRegistry.getInstance().hideAllChannels();
     }
 
     @Override
@@ -248,6 +260,7 @@ public class MindtermBackend implements Backend {
             if (!session.requestPTY("xterm", 24, 80, new byte[] {12, 0, 0, 0, 0, 0}))
             {
                 client.getTransport().normalDisconnect("bye bye");
+                removeSSHActiveChannel(account);
                 removeConnection(account);
                 throw new IOException("Failed to get PTY on remote side");
             }
@@ -273,12 +286,12 @@ public class MindtermBackend implements Backend {
 
     private Socket openTerminal(SSHAccount account, String path) throws IOException
     {
-        try (ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST))
+        try (TerminalSocketWrapper server = new TerminalSocketWrapper(SocketUtils.createListener(SocketUtils.LOCALHOST), account))
         {
             Map<String, String> params = new HashMap<>(account.getParams());
             params.put("name", path);
-            server.setSoTimeout(SocketUtils.WARM_TIMEOUT);
-            terminal.connect(server.getLocalPort(), params);
+            server.getServerSocket().setSoTimeout(SocketUtils.WARM_TIMEOUT);
+            terminal.connect(server.getServerSocket().getLocalPort(), params);
             // FIXME: collect children and kill it on (on?)
             return server.accept();
         }
@@ -335,12 +348,12 @@ public class MindtermBackend implements Backend {
         return targetURL.toString();
     }
 
-    private Socket openFTPBrowser() throws IOException
+    private Socket openFTPBrowser(SSHAccount account) throws IOException
     {
-        try (ServerSocket server = SocketUtils.createListener(SocketUtils.LOCALHOST))
+        try (FTPSocketWrapper server = new FTPSocketWrapper(SocketUtils.createListener(SocketUtils.LOCALHOST), account))
         {
-            server.setSoTimeout(SocketUtils.COLD_TIMEOUT);
-            ftpBrowser.connect(server.getLocalPort(), Collections.<String, String>emptyMap());
+            server.getServerSocket().setSoTimeout(SocketUtils.COLD_TIMEOUT);
+            ftpBrowser.connect(server.getServerSocket().getLocalPort(), Collections.<String, String>emptyMap());
             return server.accept();
         }
     }
@@ -415,13 +428,14 @@ public class MindtermBackend implements Backend {
             int localPort = SocketUtils.getFreePort();
             //FIXME: localize newLocalForward usage in localPortForward
             through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port);
-            host = SocketUtils.LOCALHOST;
-            port = localPort;
+            //host = SocketUtils.LOCALHOST;
+            //port = localPort;
+            return createSSH2Client(SocketUtils.LOCALHOST, localPort, true, account);
         }
-        return createSSH2Client(host, port, account);
+        return createSSH2Client(host, port, false, account);
     }
 
-    private SSH2SimpleClient createSSH2Client(String host, Integer port, final SSHAccount account) throws Exception
+    private SSH2SimpleClient createSSH2Client(String host, Integer port, boolean through, final SSHAccount account) throws Exception
     {
         SecureRandomAndPad secureRandomAndPad = MindtermBackend.nextSecure();
         Socket sock = new Socket();
@@ -432,6 +446,7 @@ public class MindtermBackend implements Backend {
             protected void disconnectInternal(int i, String s, String s1, boolean b)
             {
                 super.disconnectInternal(i, s, s1, b);
+                removeSSHActiveChannel(account);
                 removeConnection(account);
             }
         };
@@ -454,6 +469,7 @@ public class MindtermBackend implements Backend {
             auth.addModule(new SSH2AuthPublicKey(rsaKey));
         }
         auth.addModule(new SSH2AuthKbdInteract(new SSH2PasswordInteractor(account.getPassword())));
+        createSSHActiveChannel(account, sock.getLocalPort(), through ? port : -1);
         return new SSH2SimpleClient(transport, auth);
     }
 
@@ -475,5 +491,40 @@ public class MindtermBackend implements Backend {
     private void removeConnection(SSHAccount account)
     {
         connections.remove(account.getUniqueIdentity());
+    }
+    
+    private void createSSHActiveChannel(SSHAccount account, int port, int portThrough)
+    {
+        String[] path = account.getUniquePathReversed();
+        String[] parentPath = new String[path.length - 1];
+        
+        if (parentPath.length > 0)
+        {
+            System.arraycopy(path, 0, parentPath, 0, parentPath.length);
+        }
+        
+        IActiveChannelThrough parent = ActiveChannelsRegistry.getInstance().findChannelThrough(parentPath);
+        
+        new SSHActiveChannel(parent, account, port, portThrough, connections).save();
+    }
+    
+    private void removeSSHActiveChannel(SSHAccount account)
+    {
+        IActiveChannel channel = ActiveChannelsRegistry.getInstance().findChannel(account.getUniquePathReversed());
+        
+        if (channel != null)
+        {
+            channel.accept(new CloseActiveChannelVisitor());
+        }
+    }
+    
+    private void createSSHLocalForwardActiveChannel(SSHAccount account, int port)
+    {
+        IActiveChannel channel = ActiveChannelsRegistry.getInstance().findChannel(account.getUniquePathReversed());
+        
+        if (channel instanceof SSHActiveChannel)
+        {
+            new SSHLocalForwardActiveChannel((SSHActiveChannel)channel, port).save();
+        }
     }
 }

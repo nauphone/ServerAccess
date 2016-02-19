@@ -10,6 +10,8 @@
 package ru.naumen.servacc.config2;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -30,6 +32,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     private String host;
     private Integer port;
     private String uniqueIdentity = null;
+    private String[] uniquePath = null;
 
     private void parseHostAndPort()
     {
@@ -86,6 +89,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
         return result;
     }
 
+    // TODO: Refactor to use getUniquePath() in the method body
     public String getUniqueIdentity()
     {
         if (uniqueIdentity == null)
@@ -109,8 +113,43 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
         }
         return uniqueIdentity;
     }
+    
+    public String[] getUniquePath()
+    {
+        if (uniquePath == null)
+        {
+            List<String> path = new ArrayList<String>();
+            
+            path.add(getSignature());
+            // follow 'through' links
+            SSHAccount cur = this;
+            List<String> ids = new ArrayList<>();
+            while (cur.getThrough() instanceof SSHAccount)
+            {
+                cur = (SSHAccount) cur.getThrough();
+                if (ids.contains(cur.getId()))
+                {
+                    // circular reference detected
+                    LOGGER.error("Circular reference detected: " + uniqueIdentity);
+                    break;
+                }
+                ids.add(cur.getId());
+                path.add(cur.getSignature());
+            }
+            
+            uniquePath = path.toArray(new String[path.size()]);
+        }
+        return uniquePath;
+    }
+    
+    public String[] getUniquePathReversed()
+    {
+        List<String> path = new ArrayList<String>(Arrays.asList(getUniquePath()));
+        Collections.reverse(path);
+        return path.toArray(new String[path.size()]);
+    }
 
-    private String getSignature()
+    public String getSignature()
     {
         String address = getParams().get(ACCOUNT_PARAM_ADDRESS);
         return "ssh://" + getLogin() + "@" + address;

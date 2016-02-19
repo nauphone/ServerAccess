@@ -19,9 +19,11 @@ import java.util.Map;
 import java.util.Scanner;
 
 import org.eclipse.swt.widgets.Shell;
+
 import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.HTTPResource;
 import ru.naumen.servacc.MessageListener;
+import ru.naumen.servacc.config2.ActiveChannelsConfig;
 import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
 import ru.naumen.servacc.config2.i.IConfig;
@@ -64,6 +66,9 @@ public class ConfigLoader
                 listener.notify(e.getLocalizedMessage());
             }
         }
+        
+        compositeConfig.add(new ActiveChannelsConfig());
+        
         return compositeConfig;
     }
 

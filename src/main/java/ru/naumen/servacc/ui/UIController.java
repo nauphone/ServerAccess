@@ -52,10 +52,15 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
+import ru.naumen.servacc.activechannel.i.ActiveChannelsObserver;
+import ru.naumen.servacc.activechannel.i.IActiveChannel;
+import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.HTTPAccount;
@@ -71,7 +76,7 @@ import ru.naumen.servacc.platform.GUIOptions;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.Util;
 
-public class UIController implements GlobalThroughView
+public class UIController implements GlobalThroughView, ActiveChannelsObserver
 {
     private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
@@ -102,6 +107,7 @@ public class UIController implements GlobalThroughView
 
     public UIController(Shell shell, GUIOptions guiOptions, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider)
     {
+        ActiveChannelsRegistry.getInstance().addActiveChannelsObserver(this);
         this.shell = shell;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
@@ -564,7 +570,7 @@ public class UIController implements GlobalThroughView
                 });
                 this.executor.execute(new WaitForConnectionTask(item, (HTTPAccount)data, connectionFuture));
             }
-            else if (data instanceof Group) {
+            else if (data instanceof Group || data instanceof IActiveChannel) {
                 boolean expandedState = tic.isExpanded();
                 item.setExpanded(!expandedState);
                 tic.setExpanded(!expandedState);
@@ -671,6 +677,13 @@ public class UIController implements GlobalThroughView
         if (config instanceof Group)
         {
             for (IConfigItem configItem : ((Group) config).getChildren())
+            {
+                buildBranch(newTreeItem, configItem);
+            }
+        }
+        else if (config instanceof IActiveChannelThrough)
+        {
+            for (IActiveChannel configItem : ((IActiveChannelThrough) config).getChildren())
             {
                 buildBranch(newTreeItem, configItem);
             }
@@ -865,5 +878,33 @@ public class UIController implements GlobalThroughView
         };
         refreshTimer = new Timer();
         refreshTimer.schedule(refreshTask, delay);
+    }
+    
+    @Override
+    public void activeChannelsChanged()
+    {
+        Display.getDefault().asyncExec(new Runnable()
+        {
+            public void run()
+            {
+                ActiveChannelsRegistry registry = ActiveChannelsRegistry.getInstance();
+                for (TreeItemController child : root.getChildren())
+                {
+                    if (registry.equals(child.getData()))
+                    {
+                        child.getChildren().clear();
+                        
+                        for (IConfigItem item : registry.getChildren())
+                        {
+                            buildBranch(child, item);
+                        }
+                        
+                        updateTree(filteredTree.getText());
+                        
+                        return;
+                    }
+                }
+            }
+        });
     }
 }

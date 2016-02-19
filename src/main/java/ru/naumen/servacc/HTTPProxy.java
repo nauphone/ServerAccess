@@ -10,6 +10,8 @@
 package ru.naumen.servacc;
 
 import org.apache.log4j.Logger;
+
+import ru.naumen.servacc.activechannel.sockets.HTTProxySocketWrapper;
 import ru.naumen.servacc.backend.DualChannel;
 import ru.naumen.servacc.config2.SSHAccount;
 
@@ -95,7 +97,7 @@ public class HTTPProxy
         {
             try
             {
-                ServerSocket serverSocket = new ServerSocket(port);
+                HTTProxySocketWrapper serverSocket = new HTTProxySocketWrapper(new ServerSocket(port), serverAccount);
                 while (true)
                 {
                     Socket s = serverSocket.accept();

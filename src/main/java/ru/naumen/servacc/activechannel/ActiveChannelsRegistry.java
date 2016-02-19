@@ -1,0 +1,213 @@
+/**
+ * 
+ */
+package ru.naumen.servacc.activechannel;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
+import ru.naumen.servacc.activechannel.i.ActiveChannelsObservable;
+import ru.naumen.servacc.activechannel.i.ActiveChannelsObserver;
+import ru.naumen.servacc.activechannel.i.IActiveChannel;
+import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
+import ru.naumen.servacc.activechannel.i.IHidableChannel;
+import ru.naumen.servacc.activechannel.tasks.ActualizeActiveChannelsTask;
+import ru.naumen.servacc.activechannel.visitors.ActualizeActiveChannelVisitor;
+import ru.naumen.servacc.activechannel.visitors.HideActiveChannelVisitor;
+import ru.naumen.servacc.activechannel.visitors.IActiveChannelVisitor;
+import ru.naumen.servacc.config2.Group;
+import ru.naumen.servacc.config2.i.IConfigItem;
+
+/**
+ * @author vtarasov
+ * @since 16.02.16
+ */
+public class ActiveChannelsRegistry extends Group implements ActiveChannelsObservable
+{
+    private static final ActiveChannelsRegistry INSTANCE = new ActiveChannelsRegistry();
+    
+    private List<ActiveChannelsObserver> observers = new ArrayList<ActiveChannelsObserver>();
+    
+    private ActiveChannelsRegistry()
+    {
+        super("Активные каналы", null);
+        
+        new ActualizeActiveChannelsTask(this).start();
+    }
+    
+    public static ActiveChannelsRegistry getInstance()
+    {
+        return INSTANCE;
+    }
+
+    @Override
+    public boolean matches(String filter)
+    {
+        return true;
+    }
+    
+    @Override
+    public String getIconName()
+    {
+        return "/icons/active-channels.png";
+    }
+
+    public void saveChannel(String[] path, IActiveChannel channel)
+    {
+        if (existsChannel(path))
+        {
+            return;
+        }
+        
+        if (channel.getParent() == null)
+        {
+            ActiveChannelsRegistry.getInstance().getChildren().add(channel);
+        }
+        else
+        {
+            channel.getParent().addChild(channel);
+        }
+        
+        notifyActiveChannelsObservers();
+    }
+    
+    public void deleteChannel(String[] path)
+    {
+        IActiveChannel channel = findChannel(path);
+        
+        if (channel == null)
+        {
+            return;
+        }
+        
+        deleteChannel(channel);
+    }
+    
+    public void deleteChannel(IActiveChannel channel)
+    {
+        if (channel.getParent() == null)
+        {
+            ActiveChannelsRegistry.getInstance().getChildren().remove(channel);
+        }
+        else
+        {
+            channel.getParent().removeChild(channel);
+        }
+        
+        notifyActiveChannelsObservers();
+    }
+    
+    public boolean existsChannel(String[] path)
+    {
+        return findChannel(path) != null;
+    }
+    
+    public IActiveChannelThrough findChannelThrough(String[] path)
+    {
+        IActiveChannel channel = findChannel(path);
+        
+        if (channel instanceof IActiveChannelThrough)
+        {
+            return (IActiveChannelThrough)channel;
+        }
+        
+        return null;
+    }
+    
+    public IActiveChannel findChannel(String[] path)
+    {
+        List<IActiveChannel> channels = new ArrayList<IActiveChannel>();
+        
+        for (IConfigItem item : getChildren())
+        {
+            channels.add((IActiveChannel)item);
+        }
+        
+        int childIndex = 0;
+        int childrenLevel = 0;
+        
+        while (childIndex < channels.size())
+        {
+            if (childrenLevel == path.length)
+            {
+                return null;
+            }
+            
+            IActiveChannel channel = channels.get(childIndex);
+            
+            if (channel instanceof IHidableChannel && ((IHidableChannel)channel).isHidden())
+            {
+                childIndex++;
+                
+                continue;
+            }
+            
+            if (path[childrenLevel].equals(channel.getId()))
+            {
+                if (childrenLevel == path.length - 1)
+                {
+                    return channel;
+                }
+                
+                if (!(channel instanceof IActiveChannelThrough))
+                {
+                    return null;
+                }
+                
+                channels = ((IActiveChannelThrough)channel).getChildren();
+                childIndex = 0;
+                childrenLevel++;
+                
+                continue;
+            }
+            
+            childIndex++;
+        }
+        
+        return null;
+    }
+    
+    public void hideAllChannels()
+    {
+        forEachActiveChannel(new HideActiveChannelVisitor());
+    }
+    
+    public void actualizeAllChannels()
+    {
+        forEachActiveChannel(new ActualizeActiveChannelVisitor());
+    }
+    
+    private void forEachActiveChannel(IActiveChannelVisitor visitor)
+    {
+        new ArrayList<IConfigItem>(getChildren()).forEach(new Consumer<IConfigItem>()
+        {
+            @Override
+            public void accept(IConfigItem t)
+            {
+                visitor.visit((IActiveChannel)t);
+            }
+        });
+    }
+
+    @Override
+    public void addActiveChannelsObserver(ActiveChannelsObserver observer)
+    {
+        observers.add(observer);
+    }
+
+    @Override
+    public void removeActiveChannelsObserver(ActiveChannelsObserver observer)
+    {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyActiveChannelsObservers()
+    {
+        for (ActiveChannelsObserver observer : observers)
+        {
+            observer.activeChannelsChanged();
+        }
+    }
+}
