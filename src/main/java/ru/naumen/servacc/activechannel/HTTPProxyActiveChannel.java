@@ -14,9 +14,9 @@ import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
  */
 public class HTTPProxyActiveChannel extends SocketActiveChannel
 {
-    public HTTPProxyActiveChannel(IActiveChannelThrough parent, Socket socket, ServerSocket server)
+    public HTTPProxyActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, Socket socket, ServerSocket server)
     {
-        super(parent, socket, server);
+        super(parent, registry, socket, server);
     }
     
     @Override

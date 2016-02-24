@@ -25,20 +25,18 @@ import ru.naumen.servacc.config2.i.IConfigItem;
  */
 public class ActiveChannelsRegistry extends Group implements ActiveChannelsObservable
 {
-    private static final ActiveChannelsRegistry INSTANCE = new ActiveChannelsRegistry();
-    
     private List<ActiveChannelsObserver> observers = new ArrayList<ActiveChannelsObserver>();
     
     private ActiveChannelsRegistry()
     {
-        super("Активные каналы", null);
+        super("Active channels", null);
         
         new ActualizeActiveChannelsTask(this).start();
     }
     
-    public static ActiveChannelsRegistry getInstance()
+    public static ActiveChannelsRegistry createRegistry()
     {
-        return INSTANCE;
+        return new ActiveChannelsRegistry();
     }
 
     @Override
@@ -53,7 +51,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         return "/icons/active-channels.png";
     }
 
-    public void saveChannel(String[] path, IActiveChannel channel)
+    public void saveChannel(List<String> path, IActiveChannel channel)
     {
         if (existsChannel(path))
         {
@@ -62,7 +60,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         
         if (channel.getParent() == null)
         {
-            ActiveChannelsRegistry.getInstance().getChildren().add(channel);
+            getChildren().add(channel);
         }
         else
         {
@@ -72,7 +70,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         notifyActiveChannelsObservers();
     }
     
-    public void deleteChannel(String[] path)
+    public void deleteChannel(List<String> path)
     {
         IActiveChannel channel = findChannel(path);
         
@@ -88,7 +86,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
     {
         if (channel.getParent() == null)
         {
-            ActiveChannelsRegistry.getInstance().getChildren().remove(channel);
+            getChildren().remove(channel);
         }
         else
         {
@@ -98,12 +96,12 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         notifyActiveChannelsObservers();
     }
     
-    public boolean existsChannel(String[] path)
+    public boolean existsChannel(List<String> path)
     {
         return findChannel(path) != null;
     }
     
-    public IActiveChannelThrough findChannelThrough(String[] path)
+    public IActiveChannelThrough findChannelThrough(List<String> path)
     {
         IActiveChannel channel = findChannel(path);
         
@@ -115,7 +113,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         return null;
     }
     
-    public IActiveChannel findChannel(String[] path)
+    public IActiveChannel findChannel(List<String> path)
     {
         List<IActiveChannel> channels = new ArrayList<IActiveChannel>();
         
@@ -129,7 +127,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         
         while (childIndex < channels.size())
         {
-            if (childrenLevel == path.length)
+            if (childrenLevel == path.size())
             {
                 return null;
             }
@@ -143,9 +141,9 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
                 continue;
             }
             
-            if (path[childrenLevel].equals(channel.getId()))
+            if (path.get(childrenLevel).equals(channel.getId()))
             {
-                if (childrenLevel == path.length - 1)
+                if (childrenLevel == path.size() - 1)
                 {
                     return channel;
                 }

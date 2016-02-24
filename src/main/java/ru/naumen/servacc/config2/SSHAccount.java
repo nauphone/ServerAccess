@@ -10,7 +10,6 @@
 package ru.naumen.servacc.config2;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     private String host;
     private Integer port;
     private String uniqueIdentity = null;
-    private String[] uniquePath = null;
+    private List<String> uniquePath = null;
 
     private void parseHostAndPort()
     {
@@ -114,13 +113,13 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
         return uniqueIdentity;
     }
     
-    public String[] getUniquePath()
+    public List<String> getUniquePath()
     {
         if (uniquePath == null)
         {
-            List<String> path = new ArrayList<String>();
+            uniquePath = new ArrayList<String>();
             
-            path.add(getSignature());
+            uniquePath.add(getSignature());
             // follow 'through' links
             SSHAccount cur = this;
             List<String> ids = new ArrayList<>();
@@ -134,19 +133,17 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
                     break;
                 }
                 ids.add(cur.getId());
-                path.add(cur.getSignature());
+                uniquePath.add(cur.getSignature());
             }
-            
-            uniquePath = path.toArray(new String[path.size()]);
         }
-        return uniquePath;
+        return new ArrayList<String>(uniquePath);
     }
     
-    public String[] getUniquePathReversed()
+    public List<String> getUniquePathReversed()
     {
-        List<String> path = new ArrayList<String>(Arrays.asList(getUniquePath()));
+        List<String> path = getUniquePath();
         Collections.reverse(path);
-        return path.toArray(new String[path.size()]);
+        return path;
     }
 
     public String getSignature()

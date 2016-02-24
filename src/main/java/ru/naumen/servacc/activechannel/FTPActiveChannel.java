@@ -14,9 +14,9 @@ import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
  */
 public class FTPActiveChannel extends SocketActiveChannel
 {
-    public FTPActiveChannel(IActiveChannelThrough parent, Socket socket, ServerSocket server)
+    public FTPActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, Socket socket, ServerSocket server)
     {
-        super(parent, socket, server);
+        super(parent, registry, socket, server);
     }
     
     @Override

@@ -23,6 +23,7 @@ import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.FileResource;
 import ru.naumen.servacc.HTTPResource;
 import ru.naumen.servacc.MessageListener;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.config2.ActiveChannelsConfig;
 import ru.naumen.servacc.config2.CompositeConfig;
 import ru.naumen.servacc.config2.Config;
@@ -39,12 +40,14 @@ public class ConfigLoader
     private final Shell shell;
     private final ListProvider sourceListProvider;
     private final MessageListener listener;
+    private final ActiveChannelsRegistry acRegistry;
 
-    public ConfigLoader(Shell shell, ListProvider sourceListProvider, MessageListener listener)
+    public ConfigLoader(Shell shell, ListProvider sourceListProvider, MessageListener listener, ActiveChannelsRegistry acRegistry)
     {
         this.shell = shell;
         this.sourceListProvider = sourceListProvider;
         this.listener = listener;
+        this.acRegistry = acRegistry;
     }
 
     public IConfig loadConfig()
@@ -67,7 +70,7 @@ public class ConfigLoader
             }
         }
         
-        compositeConfig.add(new ActiveChannelsConfig());
+        compositeConfig.add(new ActiveChannelsConfig(acRegistry));
         
         return compositeConfig;
     }

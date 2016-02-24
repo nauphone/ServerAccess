@@ -35,6 +35,7 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.MindtermBackend;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
 import ru.naumen.servacc.config2.Account;
@@ -56,7 +57,7 @@ public class HTTPProxyConnectionTest
     private final HttpHost proxyForHttpClient = new HttpHost("127.0.0.1", PORT);
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final SSHAccount account = new SSHAccount();
-    private final Backend backend = new MindtermBackend(new OS(), executorService);
+    private final Backend backend = new MindtermBackend(new OS(), executorService, ActiveChannelsRegistry.createRegistry());
     private final MessageListener messageListener = new MessageListener()
     {
         @Override
@@ -68,7 +69,7 @@ public class HTTPProxyConnectionTest
     public final Timeout testTimeout = new Timeout(10000);
 
     // system under test
-    private final HTTPProxy proxy = new HTTPProxy(backend, executorService);
+    private final HTTPProxy proxy = new HTTPProxy(backend, executorService, ActiveChannelsRegistry.createRegistry());
 
     @Before
     public void startProxy()

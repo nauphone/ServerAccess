@@ -11,7 +11,9 @@ package ru.naumen.servacc;
 
 import org.apache.log4j.Logger;
 
-import ru.naumen.servacc.activechannel.sockets.HTTProxySocketWrapper;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
+import ru.naumen.servacc.activechannel.HTTPProxyActiveChannel;
+import ru.naumen.servacc.activechannel.sockets.ServerSocketWrapper;
 import ru.naumen.servacc.backend.DualChannel;
 import ru.naumen.servacc.config2.SSHAccount;
 
@@ -35,16 +37,18 @@ public class HTTPProxy
     private static final Logger LOG = Logger.getLogger(HTTPProxy.class);
     private final Backend backend;
     private final ExecutorService executor;
+    private final ActiveChannelsRegistry acRegistry;
 
     private int port;
     private SSHAccount serverAccount;
     private Future<?> serverTask;
     private MessageListener listener;
 
-    public HTTPProxy(Backend backend, ExecutorService executor)
+    public HTTPProxy(Backend backend, ExecutorService executor, ActiveChannelsRegistry acRegistry)
     {
         this.backend = backend;
         this.executor = executor;
+        this.acRegistry = acRegistry;
         this.listener = new MessageListener()
         {
             @Override
@@ -97,7 +101,7 @@ public class HTTPProxy
         {
             try
             {
-                HTTProxySocketWrapper serverSocket = new HTTProxySocketWrapper(new ServerSocket(port), serverAccount);
+                ServerSocketWrapper serverSocket = new ServerSocketWrapper(new ServerSocket(port), serverAccount, HTTPProxyActiveChannel.class, acRegistry);
                 while (true)
                 {
                     Socket s = serverSocket.accept();

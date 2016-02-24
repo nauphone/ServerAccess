@@ -3,9 +3,6 @@
  */
 package ru.naumen.servacc.activechannel;
 
-import java.io.IOException;
-import java.net.ServerSocket;
-
 import ru.naumen.servacc.SocketUtils;
 
 /**
@@ -16,9 +13,9 @@ public class SSHLocalForwardActiveChannel extends ActiveChannel
 {
     private int port;
     
-    public SSHLocalForwardActiveChannel(SSHActiveChannel parent, int port)
+    public SSHLocalForwardActiveChannel(SSHActiveChannel parent, ActiveChannelsRegistry registry, int port)
     {
-        super(parent);
+        super(parent, registry);
         
         this.port = port;
     }
@@ -38,7 +35,7 @@ public class SSHLocalForwardActiveChannel extends ActiveChannel
     @Override
     public String getIconName()
     {
-        return null;
+        return "/icons/port-forwarding.png";
     }
 
     @Override
@@ -46,25 +43,13 @@ public class SSHLocalForwardActiveChannel extends ActiveChannel
     {
         super.close();
         
-        /* TODO: Use it
-         * 
-         * SSHActiveChannel parent = narrowParent();
-        
-        if (parent != null)
-        {
-            SSH2SimpleClient sshClient = parent.getSSHClient();
-            
-            if (sshClient != null && sshClient.getTransport().isConnected())
-            {
-                sshClient.getTransport().normalDisconnect("quit");
-            }
-        }*/
+        // TODO: Remove local port forwarding from SSH client
     }
 
     @Override
     public String toString()
     {
-        return "port: " + port;
+        return "port: " + port + " (local forward)";
     }
     
     private SSHActiveChannel narrowParent()

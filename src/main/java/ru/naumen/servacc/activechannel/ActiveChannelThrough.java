@@ -18,9 +18,9 @@ public abstract class ActiveChannelThrough extends ActiveChannel implements IAct
 {
     private List<IActiveChannel> children = new ArrayList<IActiveChannel>();
     
-    public ActiveChannelThrough(IActiveChannelThrough parent)
+    public ActiveChannelThrough(IActiveChannelThrough parent, ActiveChannelsRegistry registry)
     {
-        super(parent);
+        super(parent, registry);
     }
 
     @Override

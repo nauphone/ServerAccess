@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.MindtermBackend;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.platform.OS;
@@ -24,7 +25,7 @@ public class MindtermBackendTest
 {
     private GlobalThroughViewStub view = new GlobalThroughViewStub();
 
-    private Backend backend = new MindtermBackend(new OS(), null);
+    private Backend backend = new MindtermBackend(new OS(), null, ActiveChannelsRegistry.createRegistry());
 
     @Before
     public void setGlobalThroughView()

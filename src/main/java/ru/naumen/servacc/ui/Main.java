@@ -21,6 +21,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.MindtermBackend;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.settings.ApplicationProperties;
@@ -39,6 +40,9 @@ public class Main implements Runnable
 
     public void run()
     {
+        // Create active channels registry
+        ActiveChannelsRegistry acRegistry = ActiveChannelsRegistry.createRegistry();
+        
         // Create GUI
         OS system = new OS();
         DefaultConfiguration configuration = system.getConfiguration();
@@ -46,10 +50,10 @@ public class Main implements Runnable
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
-        Backend backend = new MindtermBackend(system, executor);
-        HTTPProxy httpProxy = new HTTPProxy(backend, executor);
+        Backend backend = new MindtermBackend(system, executor, acRegistry);
+        HTTPProxy httpProxy = new HTTPProxy(backend, executor, acRegistry);
         UIController controller = new UIController(shell, system.getGUIOptions(), backend, executor, httpProxy,
-            configuration.filterProperties("source[0-9]*"));
+            configuration.filterProperties("source[0-9]*"), acRegistry);
         controller.start();
         // Start proxy server
         httpProxy.start();

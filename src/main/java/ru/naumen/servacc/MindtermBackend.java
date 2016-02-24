@@ -42,12 +42,13 @@ import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
 
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
+import ru.naumen.servacc.activechannel.FTPActiveChannel;
 import ru.naumen.servacc.activechannel.SSHActiveChannel;
 import ru.naumen.servacc.activechannel.SSHLocalForwardActiveChannel;
+import ru.naumen.servacc.activechannel.TerminalActiveChannel;
 import ru.naumen.servacc.activechannel.i.IActiveChannel;
 import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
-import ru.naumen.servacc.activechannel.sockets.FTPSocketWrapper;
-import ru.naumen.servacc.activechannel.sockets.TerminalSocketWrapper;
+import ru.naumen.servacc.activechannel.sockets.ServerSocketWrapper;
 import ru.naumen.servacc.activechannel.visitors.CloseActiveChannelVisitor;
 import ru.naumen.servacc.backend.DualChannel;
 import ru.naumen.servacc.backend.mindterm.MindTermChannel;
@@ -78,8 +79,9 @@ public class MindtermBackend implements Backend {
     private final ConnectionsManager connections;
     private SSHAccount globalThrough;
     private GlobalThroughView globalThroughView;
+    private final ActiveChannelsRegistry acRegistry;
 
-    public MindtermBackend(OS system, ExecutorService executorService)
+    public MindtermBackend(OS system, ExecutorService executorService, ActiveChannelsRegistry acRegistry)
     {
         this.browser = system.getBrowser();
         this.ftpBrowser = system.getFTPBrowser();
@@ -87,6 +89,7 @@ public class MindtermBackend implements Backend {
         this.executor = executorService;
         keyStoreDir = system.getKeyStoreDirectory();
         connections = new ConnectionsManager();
+        this.acRegistry = acRegistry;
     }
 
     @Override
@@ -197,7 +200,7 @@ public class MindtermBackend implements Backend {
     {
         globalThrough = account;
         connections.clearCache();
-        ActiveChannelsRegistry.getInstance().hideAllChannels();
+        acRegistry.hideAllChannels();
     }
 
     @Override
@@ -286,7 +289,7 @@ public class MindtermBackend implements Backend {
 
     private Socket openTerminal(SSHAccount account, String path) throws IOException
     {
-        try (TerminalSocketWrapper server = new TerminalSocketWrapper(SocketUtils.createListener(SocketUtils.LOCALHOST), account))
+        try (ServerSocketWrapper server = new ServerSocketWrapper(SocketUtils.createListener(SocketUtils.LOCALHOST), account, TerminalActiveChannel.class, acRegistry))
         {
             Map<String, String> params = new HashMap<>(account.getParams());
             params.put("name", path);
@@ -350,7 +353,7 @@ public class MindtermBackend implements Backend {
 
     private Socket openFTPBrowser(SSHAccount account) throws IOException
     {
-        try (FTPSocketWrapper server = new FTPSocketWrapper(SocketUtils.createListener(SocketUtils.LOCALHOST), account))
+        try (ServerSocketWrapper server = new ServerSocketWrapper(SocketUtils.createListener(SocketUtils.LOCALHOST), account, FTPActiveChannel.class, acRegistry))
         {
             server.getServerSocket().setSoTimeout(SocketUtils.COLD_TIMEOUT);
             ftpBrowser.connect(server.getServerSocket().getLocalPort(), Collections.<String, String>emptyMap());
@@ -495,22 +498,21 @@ public class MindtermBackend implements Backend {
     
     private void createSSHActiveChannel(SSHAccount account, int port, int portThrough)
     {
-        String[] path = account.getUniquePathReversed();
-        String[] parentPath = new String[path.length - 1];
+        List<String> path = account.getUniquePathReversed();
         
-        if (parentPath.length > 0)
+        if (!path.isEmpty())
         {
-            System.arraycopy(path, 0, parentPath, 0, parentPath.length);
+            path.remove(path.size() - 1);
         }
         
-        IActiveChannelThrough parent = ActiveChannelsRegistry.getInstance().findChannelThrough(parentPath);
+        IActiveChannelThrough parent = acRegistry.findChannelThrough(path);
         
-        new SSHActiveChannel(parent, account, port, portThrough, connections).save();
+        new SSHActiveChannel(parent, acRegistry, account, port, portThrough, connections).save();
     }
     
     private void removeSSHActiveChannel(SSHAccount account)
     {
-        IActiveChannel channel = ActiveChannelsRegistry.getInstance().findChannel(account.getUniquePathReversed());
+        IActiveChannel channel = acRegistry.findChannel(account.getUniquePathReversed());
         
         if (channel != null)
         {
@@ -520,11 +522,11 @@ public class MindtermBackend implements Backend {
     
     private void createSSHLocalForwardActiveChannel(SSHAccount account, int port)
     {
-        IActiveChannel channel = ActiveChannelsRegistry.getInstance().findChannel(account.getUniquePathReversed());
+        IActiveChannel channel = acRegistry.findChannel(account.getUniquePathReversed());
         
         if (channel instanceof SSHActiveChannel)
         {
-            new SSHLocalForwardActiveChannel((SSHActiveChannel)channel, port).save();
+            new SSHLocalForwardActiveChannel((SSHActiveChannel)channel, acRegistry, port).save();
         }
     }
 }

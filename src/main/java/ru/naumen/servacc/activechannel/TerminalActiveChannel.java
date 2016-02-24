@@ -14,9 +14,9 @@ import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
  */
 public class TerminalActiveChannel extends SocketActiveChannel
 {
-    public TerminalActiveChannel(IActiveChannelThrough parent, Socket socket, ServerSocket server)
+    public TerminalActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, Socket socket, ServerSocket server)
     {
-        super(parent, socket, server);
+        super(parent, registry, socket, server);
     }
     
     @Override

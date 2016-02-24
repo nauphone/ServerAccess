@@ -3,6 +3,8 @@
  */
 package ru.naumen.servacc.activechannel.i;
 
+import java.util.List;
+
 import ru.naumen.servacc.activechannel.visitors.IActiveChannelVisitor;
 import ru.naumen.servacc.config2.i.IConfigItem;
 
@@ -15,7 +17,7 @@ public interface IActiveChannel extends IConfigItem
     IActiveChannelThrough getParent();
     
     String getId();
-    String[] getPath();
+    List<String> getPath();
     
     void close();
     

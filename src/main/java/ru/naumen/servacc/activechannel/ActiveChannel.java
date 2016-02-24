@@ -4,7 +4,6 @@
 package ru.naumen.servacc.activechannel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import ru.naumen.servacc.activechannel.i.IActiveChannel;
@@ -18,10 +17,12 @@ import ru.naumen.servacc.activechannel.visitors.IActiveChannelVisitor;
 public abstract class ActiveChannel implements IActiveChannel
 {
     private IActiveChannelThrough parent;
+    private ActiveChannelsRegistry registry;
     
-    public ActiveChannel(IActiveChannelThrough parent)
+    public ActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry)
     {
         this.parent = parent;
+        this.registry = registry;
     }
 
     @Override
@@ -31,18 +32,18 @@ public abstract class ActiveChannel implements IActiveChannel
     }
 
     @Override
-    public String[] getPath()
+    public List<String> getPath()
     {
         List<String> path = new ArrayList<String>();
         
         if (parent != null)
         {
-            path.addAll(Arrays.asList(parent.getPath()));
+            path.addAll(parent.getPath());
         }
         
         path.add(getId());
         
-        return path.toArray(new String[path.size()]);
+        return path;
     }
 
     @Override
@@ -54,13 +55,13 @@ public abstract class ActiveChannel implements IActiveChannel
     @Override
     public void save()
     {
-        ActiveChannelsRegistry.getInstance().saveChannel(getPath(), this);
+        registry.saveChannel(getPath(), this);
     }
 
     @Override
     public void delete()
     {
-        ActiveChannelsRegistry.getInstance().deleteChannel(this);
+        registry.deleteChannel(this);
     }
 
     @Override

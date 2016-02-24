@@ -26,18 +26,18 @@ public class SSHActiveChannel extends ActiveChannelThrough implements IHidableCh
     
     private boolean hidden;
     
-    public SSHActiveChannel(IActiveChannelThrough parent, SSHAccount sshAccount, int port, ConnectionsManager connManager)
+    public SSHActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, SSHAccount sshAccount, int port, ConnectionsManager connManager)
     {
-        super(parent);
+        super(parent, registry);
         
         this.sshAccount = sshAccount;
         this.port = port;
         this.connManager = connManager;
     }
     
-    public SSHActiveChannel(IActiveChannelThrough parent, SSHAccount sshAccount, int port, int portThrough, ConnectionsManager connManager)
+    public SSHActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, SSHAccount sshAccount, int port, int portThrough, ConnectionsManager connManager)
     {
-        this(parent, sshAccount, port, connManager);
+        this(parent, registry, sshAccount, port, connManager);
         
         this.portThrough = portThrough;
     }
@@ -77,19 +77,7 @@ public class SSHActiveChannel extends ActiveChannelThrough implements IHidableCh
     {
         super.close();
         
-        /* TODO: Use it
-         * 
-         * SSH2SimpleClient sshClient = getSSHClient();
-        
-        if (sshClient != null)
-        {
-            connManager.remove(getSSHAccountId());
-            
-            if (sshClient.getTransport().isConnected())
-            {
-                sshClient.getTransport().normalDisconnect("quit");
-            }
-        }*/
+        // TODO: Close SSH client
     }
 
     @Override

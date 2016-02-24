@@ -18,22 +18,22 @@ public abstract class SocketActiveChannel extends ActiveChannel
     private Socket socket;
     private ServerSocket server;
     
-    public SocketActiveChannel(IActiveChannelThrough parent, Socket socket, ServerSocket server)
+    public SocketActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, Socket socket, ServerSocket server)
     {
-        super(parent);
+        super(parent, registry);
         
         this.socket = socket;
         this.server = server;
     }
     
-    public SocketActiveChannel(IActiveChannelThrough parent, Socket socket)
+    public SocketActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, Socket socket)
     {
-        this(parent, socket, null);
+        this(parent, registry, socket, null);
     }
     
-    public SocketActiveChannel(IActiveChannelThrough parent, ServerSocket server)
+    public SocketActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, ServerSocket server)
     {
-        this(parent, null, server);
+        this(parent, registry, null, server);
     }
 
     @Override
@@ -41,31 +41,7 @@ public abstract class SocketActiveChannel extends ActiveChannel
     {
         super.close();
         
-        /* TODO: Use it
-         * 
-         * if (!socket.isClosed())
-        {
-            try
-            {
-                socket.close();
-            }
-            catch (IOException e)
-            {
-                // Nothing to do
-            }
-        }
-        
-        if (!server.isClosed())
-        {
-            try
-            {
-                server.close();
-            }
-            catch (IOException e)
-            {
-                // Nothing to do
-            }
-        }*/
+        // TODO: Close socket/server
     }
     
     protected Socket getSocket()

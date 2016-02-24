@@ -104,17 +104,20 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private TreeItemController selection;
 
     private Timer refreshTimer;
+    
+    private final ActiveChannelsRegistry acRegistry;
 
-    public UIController(Shell shell, GUIOptions guiOptions, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider)
+    public UIController(Shell shell, GUIOptions guiOptions, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider, ActiveChannelsRegistry acRegistry)
     {
-        ActiveChannelsRegistry.getInstance().addActiveChannelsObserver(this);
+        this.acRegistry = acRegistry;
+        this.acRegistry.addActiveChannelsObserver(this);
         this.shell = shell;
         this.clipboard = new Clipboard(shell.getDisplay());
         this.backend = backend;
         this.executor = executor;
         this.synchronousAlert = new SynchronousAlert(shell);
         this.asynchronousAlert = new AsynchronousProxy(synchronousAlert);
-        this.configLoader = new ConfigLoader(shell, sourceListProvider, synchronousAlert);
+        this.configLoader = new ConfigLoader(shell, sourceListProvider, synchronousAlert, acRegistry);
         this.httpProxy = httpProxy;
         backend.setGlobalThroughView(this);
         createToolBar();
@@ -887,14 +890,13 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         {
             public void run()
             {
-                ActiveChannelsRegistry registry = ActiveChannelsRegistry.getInstance();
                 for (TreeItemController child : root.getChildren())
                 {
-                    if (registry.equals(child.getData()))
+                    if (acRegistry.equals(child.getData()))
                     {
                         child.getChildren().clear();
                         
-                        for (IConfigItem item : registry.getChildren())
+                        for (IConfigItem item : acRegistry.getChildren())
                         {
                             buildBranch(child, item);
                         }
