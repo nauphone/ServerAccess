@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel.tasks;
 
@@ -12,14 +12,14 @@ import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 public class ActualizeActiveChannelsTask extends Thread
 {
     private static final int ACTUALIZATION_CHECK_TYME = 10000;
-    
+
     private ActiveChannelsRegistry registry;
-    
+
     public ActualizeActiveChannelsTask(ActiveChannelsRegistry registry)
     {
         this.registry = registry;
     }
-    
+
     @Override
     public void run()
     {
@@ -33,7 +33,7 @@ public class ActualizeActiveChannelsTask extends Thread
             {
                 // Nothing to do
             }
-            
+
             registry.actualizeAllChannels();
         }
     }

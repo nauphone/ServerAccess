@@ -42,7 +42,7 @@ public class Main implements Runnable
     {
         // Create active channels registry
         ActiveChannelsRegistry acRegistry = ActiveChannelsRegistry.createRegistry();
-        
+
         // Create GUI
         OS system = new OS();
         DefaultConfiguration configuration = system.getConfiguration();

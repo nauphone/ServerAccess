@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.config2;
 
@@ -17,12 +17,12 @@ import ru.naumen.servacc.config2.i.IConfigItem;
 public class ActiveChannelsConfig implements IConfig
 {
     private ActiveChannelsRegistry registry;
-    
+
     public ActiveChannelsConfig(ActiveChannelsRegistry registry)
     {
         this.registry = registry;
     }
-    
+
     @Override
     public List<IConfigItem> getChildren()
     {

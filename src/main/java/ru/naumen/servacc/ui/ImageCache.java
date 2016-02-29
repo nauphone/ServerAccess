@@ -38,12 +38,12 @@ public final class ImageCache
     {
         // Utility class should not have public constructor
     }
-    
+
     public static boolean containsImage(String name)
     {
         return containsImage(name, 0);
     }
-    
+
     public static boolean containsImage(String name, int index)
     {
         ImageKey key = new ImageKey(name, index);
@@ -65,15 +65,15 @@ public final class ImageCache
                 return null;
             }
         }
-        
+
         ImageKey key = new ImageKey(name, index);
         return images.get(key);
     }
-    
+
     public static List<Image> getImages(String name) throws ArrayIndexOutOfBoundsException
     {
         List<Image> result = new ArrayList<Image>();
-        
+
         if (!containsImage(name))
         {
             reloadImage(name);
@@ -82,21 +82,21 @@ public final class ImageCache
                 return result;
             }
     	}
-        
+
         for (int index = 0; index < Integer.MAX_VALUE; index++)
         {
             if (!containsImage(name, index))
             {
                 break;
             }
-            
+
             ImageKey key = new ImageKey(name, index);
             result.add(images.get(key));
         }
-        
+
         return result;
     }
-    
+
     private static void reloadImage(String name)
     {
     	ImageLoader imageLoader = new ImageLoader();
@@ -106,9 +106,9 @@ public final class ImageCache
             LOGGER.error("Cannot load image " + name);
             return;
         }
-        
+
         Map<ImageKey, Image> newImages = new HashMap<>();
-        
+
         ImageData[] data = imageLoader.load(is);
         for (int index = 0; index < data.length; index++)
         {
@@ -116,7 +116,7 @@ public final class ImageCache
             Image image = new Image(Display.getCurrent(), data[index]);
             newImages.put(key, image);
         }
-        
+
         for (int i = 0; ; i++)
         {
             ImageKey eachKey = new ImageKey(name, i);
@@ -126,7 +126,7 @@ public final class ImageCache
             }
             images.remove(eachKey);
         }
-        
+
         for (ImageKey key : newImages.keySet())
         {
             images.put(key, newImages.get(key));

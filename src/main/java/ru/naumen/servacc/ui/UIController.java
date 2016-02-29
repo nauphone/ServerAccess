@@ -9,14 +9,6 @@
  */
 package ru.naumen.servacc.ui;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
@@ -52,7 +44,6 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
@@ -76,12 +67,21 @@ import ru.naumen.servacc.platform.GUIOptions;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.Util;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+
 public class UIController implements GlobalThroughView, ActiveChannelsObserver
 {
     private static final Logger LOGGER = Logger.getLogger(UIController.class);
     private final Shell shell;
     private final MessageListener synchronousAlert;
     private final MessageListener asynchronousAlert;
+    private final ActiveChannelsRegistry acRegistry;
 
     private Clipboard clipboard;
     private Backend backend;
@@ -104,8 +104,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private TreeItemController selection;
 
     private Timer refreshTimer;
-    
-    private final ActiveChannelsRegistry acRegistry;
 
     public UIController(Shell shell, GUIOptions guiOptions, Backend backend, ExecutorService executor, HTTPProxy httpProxy, ListProvider sourceListProvider, ActiveChannelsRegistry acRegistry)
     {
@@ -882,7 +880,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         refreshTimer = new Timer();
         refreshTimer.schedule(refreshTask, delay);
     }
-    
+
     @Override
     public void activeChannelsChanged()
     {
@@ -895,14 +893,14 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
                     if (acRegistry.equals(child.getData()))
                     {
                         child.getChildren().clear();
-                        
+
                         for (IConfigItem item : acRegistry.getChildren())
                         {
                             buildBranch(child, item);
                         }
-                        
+
                         updateTree(filteredTree.getText());
-                        
+
                         return;
                     }
                 }

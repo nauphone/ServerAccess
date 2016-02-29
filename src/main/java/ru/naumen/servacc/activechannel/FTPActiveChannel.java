@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel;
 
@@ -18,25 +18,25 @@ public class FTPActiveChannel extends SocketActiveChannel
     {
         super(parent, registry, socket, server);
     }
-    
+
     @Override
     public String getId()
     {
         return String.valueOf(getSocket().getPort());
     }
-    
+
     @Override
     public boolean matches(String filter)
     {
         return true;
     }
-    
+
     @Override
     public String getIconName()
     {
         return "/icons/drive-network.png";
     }
-    
+
     @Override
     public String toString()
     {

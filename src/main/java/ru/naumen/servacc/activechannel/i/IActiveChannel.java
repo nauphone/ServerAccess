@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel.i;
 
@@ -15,16 +15,16 @@ import ru.naumen.servacc.config2.i.IConfigItem;
 public interface IActiveChannel extends IConfigItem
 {
     IActiveChannelThrough getParent();
-    
+
     String getId();
     List<String> getPath();
-    
+
     void close();
-    
+
     void save();
     void delete();
-    
+
     boolean isActive();
-    
+
     void accept(IActiveChannelVisitor visitor);
 }

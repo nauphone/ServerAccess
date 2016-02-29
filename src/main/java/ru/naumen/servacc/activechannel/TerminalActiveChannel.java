@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel;
 
@@ -18,7 +18,7 @@ public class TerminalActiveChannel extends SocketActiveChannel
     {
         super(parent, registry, socket, server);
     }
-    
+
     @Override
     public String getId()
     {

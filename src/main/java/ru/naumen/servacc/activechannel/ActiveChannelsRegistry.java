@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel;
 
@@ -26,14 +26,14 @@ import ru.naumen.servacc.config2.i.IConfigItem;
 public class ActiveChannelsRegistry extends Group implements ActiveChannelsObservable
 {
     private List<ActiveChannelsObserver> observers = new ArrayList<ActiveChannelsObserver>();
-    
+
     private ActiveChannelsRegistry()
     {
         super("Active channels", null);
-        
+
         new ActualizeActiveChannelsTask(this).start();
     }
-    
+
     public static ActiveChannelsRegistry createRegistry()
     {
         return new ActiveChannelsRegistry();
@@ -44,7 +44,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
     {
         return true;
     }
-    
+
     @Override
     public String getIconName()
     {
@@ -57,7 +57,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         {
             return;
         }
-        
+
         if (channel.getParent() == null)
         {
             getChildren().add(channel);
@@ -66,22 +66,22 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         {
             channel.getParent().addChild(channel);
         }
-        
+
         notifyActiveChannelsObservers();
     }
-    
+
     public void deleteChannel(List<String> path)
     {
         IActiveChannel channel = findChannel(path);
-        
+
         if (channel == null)
         {
             return;
         }
-        
+
         deleteChannel(channel);
     }
-    
+
     public void deleteChannel(IActiveChannel channel)
     {
         if (channel.getParent() == null)
@@ -92,90 +92,90 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         {
             channel.getParent().removeChild(channel);
         }
-        
+
         notifyActiveChannelsObservers();
     }
-    
+
     public boolean existsChannel(List<String> path)
     {
         return findChannel(path) != null;
     }
-    
+
     public IActiveChannelThrough findChannelThrough(List<String> path)
     {
         IActiveChannel channel = findChannel(path);
-        
+
         if (channel instanceof IActiveChannelThrough)
         {
             return (IActiveChannelThrough)channel;
         }
-        
+
         return null;
     }
-    
+
     public IActiveChannel findChannel(List<String> path)
     {
         List<IActiveChannel> channels = new ArrayList<IActiveChannel>();
-        
+
         for (IConfigItem item : getChildren())
         {
             channels.add((IActiveChannel)item);
         }
-        
+
         int childIndex = 0;
         int childrenLevel = 0;
-        
+
         while (childIndex < channels.size())
         {
             if (childrenLevel == path.size())
             {
                 return null;
             }
-            
+
             IActiveChannel channel = channels.get(childIndex);
-            
+
             if (channel instanceof IHidableChannel && ((IHidableChannel)channel).isHidden())
             {
                 childIndex++;
-                
+
                 continue;
             }
-            
+
             if (path.get(childrenLevel).equals(channel.getId()))
             {
                 if (childrenLevel == path.size() - 1)
                 {
                     return channel;
                 }
-                
+
                 if (!(channel instanceof IActiveChannelThrough))
                 {
                     return null;
                 }
-                
+
                 channels = ((IActiveChannelThrough)channel).getChildren();
                 childIndex = 0;
                 childrenLevel++;
-                
+
                 continue;
             }
-            
+
             childIndex++;
         }
-        
+
         return null;
     }
-    
+
     public void hideAllChannels()
     {
         forEachActiveChannel(new HideActiveChannelVisitor());
     }
-    
+
     public void actualizeAllChannels()
     {
         forEachActiveChannel(new ActualizeActiveChannelVisitor());
     }
-    
+
     private void forEachActiveChannel(IActiveChannelVisitor visitor)
     {
         new ArrayList<IConfigItem>(getChildren()).forEach(new Consumer<IConfigItem>()

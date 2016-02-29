@@ -69,9 +69,9 @@ public class ConfigLoader
                 listener.notify(e.getLocalizedMessage());
             }
         }
-        
+
         compositeConfig.add(new ActiveChannelsConfig(acRegistry));
-        
+
         return compositeConfig;
     }
 

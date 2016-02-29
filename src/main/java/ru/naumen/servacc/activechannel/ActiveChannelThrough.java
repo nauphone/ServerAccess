@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel;
 
@@ -17,7 +17,7 @@ import ru.naumen.servacc.activechannel.visitors.IActiveChannelVisitor;
 public abstract class ActiveChannelThrough extends ActiveChannel implements IActiveChannelThrough
 {
     private List<IActiveChannel> children = new ArrayList<IActiveChannel>();
-    
+
     public ActiveChannelThrough(IActiveChannelThrough parent, ActiveChannelsRegistry registry)
     {
         super(parent, registry);
@@ -28,7 +28,7 @@ public abstract class ActiveChannelThrough extends ActiveChannel implements IAct
     {
         return getChildrenCopy();
     }
-    
+
     private List<IActiveChannel> getChildrenCopy()
     {
         return new ArrayList<IActiveChannel>(children);
@@ -53,7 +53,7 @@ public abstract class ActiveChannelThrough extends ActiveChannel implements IAct
         {
             child.accept(visitor);
         }
-        
+
         super.accept(visitor);
     }
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.ui;
 
@@ -18,23 +18,23 @@ import ru.naumen.servacc.config2.i.IConnectableConfigItem;
 public class WaitForConnectionTask implements Runnable
 {
     private static final int MIN_DELAY = 100;
-    
+
     private TreeItem treeItem;
     private IConnectableConfigItem configItem;
     private Future<?> connectionTaskFuture;
-    
+
     public WaitForConnectionTask(TreeItem treeItem, IConnectableConfigItem configItem, Future<?> connectionTaskFuture)
     {
         this.treeItem = treeItem;
         this.configItem = configItem;
         this.connectionTaskFuture = connectionTaskFuture;
     }
-    
+
     @Override
     public void run()
     {
         List<Image> images = ImageCache.getImages(configItem.getConnectionProcessIconName());
-        
+
         int imageIndex = 0;
         while (imageIndex < images.size())
         {
@@ -43,29 +43,29 @@ public class WaitForConnectionTask implements Runnable
                 changeTreeItemIcon(ImageCache.getImage(configItem.getIconName()));
                 return;
             }
-            
+
             Image image = images.get(imageIndex);
             int delay = image.getImageData().delayTime;
-            
+
             changeTreeItemIcon(image);
-            
+
             imageIndex++;
             if (imageIndex == images.size())
             {
                 imageIndex = 0;
             }
-            
+
             waitPause(delay);
         }
     }
-    
+
     private void changeTreeItemIcon(Image image)
     {
         if (treeItem.isDisposed())
         {
             return;
         }
-        
+
         treeItem.getDisplay().asyncExec(new Runnable()
         {
             @Override
@@ -75,13 +75,13 @@ public class WaitForConnectionTask implements Runnable
                 {
                     return;
                 }
-                
+
                 treeItem.setImage(image);
                 treeItem.getParent().update();
             }
         });
     }
-    
+
     private void waitPause(int delay)
     {
         try

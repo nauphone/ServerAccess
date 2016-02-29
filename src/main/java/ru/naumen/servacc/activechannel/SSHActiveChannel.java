@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel;
 
@@ -18,27 +18,27 @@ import ru.naumen.servacc.config2.SSHAccount;
 public class SSHActiveChannel extends ActiveChannelThrough implements IHidableChannel
 {
     private SSHAccount sshAccount;
-    
+
     private int port;
     private int portThrough = -1;
-    
+
     private ConnectionsManager connManager;
-    
+
     private boolean hidden;
-    
+
     public SSHActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, SSHAccount sshAccount, int port, ConnectionsManager connManager)
     {
         super(parent, registry);
-        
+
         this.sshAccount = sshAccount;
         this.port = port;
         this.connManager = connManager;
     }
-    
+
     public SSHActiveChannel(IActiveChannelThrough parent, ActiveChannelsRegistry registry, SSHAccount sshAccount, int port, int portThrough, ConnectionsManager connManager)
     {
         this(parent, registry, sshAccount, port, connManager);
-        
+
         this.portThrough = portThrough;
     }
 
@@ -53,7 +53,7 @@ public class SSHActiveChannel extends ActiveChannelThrough implements IHidableCh
     {
         return hidden;
     }
-    
+
     @Override
     public void hide()
     {
@@ -76,7 +76,7 @@ public class SSHActiveChannel extends ActiveChannelThrough implements IHidableCh
     public void close()
     {
         super.close();
-        
+
         // TODO: Close SSH client
     }
 
@@ -85,19 +85,19 @@ public class SSHActiveChannel extends ActiveChannelThrough implements IHidableCh
     {
         return "ports: " + port + (portThrough != -1 ? " via " + portThrough : "") + "(" + sshAccount.toString() + ")";
     }
-    
+
     public SSH2SimpleClient getSSHClient()
     {
         String connectionId = getSSHAccountId();
-        
+
         if (connManager.containsKey(connectionId))
         {
             return connManager.get(connectionId);
         }
-        
+
         return null;
     }
-    
+
     public String getSSHAccountId()
     {
         return sshAccount.getUniqueIdentity();

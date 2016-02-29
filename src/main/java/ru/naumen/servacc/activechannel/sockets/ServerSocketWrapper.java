@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel.sockets;
 
@@ -23,7 +23,7 @@ public class ServerSocketWrapper implements AutoCloseable
     private SSHAccount account;
     private Class<? extends IActiveChannel> activeChannelClass;
     private ActiveChannelsRegistry registry;
-    
+
     public ServerSocketWrapper(ServerSocket serverSocket, SSHAccount account, Class<? extends IActiveChannel> activeChannelClass, ActiveChannelsRegistry registry)
     {
         this.serverSocket = serverSocket;
@@ -35,18 +35,18 @@ public class ServerSocketWrapper implements AutoCloseable
     public Socket accept() throws IOException
     {
         Socket acceptedSocket = serverSocket.accept();
-        
+
         register(account, serverSocket, acceptedSocket);
-        
+
         return acceptedSocket;
     }
-    
+
     protected void register(SSHAccount account, ServerSocket serverSocket, Socket acceptedSocket)
     {
         if (account != null)
         {
             IActiveChannelThrough channel = registry.findChannelThrough(account.getUniquePathReversed());
-            
+
             if (channel != null)
             {
                 try
@@ -62,7 +62,7 @@ public class ServerSocketWrapper implements AutoCloseable
             }
         }
     }
-    
+
     public ServerSocket getServerSocket()
     {
         return serverSocket;

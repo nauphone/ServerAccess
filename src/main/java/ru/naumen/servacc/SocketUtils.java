@@ -76,9 +76,9 @@ public final class SocketUtils
         }
         return addresses;
     }
-    
+
     public static boolean isPortFree(int port)
-    {   
+    {
         try (ServerSocket server = new ServerSocket(port))
         {
             return true;

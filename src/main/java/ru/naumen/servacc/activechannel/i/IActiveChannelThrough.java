@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel.i;
 
@@ -12,7 +12,7 @@ import java.util.List;
 public interface IActiveChannelThrough extends IActiveChannel
 {
     List<IActiveChannel> getChildren();
-    
+
     void addChild(IActiveChannel child);
     void removeChild(IActiveChannel child);
 }

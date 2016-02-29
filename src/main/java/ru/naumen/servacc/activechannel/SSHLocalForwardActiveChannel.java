@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package ru.naumen.servacc.activechannel;
 
@@ -12,26 +12,26 @@ import ru.naumen.servacc.SocketUtils;
 public class SSHLocalForwardActiveChannel extends ActiveChannel
 {
     private int port;
-    
+
     public SSHLocalForwardActiveChannel(SSHActiveChannel parent, ActiveChannelsRegistry registry, int port)
     {
         super(parent, registry);
-        
+
         this.port = port;
     }
-    
+
     @Override
     public String getId()
     {
         return String.valueOf(port);
     }
-    
+
     @Override
     public boolean matches(String filter)
     {
         return true;
     }
-    
+
     @Override
     public String getIconName()
     {
@@ -42,7 +42,7 @@ public class SSHLocalForwardActiveChannel extends ActiveChannel
     public void close()
     {
         super.close();
-        
+
         // TODO: Remove local port forwarding from SSH client
     }
 
@@ -51,7 +51,7 @@ public class SSHLocalForwardActiveChannel extends ActiveChannel
     {
         return "port: " + port + " (local forward)";
     }
-    
+
     private SSHActiveChannel narrowParent()
     {
         return (SSHActiveChannel)getParent();
