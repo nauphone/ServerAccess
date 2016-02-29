@@ -3,10 +3,6 @@
  */
 package ru.naumen.servacc.activechannel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
-
 import ru.naumen.servacc.activechannel.i.ActiveChannelsObservable;
 import ru.naumen.servacc.activechannel.i.ActiveChannelsObserver;
 import ru.naumen.servacc.activechannel.i.IActiveChannel;
@@ -19,6 +15,10 @@ import ru.naumen.servacc.activechannel.visitors.IActiveChannelVisitor;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.i.IConfigItem;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 /**
  * @author vtarasov
  * @since 16.02.16
@@ -27,16 +27,10 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
 {
     private List<ActiveChannelsObserver> observers = new ArrayList<ActiveChannelsObserver>();
 
-    private ActiveChannelsRegistry()
+    public ActiveChannelsRegistry()
     {
         super("Active channels", null);
-
         new ActualizeActiveChannelsTask(this).start();
-    }
-
-    public static ActiveChannelsRegistry createRegistry()
-    {
-        return new ActiveChannelsRegistry();
     }
 
     @Override

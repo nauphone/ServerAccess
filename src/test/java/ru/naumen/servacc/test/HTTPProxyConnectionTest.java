@@ -57,7 +57,7 @@ public class HTTPProxyConnectionTest
     private final HttpHost proxyForHttpClient = new HttpHost("127.0.0.1", PORT);
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final SSHAccount account = new SSHAccount();
-    private final Backend backend = new MindtermBackend(new OS(), executorService, ActiveChannelsRegistry.createRegistry());
+    private final Backend backend = new MindtermBackend(new OS(), executorService, new ActiveChannelsRegistry());
     private final MessageListener messageListener = new MessageListener()
     {
         @Override
@@ -69,7 +69,7 @@ public class HTTPProxyConnectionTest
     public final Timeout testTimeout = new Timeout(10000);
 
     // system under test
-    private final HTTPProxy proxy = new HTTPProxy(backend, executorService, ActiveChannelsRegistry.createRegistry());
+    private final HTTPProxy proxy = new HTTPProxy(backend, executorService, new ActiveChannelsRegistry());
 
     @Before
     public void startProxy()

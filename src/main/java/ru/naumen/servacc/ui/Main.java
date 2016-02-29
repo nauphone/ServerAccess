@@ -41,7 +41,7 @@ public class Main implements Runnable
     public void run()
     {
         // Create active channels registry
-        ActiveChannelsRegistry acRegistry = ActiveChannelsRegistry.createRegistry();
+        ActiveChannelsRegistry acRegistry = new ActiveChannelsRegistry();
 
         // Create GUI
         OS system = new OS();
