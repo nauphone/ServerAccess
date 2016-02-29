@@ -431,8 +431,6 @@ public class MindtermBackend implements Backend {
             int localPort = SocketUtils.getFreePort();
             //FIXME: localize newLocalForward usage in localPortForward
             through.getConnection().newLocalForward(SocketUtils.LOCALHOST, localPort, host, port);
-            //host = SocketUtils.LOCALHOST;
-            //port = localPort;
             return createSSH2Client(SocketUtils.LOCALHOST, localPort, true, account);
         }
         return createSSH2Client(host, port, false, account);
