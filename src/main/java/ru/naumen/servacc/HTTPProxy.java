@@ -142,9 +142,6 @@ public class HTTPProxy
                 {
                     parseRequest();
                     LOG.debug("Got request: " + request + " -> " + host + ":" + port);
-                    // TODO: maybe it should be redesigned like:
-                    // backend.openProxyConnection(host, port, account, socket)
-                    // this will allow us break dependency on MindTerm in this class
                     DualChannel channel = backend.openProxyConnection(host, port, account);
                     crossConnectStreams(channel, socket);
                 }
