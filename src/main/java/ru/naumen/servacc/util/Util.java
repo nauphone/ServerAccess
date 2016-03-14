@@ -9,6 +9,7 @@
  */
 package ru.naumen.servacc.util;
 
+import java.security.SecureRandom;
 import java.util.regex.Pattern;
 
 public final class Util
@@ -27,5 +28,16 @@ public final class Util
     {
         String regexp = "(?iu).*" + Pattern.quote(filter) + ".*";
         return string.matches(regexp);
+    }
+    
+    public static String generateRandomString(String alphabet, int length)
+    {
+        StringBuilder sb = new StringBuilder(length);
+        SecureRandom rnd = new SecureRandom();
+        for(int i = 0; i < length; i++)
+        {
+           sb.append(alphabet.charAt(rnd.nextInt(alphabet.length())));
+        }
+        return sb.toString();
     }
 }

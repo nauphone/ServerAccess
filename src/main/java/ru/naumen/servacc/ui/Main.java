@@ -46,11 +46,12 @@ public class Main implements Runnable
         // Create GUI
         OS system = new OS();
         DefaultConfiguration configuration = system.getConfiguration();
+        system.initTempDirectiries();
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
-        Backend backend = new MindtermBackend(system, executor, acRegistry);
+        Backend backend = new MindtermBackend(system, executor, acRegistry, shell);
         HTTPProxy httpProxy = new HTTPProxy(backend, executor, acRegistry);
         UIController controller = new UIController(shell, system.getGUIOptions(), backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"), acRegistry);
@@ -68,6 +69,7 @@ public class Main implements Runnable
         httpProxy.finish();
         display.dispose();
         backend.cleanup();
+        system.removeTempDirectiries();
     }
 
     private Shell createShell(Display display, ApplicationProperties windowProperties)

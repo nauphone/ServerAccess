@@ -26,7 +26,7 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.Inflater;
 import java.util.zip.InflaterInputStream;
 
-public class HTTPResource
+public class HTTPResource implements AutoCloseable
 {
     private static final int TIMEOUT = 0;
 
@@ -51,6 +51,7 @@ public class HTTPResource
         this.url = new URL(url);
     }
 
+    @Override
     public void close()
     {
         if (connection != null)

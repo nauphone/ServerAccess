@@ -25,7 +25,7 @@ public class MindtermBackendTest
 {
     private GlobalThroughViewStub view = new GlobalThroughViewStub();
 
-    private Backend backend = new MindtermBackend(new OS(), null, new ActiveChannelsRegistry());
+    private Backend backend = new MindtermBackend(new OS(), null, new ActiveChannelsRegistry(), null);
 
     @Before
     public void setGlobalThroughView()

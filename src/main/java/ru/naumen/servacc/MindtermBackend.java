@@ -15,7 +15,6 @@ import com.mindbright.ssh2.SSH2AuthKbdInteract;
 import com.mindbright.ssh2.SSH2AuthPassword;
 import com.mindbright.ssh2.SSH2AuthPublicKey;
 import com.mindbright.ssh2.SSH2Authenticator;
-import com.mindbright.ssh2.SSH2KeyPairFile;
 import com.mindbright.ssh2.SSH2SessionChannel;
 import com.mindbright.ssh2.SSH2Signature;
 import com.mindbright.ssh2.SSH2SimpleClient;
@@ -23,6 +22,8 @@ import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
 import org.apache.log4j.Logger;
+import org.eclipse.swt.widgets.Shell;
+
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.activechannel.FTPActiveChannel;
 import ru.naumen.servacc.activechannel.SSHActiveChannel;
@@ -43,9 +44,9 @@ import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.telnet.ConsoleManager;
+import ru.naumen.servacc.ui.SSHKeyLoader;
 import ru.naumen.servacc.util.Util;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -72,22 +73,22 @@ public class MindtermBackend implements Backend {
     private final Command browser;
     private final Command terminal;
     private final Command ftpBrowser;
-    private final File keyStoreDir;
     private final ExecutorService executor;
     private final ConnectionsManager connections;
     private SSHAccount globalThrough;
     private GlobalThroughView globalThroughView;
     private final ActiveChannelsRegistry acRegistry;
+    private final SSHKeyLoader keyLoader;
 
-    public MindtermBackend(OS system, ExecutorService executorService, ActiveChannelsRegistry acRegistry)
+    public MindtermBackend(OS system, ExecutorService executorService, ActiveChannelsRegistry acRegistry, Shell shell)
     {
         this.browser = system.getBrowser();
         this.ftpBrowser = system.getFTPBrowser();
         this.terminal = system.getTerminal();
         this.executor = executorService;
-        keyStoreDir = system.getKeyStoreDirectory();
         connections = new ConnectionsManager();
         this.acRegistry = acRegistry;
+        this.keyLoader = new SSHKeyLoader(shell, system.getKeyStoreDirectory(), system.getTempKeyStoreDirectory());
     }
 
     @Override
@@ -457,10 +458,7 @@ public class MindtermBackend implements Backend {
         else
         {
             final SSHKey key = account.getSecureKey();
-            final File keyFile = new File(keyStoreDir, key.path);
-            SSH2KeyPairFile ssh2KeyPairFile = new SSH2KeyPairFile();
-            ssh2KeyPairFile.load(keyFile.getAbsolutePath(), key.password);
-            KeyPair keyPair = ssh2KeyPairFile.getKeyPair();
+            KeyPair keyPair = keyLoader.loadKeyPair(key);
 
             SSH2Signature rsaKey = SSH2Signature.getInstance(key.protocolType);
             rsaKey.setPublicKey(keyPair.getPublic());

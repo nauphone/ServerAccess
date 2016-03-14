@@ -5,6 +5,7 @@ import java.util.Iterator;
 
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.settings.impl.DefaultConfiguration;
+import ru.naumen.servacc.util.FileUtil;
 
 /**
  * @author Andrey Hitrin
@@ -87,5 +88,21 @@ public class OS
     public File getKeyStoreDirectory()
     {
         return platform.getKeyStoreDirectory();
+    }
+    
+    public File getTempKeyStoreDirectory()
+    {
+        return platform.getTempKeyStoreDirectory();
+    }
+    
+    public void initTempDirectiries()
+    {
+        removeTempDirectiries();
+        platform.getTempKeyStoreDirectory().mkdir();
+    }
+    
+    public void removeTempDirectiries()
+    {
+        FileUtil.deleteDirReqursivelyIfExists(platform.getTempKeyStoreDirectory());
     }
 }
