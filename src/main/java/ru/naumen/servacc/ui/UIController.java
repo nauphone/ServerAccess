@@ -521,10 +521,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private void defaultActionRequested(TreeItem item)
     {
         final TreeItemController tic = getConfigTreeItem(item);
-        if (tic == null)
-        {
-            return;
-        }
         try
         {
             final IConfigItem data = tic.getData();
@@ -592,7 +588,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private void portForwardingRequested(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        if (tic != null && tic.getData() instanceof SSHAccount)
+        if (tic.getData() instanceof SSHAccount)
         {
             try
             {
@@ -615,7 +611,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private void ftpConnectionRequested(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        if (tic != null && tic.getData() instanceof SSHAccount)
+        if (tic.getData() instanceof SSHAccount)
         {
             try
             {
@@ -632,7 +628,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private void httpProxySetupRequested(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        if (tic != null && tic.getData() instanceof SSHAccount)
+        if (tic.getData() instanceof SSHAccount)
         {
             ProxySetupDialog dialog = new ProxySetupDialog(shell);
             dialog.show();
@@ -758,7 +754,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private void updateExpandedState(TreeItem item)
     {
         TreeItemController data = getConfigTreeItem(item);
-        if (data == null || !data.isVisible())
+        if (!data.isVisible())
         {
             return;
         }
@@ -807,25 +803,25 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private static boolean isPortForwarder(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        return (tic != null) && (tic.getData() instanceof IPortForwarder);
+        return tic.getData() instanceof IPortForwarder;
     }
 
     private static boolean isAccount(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        return (tic != null) && (tic.getData() instanceof Account);
+        return tic.getData() instanceof Account;
     }
 
     private static boolean isConnectable(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        return (tic != null) && (tic.getData() instanceof IConnectable);
+        return tic.getData() instanceof IConnectable;
     }
 
     private static boolean isFTPBrowseable(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        return (tic != null) && (tic.getData() instanceof IFTPBrowseable);
+        return tic.getData() instanceof IFTPBrowseable;
     }
 
     private static TreeItemController getConfigTreeItem(TreeItem item)
@@ -838,7 +834,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
                 return (TreeItemController) data;
             }
         }
-        return null;
+        return new TreeItemController();
     }
 
     private TreeItem getSelectedTreeItem()
