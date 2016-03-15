@@ -9,10 +9,13 @@ import static ru.naumen.servacc.test.config2.ConfigStub.httpAccount;
 
 import org.junit.Before;
 import org.junit.Test;
+
 import ru.naumen.servacc.Backend;
-import ru.naumen.servacc.MindtermBackend;
-import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.GlobalThroughView;
+import ru.naumen.servacc.IAuthenticationParametersGetter;
+import ru.naumen.servacc.MindtermBackend;
+import ru.naumen.servacc.SSHKeyLoader;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.test.config2.SSHAccountStub;
@@ -25,8 +28,39 @@ public class MindtermBackendTest
 {
     private GlobalThroughViewStub view = new GlobalThroughViewStub();
 
-    private Backend backend = new MindtermBackend(new OS(), null, new ActiveChannelsRegistry(), null);
+    private Backend backend;
+    
+    private final IAuthenticationParametersGetter authGetter = new IAuthenticationParametersGetter()
+    {
+        @Override
+        public void setResourcePath(String resourcePath)
+        {
+        }
 
+        @Override
+        public void doGet()
+        {
+        }
+
+        @Override
+        public String getLogin()
+        {
+            return "login";
+        }
+
+        @Override
+        public String getPassword()
+        {
+            return "password";
+        }
+    };
+
+    public MindtermBackendTest()
+    {
+        OS system = new OS();
+        backend = new MindtermBackend(new OS(), null, new ActiveChannelsRegistry(), new SSHKeyLoader(authGetter, system.getKeyStoreDirectory(), system.getTempKeyStoreDirectory()));
+    }
+    
     @Before
     public void setGlobalThroughView()
     {

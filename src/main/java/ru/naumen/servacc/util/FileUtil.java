@@ -1,9 +1,22 @@
-/**
- * 
+/*
+ * Copyright (C) 2016 NAUMEN. All rights reserved.
+ *
+ * This file may be distributed and/or modified under the terms of the
+ * GNU General Public License version 2 as published by the Free Software
+ * Foundation and appearing in the file LICENSE.GPL included in the
+ * packaging of this file.
+ *
  */
 package ru.naumen.servacc.util;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 
 /**
  * @author vtarasov
@@ -16,26 +29,32 @@ public class FileUtil
         // Utility class should not have public constructor
     }
     
-    public static void deleteDirReqursively(File dir)
+    public static void deleteDirReqursively(File dir) throws IOException
     {
         if (dir.isDirectory())
         {
-            for (File subFile : dir.listFiles())
+            Path directory = Paths.get(dir.getAbsolutePath());
+            Files.walkFileTree(directory, new SimpleFileVisitor<Path>()
             {
-                if (subFile.isFile())
+                @Override
+                public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException
                 {
-                    subFile.delete();
+                    Files.delete(file);
+                    return FileVisitResult.CONTINUE;
                 }
-                else
+
+                @Override
+                public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException
                 {
-                    deleteDirReqursively(subFile);
+                    Files.delete(dir);
+                    return FileVisitResult.CONTINUE;
                 }
-            }
-            dir.delete();
+
+            });
         }
     }
     
-    public static void deleteDirReqursivelyIfExists(File dir)
+    public static void deleteDirReqursivelyIfExists(File dir) throws IOException
     {
         if (dir.exists())
         {

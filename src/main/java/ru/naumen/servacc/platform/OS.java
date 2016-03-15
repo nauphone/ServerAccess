@@ -1,8 +1,10 @@
 package ru.naumen.servacc.platform;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
+import ru.naumen.servacc.exception.ServerAccessException;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.settings.impl.DefaultConfiguration;
 import ru.naumen.servacc.util.FileUtil;
@@ -95,14 +97,21 @@ public class OS
         return platform.getTempKeyStoreDirectory();
     }
     
-    public void initTempDirectiries()
+    public void initTempDirectories()
     {
-        removeTempDirectiries();
+        removeTempDirectories();
         platform.getTempKeyStoreDirectory().mkdir();
     }
     
-    public void removeTempDirectiries()
+    public void removeTempDirectories()
     {
-        FileUtil.deleteDirReqursivelyIfExists(platform.getTempKeyStoreDirectory());
+        try
+        {
+            FileUtil.deleteDirReqursivelyIfExists(platform.getTempKeyStoreDirectory());
+        }
+        catch (IOException e)
+        {
+            throw new ServerAccessException(e);
+        }
     }
 }

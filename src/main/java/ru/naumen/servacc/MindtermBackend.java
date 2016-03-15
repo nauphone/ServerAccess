@@ -22,7 +22,6 @@ import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
 import org.apache.log4j.Logger;
-import org.eclipse.swt.widgets.Shell;
 
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.activechannel.FTPActiveChannel;
@@ -44,7 +43,6 @@ import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.telnet.ConsoleManager;
-import ru.naumen.servacc.ui.SSHKeyLoader;
 import ru.naumen.servacc.util.Util;
 
 import java.io.IOException;
@@ -80,7 +78,7 @@ public class MindtermBackend implements Backend {
     private final ActiveChannelsRegistry acRegistry;
     private final SSHKeyLoader keyLoader;
 
-    public MindtermBackend(OS system, ExecutorService executorService, ActiveChannelsRegistry acRegistry, Shell shell)
+    public MindtermBackend(OS system, ExecutorService executorService, ActiveChannelsRegistry acRegistry, SSHKeyLoader keyLoader)
     {
         this.browser = system.getBrowser();
         this.ftpBrowser = system.getFTPBrowser();
@@ -88,7 +86,7 @@ public class MindtermBackend implements Backend {
         this.executor = executorService;
         connections = new ConnectionsManager();
         this.acRegistry = acRegistry;
-        this.keyLoader = new SSHKeyLoader(shell, system.getKeyStoreDirectory(), system.getTempKeyStoreDirectory());
+        this.keyLoader = keyLoader;
     }
 
     @Override

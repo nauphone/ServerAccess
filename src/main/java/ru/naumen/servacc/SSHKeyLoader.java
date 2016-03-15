@@ -1,7 +1,13 @@
-/**
- * 
+/*
+ * Copyright (C) 2016 NAUMEN. All rights reserved.
+ *
+ * This file may be distributed and/or modified under the terms of the
+ * GNU General Public License version 2 as published by the Free Software
+ * Foundation and appearing in the file LICENSE.GPL included in the
+ * packaging of this file.
+ *
  */
-package ru.naumen.servacc.ui;
+package ru.naumen.servacc;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -11,14 +17,10 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Shell;
-
 import com.mindbright.jca.security.KeyPair;
 import com.mindbright.ssh2.SSH2Exception;
 import com.mindbright.ssh2.SSH2KeyPairFile;
 
-import ru.naumen.servacc.HTTPResource;
 import ru.naumen.servacc.HTTPResource.NotAuthenticatedError;
 import ru.naumen.servacc.config2.SSHKey;
 import ru.naumen.servacc.util.Util;
@@ -34,15 +36,16 @@ public class SSHKeyLoader
     private static final String PREFIX_HTTP = "http://";
     private static final String PREFIX_HTTPS = "https://";
     
-    private final Shell shell;
+    private final IAuthenticationParametersGetter keyURLAuthParamsGetter;
+    
     private final File localKeyStore;
     private final File tempKeyStore;
     
     private final Map<String, String[]> authCache = new HashMap<>();
     
-    public SSHKeyLoader(final Shell shell, final File localKeyStore, final File tempKeyStore)
+    public SSHKeyLoader(final IAuthenticationParametersGetter keyURLAuthParamsGetter, final File localKeyStore, final File tempKeyStore)
     {
-        this.shell = shell;
+        this.keyURLAuthParamsGetter = keyURLAuthParamsGetter;
         this.localKeyStore = localKeyStore;
         this.tempKeyStore = tempKeyStore;
     }
@@ -105,14 +108,14 @@ public class SSHKeyLoader
     
     private String[] requestAuth(final String keyPath) throws LoginPasswordNotFoundException
     {
-        AuthenticationDialogShowerThread authDialogShowerThread = new AuthenticationDialogShowerThread(shell, keyPath);
-        Display.getDefault().syncExec(authDialogShowerThread);
+        keyURLAuthParamsGetter.setResourcePath(keyPath);
+        keyURLAuthParamsGetter.doGet();
         
-        if (authDialogShowerThread.getLoginPassword() == null)
+        if (keyURLAuthParamsGetter.getLogin() == null)
         {
             throw new LoginPasswordNotFoundException(keyPath);
         }
-        return authDialogShowerThread.getLoginPassword();
+        return new String[] { keyURLAuthParamsGetter.getLogin(), keyURLAuthParamsGetter.getPassword() };
     }
     
     private void saveLoginPassword(final String keyPath, final String[] loginPassword)
@@ -255,38 +258,6 @@ public class SSHKeyLoader
         public LoginPasswordNotFoundException(String keyPath)
         {
             super("Login/password not found to key path: " + keyPath);
-        }
-    }
-    
-    private static class AuthenticationDialogShowerThread implements Runnable
-    {
-        private final Shell shell;
-        private final String resuourceUrl;
-        private String[] loginPassword;
-        
-        private AuthenticationDialogShowerThread(final Shell shell, final String resuourceUrl)
-        {
-            this.shell = shell;
-            this.resuourceUrl = resuourceUrl;
-        }
-
-        @Override
-        public void run()
-        {
-            AuthenticationDialog dialog = new AuthenticationDialog(shell);
-            dialog.setURL(resuourceUrl);
-            if (dialog.show())
-            {
-                String login = dialog.getLogin();
-                String password = dialog.getPassword();
-                
-                loginPassword = new String[] { login, password };
-            }
-        }
-        
-        public String[] getLoginPassword()
-        {
-            return loginPassword;
         }
     }
 }

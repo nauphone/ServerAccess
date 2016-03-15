@@ -33,11 +33,14 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
+
 import ru.naumen.servacc.Backend;
-import ru.naumen.servacc.MindtermBackend;
-import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.HTTPProxy;
+import ru.naumen.servacc.IAuthenticationParametersGetter;
 import ru.naumen.servacc.MessageListener;
+import ru.naumen.servacc.MindtermBackend;
+import ru.naumen.servacc.SSHKeyLoader;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.platform.OS;
@@ -57,7 +60,7 @@ public class HTTPProxyConnectionTest
     private final HttpHost proxyForHttpClient = new HttpHost("127.0.0.1", PORT);
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final SSHAccount account = new SSHAccount();
-    private final Backend backend = new MindtermBackend(new OS(), executorService, new ActiveChannelsRegistry(), null);
+    private final Backend backend;
     private final MessageListener messageListener = new MessageListener()
     {
         @Override
@@ -69,7 +72,39 @@ public class HTTPProxyConnectionTest
     public final Timeout testTimeout = new Timeout(10000);
 
     // system under test
-    private final HTTPProxy proxy = new HTTPProxy(backend, executorService, new ActiveChannelsRegistry());
+    private final HTTPProxy proxy;
+    
+    private final IAuthenticationParametersGetter authGetter = new IAuthenticationParametersGetter()
+    {
+        @Override
+        public void setResourcePath(String resourcePath)
+        {
+        }
+
+        @Override
+        public void doGet()
+        {
+        }
+
+        @Override
+        public String getLogin()
+        {
+            return "login";
+        }
+
+        @Override
+        public String getPassword()
+        {
+            return "password";
+        }
+    };
+    
+    public HTTPProxyConnectionTest()
+    {
+        OS system = new OS();
+        backend = new MindtermBackend(system, executorService, new ActiveChannelsRegistry(), new SSHKeyLoader(authGetter, system.getKeyStoreDirectory(), system.getTempKeyStoreDirectory()));
+        proxy = new HTTPProxy(backend, executorService, new ActiveChannelsRegistry());
+    }
 
     @Before
     public void startProxy()
