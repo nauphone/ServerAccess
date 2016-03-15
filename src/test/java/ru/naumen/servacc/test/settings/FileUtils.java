@@ -29,20 +29,22 @@ public class FileUtils
     public static void write(File file, String contents) throws IOException
     {
         file.createNewFile();
-        PrintWriter writer = new PrintWriter(new FileWriter(file));
-        writer.print(contents);
-        writer.flush();
+        try (PrintWriter writer = new PrintWriter(new FileWriter(file))) {
+            writer.print(contents);
+            writer.flush();
+        }
     }
 
     public static List<String> contents(File file) throws IOException
     {
         List<String> contents = new ArrayList<>();
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String s;
-        while((s = reader.readLine()) != null)
-        {
-            contents.add(s);
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+            String s;
+            while((s = reader.readLine()) != null)
+            {
+                contents.add(s);
+            }
+            return contents;
         }
-        return contents;
     }
 }

@@ -49,15 +49,16 @@ public class PropertiesFile extends Properties
 
     public void store() throws IOException
     {
-        OutputStream os = new FileOutputStream(file);
         String comment = "This file is auto-generated. DO NOT EDIT IT MANUALLY";
-        if (isXML)
-        {
-            super.storeToXML(os, comment);
-        }
-        else
-        {
-            super.store(os, comment);
+        try (OutputStream os = new FileOutputStream(file)) {
+            if (isXML)
+            {
+                super.storeToXML(os, comment);
+            }
+            else
+            {
+                super.store(os, comment);
+            }
         }
     }
 }

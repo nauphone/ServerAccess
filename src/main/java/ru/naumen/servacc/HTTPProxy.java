@@ -101,11 +101,13 @@ public class HTTPProxy
         {
             try
             {
-                ServerSocketWrapper serverSocket = new ServerSocketWrapper(new ServerSocket(port), serverAccount, HTTPProxyActiveChannel.class, acRegistry);
-                while (true)
-                {
-                    Socket s = serverSocket.accept();
-                    executor.submit(new Listener(s, serverAccount));
+                try (ServerSocketWrapper serverSocket = new ServerSocketWrapper(
+                        new ServerSocket(port), serverAccount, HTTPProxyActiveChannel.class, acRegistry)) {
+                    while (true)
+                    {
+                        Socket s = serverSocket.accept();
+                        executor.submit(new Listener(s, serverAccount));
+                    }
                 }
             }
             catch (IOException e)
