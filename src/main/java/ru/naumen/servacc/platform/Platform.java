@@ -21,6 +21,11 @@ public interface Platform
     File getConfigDirectory();
 
     File getKeyStoreDirectory();
+    
+    default File getTempKeyStoreDirectory()
+    {
+        return new File(getConfigDirectory(), "temp");
+    };
 
     Command defaultBrowser();
 

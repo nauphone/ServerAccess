@@ -1,10 +1,13 @@
 package ru.naumen.servacc.platform;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Iterator;
 
+import ru.naumen.servacc.exception.ServerAccessException;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.settings.impl.DefaultConfiguration;
+import ru.naumen.servacc.util.FileUtil;
 
 /**
  * @author Andrey Hitrin
@@ -87,5 +90,28 @@ public class OS
     public File getKeyStoreDirectory()
     {
         return platform.getKeyStoreDirectory();
+    }
+    
+    public File getTempKeyStoreDirectory()
+    {
+        return platform.getTempKeyStoreDirectory();
+    }
+    
+    public void initTempDirectories()
+    {
+        removeTempDirectories();
+        platform.getTempKeyStoreDirectory().mkdir();
+    }
+    
+    public void removeTempDirectories()
+    {
+        try
+        {
+            FileUtil.deleteDirReqursivelyIfExists(platform.getTempKeyStoreDirectory());
+        }
+        catch (IOException e)
+        {
+            throw new ServerAccessException(e);
+        }
     }
 }

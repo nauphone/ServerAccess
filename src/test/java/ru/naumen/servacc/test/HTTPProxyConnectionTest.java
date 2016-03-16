@@ -57,7 +57,7 @@ public class HTTPProxyConnectionTest
     private final HttpHost proxyForHttpClient = new HttpHost("127.0.0.1", PORT);
     private final ExecutorService executorService = Executors.newCachedThreadPool();
     private final SSHAccount account = new SSHAccount();
-    private final Backend backend = new MindtermBackend(new OS(), executorService, new ActiveChannelsRegistry());
+    private final Backend backend = new MindtermBackend(new OS(), executorService, new ActiveChannelsRegistry(), null);
     private final MessageListener messageListener = new MessageListener()
     {
         @Override

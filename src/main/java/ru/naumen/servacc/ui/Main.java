@@ -19,10 +19,13 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+
 import ru.naumen.servacc.Backend;
-import ru.naumen.servacc.MindtermBackend;
-import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.HTTPProxy;
+import ru.naumen.servacc.IAuthenticationParametersGetter;
+import ru.naumen.servacc.MindtermBackend;
+import ru.naumen.servacc.SSHKeyLoader;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ShellConfiguration;
@@ -46,11 +49,13 @@ public class Main implements Runnable
         // Create GUI
         OS system = new OS();
         DefaultConfiguration configuration = system.getConfiguration();
+        system.initTempDirectories();
 
         Display display = new Display();
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
-        Backend backend = new MindtermBackend(system, executor, acRegistry);
+        IAuthenticationParametersGetter authParamsGetter = new AuthenticationDialogParametersGetter(shell);
+        Backend backend = new MindtermBackend(system, executor, acRegistry, new SSHKeyLoader(authParamsGetter, system.getKeyStoreDirectory(), system.getTempKeyStoreDirectory()));
         HTTPProxy httpProxy = new HTTPProxy(backend, executor, acRegistry);
         UIController controller = new UIController(shell, system.getGUIOptions(), backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"), acRegistry);
@@ -68,6 +73,7 @@ public class Main implements Runnable
         httpProxy.finish();
         display.dispose();
         backend.cleanup();
+        system.removeTempDirectories();
     }
 
     private Shell createShell(Display display, ApplicationProperties windowProperties)
