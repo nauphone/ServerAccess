@@ -187,7 +187,7 @@ On the first launch an empty configuration file named ``accounts.xml`` will be c
 Key authentication
 ------------------
 
-At the current moment, you could use passwordless RSA or DSA keys for authentication instead of password. To do this, please use either `rsaKey` or `dsaKey` params (with optional *empty* `rsaPassword` or `dsaPassword` params respectively). Params `rsaPassword` and `dsaPassword` are reserved for the forward compatibility.
+At the current moment, you could use passwordless (due to limitations of used backend) RSA or DSA keys for authentication instead of password. To do this, please use either `rsaKey` or `dsaKey` params (with optional *empty* `rsaPassword` or `dsaPassword` params respectively). Params `rsaPassword` and `dsaPassword` are reserved for the forward compatibility.
 
 Keys must be stored in your default SSH key directory. It usually depends on your Operating System defaults.
 
