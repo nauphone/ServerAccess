@@ -58,11 +58,6 @@ public class SSHLocalForwardActiveChannel extends ActiveChannel
         return "port: " + port + " (local forward)";
     }
 
-    private SSHActiveChannel narrowParent()
-    {
-        return (SSHActiveChannel)getParent();
-    }
-
     @Override
     public boolean isActive()
     {
