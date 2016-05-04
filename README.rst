@@ -3,6 +3,11 @@
 .. |image0| image:: https://travis-ci.org/nauphone/ServerAccess.png
 .. _image0: https://travis-ci.org/nauphone/ServerAccess
 
+|image1|_
+
+.. |image1| image:: https://api.codacy.com/project/badge/Grade/011f421c44ba44e6a2f76ff81b27fbcf
+.. _image1: https://www.codacy.com/app/andrey-hitrin/ServerAccess?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=nauphone/ServerAccess&amp;utm_campaign=Badge_Grade
+
 Overview
 ========
 
