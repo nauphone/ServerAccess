@@ -37,7 +37,7 @@ public class ActualizeActiveChannelsTask extends Thread
             }
             catch (InterruptedException e)
             {
-                // Nothing to do
+                Thread.currentThread().interrupt();
             }
 
             registry.actualizeAllChannels();
