@@ -70,6 +70,7 @@ public class Main implements Runnable
                 display.sleep();
             }
         }
+        acRegistry.finish();
         httpProxy.finish();
         display.dispose();
         backend.cleanup();

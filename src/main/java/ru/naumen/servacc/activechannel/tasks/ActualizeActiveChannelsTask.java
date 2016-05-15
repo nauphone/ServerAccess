@@ -17,7 +17,7 @@ import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
  */
 public class ActualizeActiveChannelsTask extends Thread
 {
-    private static final int ACTUALIZATION_CHECK_TYME = 10000;
+    private static final int ACTUALIZATION_CHECK_TIME = 300;
 
     private ActiveChannelsRegistry registry;
 
@@ -29,11 +29,11 @@ public class ActualizeActiveChannelsTask extends Thread
     @Override
     public void run()
     {
-        while (true)
+        while (registry.isRunning())
         {
             try
             {
-                Thread.currentThread().sleep(ACTUALIZATION_CHECK_TYME);
+                Thread.currentThread().sleep(ACTUALIZATION_CHECK_TIME);
             }
             catch (InterruptedException e)
             {

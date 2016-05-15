@@ -32,6 +32,7 @@ import java.util.function.Consumer;
 public class ActiveChannelsRegistry extends Group implements ActiveChannelsObservable
 {
     private List<ActiveChannelsObserver> observers = new ArrayList<ActiveChannelsObserver>();
+    private boolean running = true;
 
     public ActiveChannelsRegistry()
     {
@@ -207,5 +208,13 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
         {
             observer.activeChannelsChanged();
         }
+    }
+
+    public void finish() {
+        running = false;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 }
