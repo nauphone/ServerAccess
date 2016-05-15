@@ -46,7 +46,10 @@ public final class FileResource
                 throw new EncryptionException("No password provided");
             }
 
-            stream.skip(ENCRYPTED_HEADER.length);
+            long skipped = stream.skip(ENCRYPTED_HEADER.length);
+            if (skipped != ENCRYPTED_HEADER.length) {
+                throw new IOException("Unexpected end of file");
+            }
             String content = new Scanner(stream).useDelimiter("\\A").next();
             stream.close();
 
