@@ -71,11 +71,11 @@ To create deb-package for Debian/Ubuntu distributive, use following script:
 Static analysis
 ===============
 
-You may want to launch static analysis upon ServerAccess code. The best way to do it is to use Sonar Qube. Download and install it, and then run following command:
+You may want to launch static analysis upon ServerAccess code. The best way to do it is to use Sonar Qube. Download and install it altogether with Sonar Scanner, and then run following command:
 
-    ``./gradlew sonarRunner``
+    ``sonar-scanner``
 
-Currently, it expects that Sonar uses local PostgreSQL database named 'sonar'. If your settings differ, please refer to plugin `documentation <http://www.gradle.org/docs/current/userguide/sonar_runner_plugin.html>`_ for ways you can change them.
+For the scanner-related questions, please refer to the `official documentation <http://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner>`_.
 
 Configuration
 =============

@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id 'sonar-runner'
     id 'info.solidsoft.pitest' version '1.1.1'
     id 'com.github.johnrengelman.shadow' version '1.2.2'
 }
@@ -84,14 +83,6 @@ def configureShadowJarArch(ShadowJar shadowJarArch, String arch) {
         configurations = [project.configurations.runtime.copyRecursive()]
         exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
         dependencyFilter = new ArchDependencyFilter(getProject(), files('lib/swt.jar'), files("lib/win_${arch}/swt.jar"))
-    }
-}
-
-sonarRunner {
-    sonarProperties {
-        property "sonar.jdbc.url", "jdbc:postgresql://localhost:5432/sonar"
-        property "sonar.jdbc.driverClassName", "org.postgresql.Driver"
-        property "sonar.projectVersion", currentVersion
     }
 }
 
