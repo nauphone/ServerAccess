@@ -47,6 +47,12 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
     }
 
     @Override
+    public boolean isAutoExpanded()
+    {
+        return false;
+    }
+
+    @Override
     public String getIconName()
     {
         return "/icons/active-channels.png";

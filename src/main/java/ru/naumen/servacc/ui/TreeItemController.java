@@ -74,7 +74,7 @@ public class TreeItemController
             return;
         }
         setVisibility(true);
-        setExpanded(true);
+        setExpanded(data.isAutoExpanded());
         if (hasParent())
         {
             parent.raiseVisibility();
