@@ -725,7 +725,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         {
             if (item.matches(filters))
             {
-                item.setVisibility(true);
                 item.raiseVisibility();
             }
             else

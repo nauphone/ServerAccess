@@ -70,13 +70,15 @@ public class TreeItemController
 
     public void raiseVisibility()
     {
-        if ((parent == null) || (parent.isExpanded() && parent.isVisible()))
-        {
+        if (isExpanded() && isVisible()) {
             return;
         }
-        parent.setVisibility(true);
-        parent.setExpanded(true);
-        parent.raiseVisibility();
+        setVisibility(true);
+        setExpanded(true);
+        if (hasParent())
+        {
+            parent.raiseVisibility();
+        }
     }
 
     public boolean matches(Collection<String> filters)
@@ -98,12 +100,16 @@ public class TreeItemController
 
     private boolean parentMatches(String filter)
     {
-        return (parent != null) && parent.uprisingMatches(filter);
+        return hasParent() && parent.uprisingMatches(filter);
     }
 
     private boolean dataMatches(String filter)
     {
         return data.matches(filter);
+    }
+
+    private boolean hasParent() {
+        return parent != null;
     }
 
     @Override
