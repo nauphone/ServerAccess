@@ -15,7 +15,7 @@ package ru.naumen.servacc.activechannel.i;
  */
 public interface ActiveChannelsObservable
 {
-    void addActiveChannelsObserver(ActiveChannelsObserver observer);
-    void removeActiveChannelsObserver(ActiveChannelsObserver observer);
-    void notifyActiveChannelsObservers();
+    void setObserver(ActiveChannelsObserver observer);
+
+    void notifyObserver();
 }

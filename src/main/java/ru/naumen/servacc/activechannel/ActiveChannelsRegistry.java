@@ -31,7 +31,10 @@ import java.util.function.Consumer;
  */
 public class ActiveChannelsRegistry extends Group implements ActiveChannelsObservable
 {
-    private List<ActiveChannelsObserver> observers = new ArrayList<ActiveChannelsObserver>();
+    private ActiveChannelsObserver observer = new ActiveChannelsObserver() {
+        @Override
+        public void activeChannelsChanged() {}
+    };
     private boolean running = true;
 
     public ActiveChannelsRegistry()
@@ -74,7 +77,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
             channel.getParent().addChild(channel);
         }
 
-        notifyActiveChannelsObservers();
+        notifyObserver();
     }
 
     public void deleteChannel(List<String> path)
@@ -100,7 +103,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
             channel.getParent().removeChild(channel);
         }
 
-        notifyActiveChannelsObservers();
+        notifyObserver();
     }
 
     public boolean existsChannel(List<String> path)
@@ -196,24 +199,15 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
     }
 
     @Override
-    public void addActiveChannelsObserver(ActiveChannelsObserver observer)
+    public void setObserver(ActiveChannelsObserver observer)
     {
-        observers.add(observer);
+        this.observer = observer;
     }
 
     @Override
-    public void removeActiveChannelsObserver(ActiveChannelsObserver observer)
+    public void notifyObserver()
     {
-        observers.remove(observer);
-    }
-
-    @Override
-    public void notifyActiveChannelsObservers()
-    {
-        for (ActiveChannelsObserver observer : observers)
-        {
-            observer.activeChannelsChanged();
-        }
+        observer.activeChannelsChanged();
     }
 
     public void finish() {
