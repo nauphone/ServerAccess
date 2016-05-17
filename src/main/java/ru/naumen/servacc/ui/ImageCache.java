@@ -70,9 +70,9 @@ public final class ImageCache
         return images.get(key);
     }
 
-    public static List<Image> getImages(String name) throws ArrayIndexOutOfBoundsException
+    public static List<Image> getImages(String name)
     {
-        List<Image> result = new ArrayList<Image>();
+        List<Image> result = new ArrayList<>();
 
         if (!containsImage(name))
         {
@@ -81,7 +81,7 @@ public final class ImageCache
             {
                 return result;
             }
-    	}
+        }
 
         for (int index = 0; index < Integer.MAX_VALUE; index++)
         {
@@ -99,7 +99,7 @@ public final class ImageCache
 
     private static void reloadImage(String name)
     {
-    	ImageLoader imageLoader = new ImageLoader();
+        ImageLoader imageLoader = new ImageLoader();
         InputStream is = ImageCache.class.getResourceAsStream(name);
         if (is == null)
         {

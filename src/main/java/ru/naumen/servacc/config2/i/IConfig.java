@@ -11,6 +11,7 @@ package ru.naumen.servacc.config2.i;
 
 import java.util.List;
 
+@FunctionalInterface
 public interface IConfig
 {
     List<IConfigItem> getChildren();

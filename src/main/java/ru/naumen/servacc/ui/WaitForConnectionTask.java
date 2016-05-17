@@ -72,19 +72,15 @@ public class WaitForConnectionTask implements Runnable
             return;
         }
 
-        treeItem.getDisplay().asyncExec(new Runnable()
+        treeItem.getDisplay().asyncExec(() ->
         {
-            @Override
-            public void run()
+            if (treeItem.isDisposed())
             {
-                if (treeItem.isDisposed())
-                {
-                    return;
-                }
-
-                treeItem.setImage(image);
-                treeItem.getParent().update();
+                return;
             }
+
+            treeItem.setImage(image);
+            treeItem.getParent().update();
         });
     }
 

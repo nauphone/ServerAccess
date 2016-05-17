@@ -21,8 +21,20 @@ import com.mindbright.ssh2.SSH2SimpleClient;
 import com.mindbright.ssh2.SSH2Transport;
 import com.mindbright.util.RandomSeed;
 import com.mindbright.util.SecureRandomAndPad;
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import org.apache.log4j.Logger;
-
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.activechannel.FTPActiveChannel;
 import ru.naumen.servacc.activechannel.SSHActiveChannel;
@@ -44,21 +56,6 @@ import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.telnet.ConsoleManager;
 import ru.naumen.servacc.util.Util;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 /**
  * @author tosha
@@ -101,14 +98,10 @@ public class MindtermBackend implements Backend {
             try
             {
                 final SSH2SimpleClient clientCopy = client;
-                Future<Object> f = this.executor.submit(new Callable<Object>()
+                Future<Object> f = this.executor.submit(() ->
                 {
-                    @Override
-                    public Object call() throws Exception
-                    {
-                        openSSHAccount(account, clientCopy, path);
-                        return null;
-                    }
+                    openSSHAccount(account, clientCopy, path);
+                    return null;
                 });
                 f.get(SocketUtils.WARM_TIMEOUT, TimeUnit.MILLISECONDS);
                 return;

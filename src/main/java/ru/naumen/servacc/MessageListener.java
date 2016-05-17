@@ -13,6 +13,7 @@ package ru.naumen.servacc;
  * @author Andrey Hitrin
  * @since 10.02.13
  */
+@FunctionalInterface
 public interface MessageListener
 {
     void notify(String text);

@@ -117,7 +117,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
     {
         if (uniquePath == null)
         {
-            uniquePath = new ArrayList<String>();
+            uniquePath = new ArrayList<>();
 
             uniquePath.add(getSignature());
             // follow 'through' links
@@ -136,7 +136,7 @@ public class SSHAccount extends Account implements IConnectable, IPortForwarder,
                 uniquePath.add(cur.getSignature());
             }
         }
-        return new ArrayList<String>(uniquePath);
+        return new ArrayList<>(uniquePath);
     }
 
     public List<String> getUniquePathReversed()

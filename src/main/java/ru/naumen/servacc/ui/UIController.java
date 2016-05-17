@@ -526,43 +526,35 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
             final IConfigItem data = tic.getData();
             if (data instanceof SSHAccount)
             {
-                Future<?> connectionFuture = this.executor.submit(new Runnable()
+                Future<?> connectionFuture = this.executor.submit(() ->
                 {
-                    @Override
-                    public void run()
+                    try
                     {
-                        try
-                        {
-                            SSHAccount account = (SSHAccount) data;
-                            Path path = Path.find(config, account.getUniqueIdentity());
-                            backend.openSSHAccount(account, path.path());
-                        }
-                        catch (Exception e)
-                        {
-                            LOGGER.error("Cannot open SSH account", e);
-                            String message = e.getMessage() == null ? "Cannot open SSH account" : e.getMessage();
-                            showAlertAsync(message);
-                        }
+                        SSHAccount account = (SSHAccount) data;
+                        Path path = Path.find(config, account.getUniqueIdentity());
+                        backend.openSSHAccount(account, path.path());
+                    }
+                    catch (Exception e)
+                    {
+                        LOGGER.error("Cannot open SSH account", e);
+                        String message = e.getMessage() == null ? "Cannot open SSH account" : e.getMessage();
+                        showAlertAsync(message);
                     }
                 });
                 this.executor.execute(new WaitForConnectionTask(item, (SSHAccount)data, connectionFuture));
             }
             else if (data instanceof HTTPAccount)
             {
-            	Future<?> connectionFuture = this.executor.submit(new Runnable()
+                Future<?> connectionFuture = this.executor.submit(() ->
                 {
-                    @Override
-                    public void run()
+                    try
                     {
-                        try
-                        {
-                            backend.openHTTPAccount((HTTPAccount) data);
-                        }
-                        catch (Exception e)
-                        {
-                            LOGGER.error("Cannot open HTTP account", e);
-                            showAlertAsync(e.getMessage());
-                        }
+                        backend.openHTTPAccount((HTTPAccount) data);
+                    }
+                    catch (Exception e)
+                    {
+                        LOGGER.error("Cannot open HTTP account", e);
+                        showAlertAsync(e.getMessage());
                     }
                 });
                 this.executor.execute(new WaitForConnectionTask(item, (HTTPAccount)data, connectionFuture));
@@ -721,7 +713,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
 
     private void updateBranch(TreeItemController item, Collection<String> filters)
     {
-        if (filters.size() > 0)
+        if (!filters.isEmpty())
         {
             if (item.matches(filters))
             {
@@ -862,13 +854,10 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         {
             public void run()
             {
-                Display.getDefault().asyncExec(new Runnable()
+                Display.getDefault().asyncExec(() ->
                 {
-                    public void run()
-                    {
-                        updateTree(filter);
-                        refreshTimer.cancel();
-                    }
+                    updateTree(filter);
+                    refreshTimer.cancel();
                 });
             }
         };
@@ -879,25 +868,22 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     @Override
     public void activeChannelsChanged()
     {
-        Display.getDefault().asyncExec(new Runnable()
+        Display.getDefault().asyncExec(() ->
         {
-            public void run()
+            for (TreeItemController child : root.getChildren())
             {
-                for (TreeItemController child : root.getChildren())
+                if (acRegistry.equals(child.getData()))
                 {
-                    if (acRegistry.equals(child.getData()))
+                    child.getChildren().clear();
+
+                    for (IConfigItem item : acRegistry.getChildren())
                     {
-                        child.getChildren().clear();
-
-                        for (IConfigItem item : acRegistry.getChildren())
-                        {
-                            buildBranch(child, item);
-                        }
-
-                        updateTree(filteredTree.getText());
-
-                        return;
+                        buildBranch(child, item);
                     }
+
+                    updateTree(filteredTree.getText());
+
+                    return;
                 }
             }
         });

@@ -22,7 +22,7 @@ import ru.naumen.servacc.activechannel.visitors.IActiveChannelVisitor;
  */
 public abstract class ActiveChannelThrough extends ActiveChannel implements IActiveChannelThrough
 {
-    private List<IActiveChannel> children = new ArrayList<IActiveChannel>();
+    private List<IActiveChannel> children = new ArrayList<>();
 
     public ActiveChannelThrough(IActiveChannelThrough parent, ActiveChannelsRegistry registry)
     {

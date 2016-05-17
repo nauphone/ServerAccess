@@ -15,6 +15,7 @@ import ru.naumen.servacc.activechannel.i.IActiveChannel;
  * @author vtarasov
  * @since 18.02.16
  */
+@FunctionalInterface
 public interface IActiveChannelVisitor
 {
     void visit(IActiveChannel channel);

@@ -21,30 +21,27 @@ import ru.naumen.servacc.IAuthenticationParametersGetter;
 public class AuthenticationDialogParametersGetter implements IAuthenticationParametersGetter
 {
     private String resourcePath;
-    
+
     private String login;
     private String password;
-    
+
     private final Shell shell;
-    
+
     public AuthenticationDialogParametersGetter(Shell shell)
     {
         this.shell = shell;
     }
-    
+
     @Override
     public void setResourcePath(String resourcePath)
     {
         this.resourcePath = resourcePath;
     }
-    
+
     @Override
     public void doGet()
     {
-        Display.getDefault().syncExec(new Runnable()
-        {
-            @Override
-            public void run()
+        Display.getDefault().syncExec(() ->
             {
                 AuthenticationDialog dialog = new AuthenticationDialog(shell);
                 dialog.setURL(resourcePath);
@@ -53,10 +50,9 @@ public class AuthenticationDialogParametersGetter implements IAuthenticationPara
                     login = dialog.getLogin();
                     password = dialog.getPassword();
                 }
-            }
-        });
+            });
     }
-    
+
     @Override
     public String getLogin()
     {

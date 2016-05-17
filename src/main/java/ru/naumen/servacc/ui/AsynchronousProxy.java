@@ -28,13 +28,6 @@ public class AsynchronousProxy implements MessageListener
     @Override
     public void notify(final String message)
     {
-        Display.getDefault().asyncExec(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                messageListener.notify(message);
-            }
-        });
+        Display.getDefault().asyncExec(() -> messageListener.notify(message));
     }
 }

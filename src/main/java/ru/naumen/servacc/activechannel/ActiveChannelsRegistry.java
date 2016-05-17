@@ -9,6 +9,8 @@
  */
 package ru.naumen.servacc.activechannel;
 
+import java.util.ArrayList;
+import java.util.List;
 import ru.naumen.servacc.activechannel.i.ActiveChannelsObservable;
 import ru.naumen.servacc.activechannel.i.ActiveChannelsObserver;
 import ru.naumen.servacc.activechannel.i.IActiveChannel;
@@ -20,10 +22,6 @@ import ru.naumen.servacc.activechannel.visitors.HideActiveChannelVisitor;
 import ru.naumen.servacc.activechannel.visitors.IActiveChannelVisitor;
 import ru.naumen.servacc.config2.Group;
 import ru.naumen.servacc.config2.i.IConfigItem;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
 
 /**
  * @author vtarasov
@@ -125,7 +123,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
 
     public IActiveChannel findChannel(List<String> path)
     {
-        List<IActiveChannel> channels = new ArrayList<IActiveChannel>();
+        List<IActiveChannel> channels = new ArrayList<>();
 
         for (IConfigItem item : getChildren())
         {
@@ -188,14 +186,7 @@ public class ActiveChannelsRegistry extends Group implements ActiveChannelsObser
 
     private void forEachActiveChannel(IActiveChannelVisitor visitor)
     {
-        new ArrayList<IConfigItem>(getChildren()).forEach(new Consumer<IConfigItem>()
-        {
-            @Override
-            public void accept(IConfigItem t)
-            {
-                visitor.visit((IActiveChannel)t);
-            }
-        });
+        new ArrayList<IConfigItem>(getChildren()).forEach((IConfigItem t) -> visitor.visit((IActiveChannel) t));
     }
 
     @Override

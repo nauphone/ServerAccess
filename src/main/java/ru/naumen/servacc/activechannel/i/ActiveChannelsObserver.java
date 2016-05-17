@@ -13,6 +13,7 @@ package ru.naumen.servacc.activechannel.i;
  * @author vtarasov
  * @since 18.02.16
  */
+@FunctionalInterface
 public interface ActiveChannelsObserver
 {
     void activeChannelsChanged();

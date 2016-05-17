@@ -40,7 +40,7 @@ public abstract class ActiveChannel implements IActiveChannel
     @Override
     public List<String> getPath()
     {
-        List<String> path = new ArrayList<String>();
+        List<String> path = new ArrayList<>();
 
         if (parent != null)
         {

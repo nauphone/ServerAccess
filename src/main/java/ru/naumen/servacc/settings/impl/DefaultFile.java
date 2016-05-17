@@ -16,6 +16,7 @@ import java.io.IOException;
  * @author Andrey Hitrin
  * @since 31.08.12
  */
+@FunctionalInterface
 public interface DefaultFile
 {
     void fill(File configFile) throws IOException;
