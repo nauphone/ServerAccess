@@ -57,7 +57,7 @@ Copy ``ServerAccess.app`` (from ``build/libs`` subdirectory) to your ``/Applicat
 
 GNU Linux/Other
 ---------------
-Use ``./gradlew prepareRelease`` command to build application distribution.
+Use ``./gradlew lin64`` command to build application distribution.
 
 Then launch it (you will probably need to download SWT binaries for your platform and add them to Java class path):
 
