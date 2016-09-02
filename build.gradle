@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'info.solidsoft.pitest' version '1.1.1'
-    id 'com.github.johnrengelman.shadow' version '1.2.2'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
 }
 
 group = 'ru.naumen'
@@ -78,7 +78,7 @@ def configureShadowJarArch(ShadowJar shadowJarArch, String arch) {
             }
         }
         destinationDir = file(shadowJar.destinationDir.getPath() + "/${arch}")
-        manifest.from shadowJar.manifest
+        manifest.from 'resource/MANIFEST.MF'
         from sourceSets.main.output
         configurations = [project.configurations.runtime.copyRecursive()]
         exclude 'META-INF/INDEX.LIST', 'META-INF/*.SF', 'META-INF/*.DSA', 'META-INF/*.RSA'
