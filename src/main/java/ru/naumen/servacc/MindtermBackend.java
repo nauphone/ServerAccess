@@ -34,7 +34,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.activechannel.FTPActiveChannel;
 import ru.naumen.servacc.activechannel.SSHActiveChannel;
@@ -62,7 +63,7 @@ import ru.naumen.servacc.util.Util;
  */
 public class MindtermBackend implements Backend {
     private static final int SSH_DEFAULT_PORT = 22;
-    private static final Logger LOGGER = Logger.getLogger(MindtermBackend.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MindtermBackend.class);
     private static RandomSeed seed;
     private static SecureRandomAndPad secureRandom;
     private final Command browser;

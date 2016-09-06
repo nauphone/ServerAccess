@@ -11,8 +11,8 @@ package ru.naumen.servacc.settings;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.naumen.servacc.exception.ServerAccessException;
 
 /**
@@ -23,7 +23,7 @@ import ru.naumen.servacc.exception.ServerAccessException;
  */
 public class ApplicationProperties
 {
-    private static final Logger LOGGER = Logger.getLogger(ApplicationProperties.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ApplicationProperties.class);
     private final File configFile;
 
     public ApplicationProperties(File configFile)

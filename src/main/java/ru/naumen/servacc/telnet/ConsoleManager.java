@@ -9,6 +9,7 @@
  */
 package ru.naumen.servacc.telnet;
 
+import com.mindbright.ssh2.SSH2SessionChannel;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -17,13 +18,12 @@ import java.io.PushbackInputStream;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.mindbright.ssh2.SSH2SessionChannel;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConsoleManager
 {
-    private static final Logger LOGGER = Logger.getLogger(ConsoleManager.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConsoleManager.class);
 
     /*
      * Telnet protocol commands

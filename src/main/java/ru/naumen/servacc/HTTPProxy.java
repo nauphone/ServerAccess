@@ -9,14 +9,6 @@
  */
 package ru.naumen.servacc;
 
-import org.apache.log4j.Logger;
-
-import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
-import ru.naumen.servacc.activechannel.HTTPProxyActiveChannel;
-import ru.naumen.servacc.activechannel.sockets.ServerSocketWrapper;
-import ru.naumen.servacc.backend.DualChannel;
-import ru.naumen.servacc.config2.SSHAccount;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -27,6 +19,13 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
+import ru.naumen.servacc.activechannel.HTTPProxyActiveChannel;
+import ru.naumen.servacc.activechannel.sockets.ServerSocketWrapper;
+import ru.naumen.servacc.backend.DualChannel;
+import ru.naumen.servacc.config2.SSHAccount;
 
 /**
  * @author Andrey Hitrin
@@ -34,7 +33,7 @@ import java.util.concurrent.Future;
  */
 public class HTTPProxy
 {
-    private static final Logger LOG = Logger.getLogger(HTTPProxy.class);
+    private static final Logger LOG = LoggerFactory.getLogger(HTTPProxy.class);
     private final Backend backend;
     private final ExecutorService executor;
     private final ActiveChannelsRegistry acRegistry;

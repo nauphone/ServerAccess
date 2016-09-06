@@ -12,9 +12,8 @@ package ru.naumen.servacc.config2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import org.apache.log4j.Logger;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IConnectableConfigItem;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
@@ -23,7 +22,7 @@ import ru.naumen.servacc.util.Util;
 
 public class SSHAccount extends Account implements IConnectable, IPortForwarder, IFTPBrowseable, IConnectableConfigItem
 {
-    private static final Logger LOGGER = Logger.getLogger(SSHAccount.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SSHAccount.class);
     public static final String SSHACCOUNT_TYPE = "ssh";
     public static final String EMPTY_NAME = "*** empty ***";
     public static final int DEFAULT_SSH_PORT = 22;

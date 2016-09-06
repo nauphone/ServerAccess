@@ -9,7 +9,13 @@
  */
 package ru.naumen.servacc.ui;
 
-import org.apache.log4j.Logger;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
@@ -44,6 +50,8 @@ import org.eclipse.swt.widgets.ToolItem;
 import org.eclipse.swt.widgets.TrayItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
@@ -67,17 +75,9 @@ import ru.naumen.servacc.platform.GUIOptions;
 import ru.naumen.servacc.settings.ListProvider;
 import ru.naumen.servacc.util.Util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-
 public class UIController implements GlobalThroughView, ActiveChannelsObserver
 {
-    private static final Logger LOGGER = Logger.getLogger(UIController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UIController.class);
     private final Shell shell;
     private final MessageListener synchronousAlert;
     private final MessageListener asynchronousAlert;

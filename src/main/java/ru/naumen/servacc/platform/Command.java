@@ -3,8 +3,8 @@ package ru.naumen.servacc.platform;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Andrey Hitrin
@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
  */
 public class Command
 {
-    private static final Logger LOGGER = Logger.getLogger(Command.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Command.class);
     private final CommandBuilder builder;
 
     public Command(String command)

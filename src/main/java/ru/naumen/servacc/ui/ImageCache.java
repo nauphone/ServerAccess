@@ -14,12 +14,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.log4j.Logger;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.widgets.Display;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Load any image once and store it in cache.
@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Display;
  */
 public final class ImageCache
 {
-    private static final Logger LOGGER = Logger.getLogger(ImageCache.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImageCache.class);
     private static Map<ImageKey, Image> images = new HashMap<>();
 
     private ImageCache()
