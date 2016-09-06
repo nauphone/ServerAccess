@@ -5,22 +5,11 @@ function try_path() {
     if [ -e $path ]; then echo $path; fi
 }
 
-function detect_swt() {
-    # Try to find swt binaries in several paths, and return the first found jar
-    # sed is used to filter out empty lines that emerge from non-existing paths
-    (
-        echo `try_path /usr/lib/java/swt*.jar`
-        echo `try_path /usr/share/java/swt*.jar`
-        echo `try_path /etc/alternatives/swt*.jar`
-    ) | sed -e /^$/d | head -n1
-}
-
 unset CDPATH
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
-SWT=`detect_swt`
-FLAGS="-Dswt.library.path=/usr/lib/jni -cp $SWT:ServerAccess-all.jar"
+FLAGS="-cp ServerAccess-all.jar"
 ARCH=`uname -i`
 
 if [ "$ARCH" == "x86_64" ] ;then

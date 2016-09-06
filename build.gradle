@@ -140,10 +140,6 @@ task macosx {dependsOn build, shadowJarMacosx} << {
         from 'resource/scripts/serveraccess'
         into 'build/libs/ServerAccess.app/Contents/MacOS'
     }
-    copy {
-        from configurations.macosxswt.resolve()
-        into 'build/libs/ServerAccess.app/Contents/MacOS/swt'
-    }
 }
 
 // vim: set ft=groovy:
