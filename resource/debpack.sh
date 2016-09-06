@@ -1,15 +1,20 @@
 #!/bin/bash
 
-function require_app() {
-    if [[ -z `which $1` ]]
-    then
-        echo "$1 not found - exiting"
+HASHCMD="md5deep"
+
+if ! which fakeroot ; then
+    echo fakeroot not found
+    exit 2
+fi
+
+if ! which md5deep ; then
+    if which hashdeep ; then
+        HASHCMD="hashdeep"
+    else
+        echo md5deep or hashdeep not found
         exit 2
     fi
-}
-
-require_app fakeroot
-require_app md5deep
+fi
 
 # move to the project root dir
 unset CDPATH
@@ -47,7 +52,7 @@ cp LICENSE.GPL $TARGET/
 touch $TARGET/serveraccess.log
 chmod a+rw $TARGET/serveraccess.log
 
-md5deep -rl $tmpdir/ > $tmpdir/DEBIAN/md5sums
+$HASHCMD -rl $tmpdir/ > $tmpdir/DEBIAN/md5sums
 
 touch $tmpdir/conffiles
 
