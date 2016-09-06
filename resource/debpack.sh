@@ -63,14 +63,15 @@ cat <<-EOF > $tmpdir/DEBIAN/control
 Package: $NAME
 Version: $VERSION
 Provides: $NAME
-Maintainer: Grigori Frolov <gfrolov@naumen.ru>
+Maintainer: Andrey Hitrin <ahitrin@naumen.ru>
 Architecture: all
 Section: net
 Source: https://github.com/nauphone/ServerAccess
 Description: An SSH,FTP and HTTP client.
  A tool for getting servers info from db and connecting to selected servers by ssh
  or others tools (uses ssh port mapping to local ports)
-Depends: libswt-gtk-3-java, libswt-gtk-3-jni, libswt-cairo-gtk-3-jni, gftp
+Depends: openjdk-8-jre-headless | java-runtime-headless (>= 1.8)
+Recommends: gftp
 Installed-Size: $SIZE
 Priority: optional
 Essential: no
