@@ -474,16 +474,18 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
 
     private void createAppMenu()
     {
-        final Menu menuBar = Display.getCurrent().getMenuBar();
-        if (menuBar != null)
-        {
-            final MenuItem file = new MenuItem(menuBar, SWT.CASCADE);
-            final Menu dropdown = new Menu(menuBar);
-            file.setText("File");
-            file.setMenu(dropdown);
-            createEncryptMenuItem(dropdown);
-            createDecryptMenuItem(dropdown);
+        Menu menuBar = Display.getCurrent().getMenuBar();
+        if (menuBar == null) {
+            menuBar = new Menu(shell, SWT.BAR);
+            shell.setMenuBar(menuBar);
         }
+
+        final MenuItem file = new MenuItem(menuBar, SWT.CASCADE);
+        final Menu dropdown = new Menu(menuBar);
+        file.setText("File");
+        file.setMenu(dropdown);
+        createEncryptMenuItem(dropdown);
+        createDecryptMenuItem(dropdown);
     }
 
     private void createEncryptMenuItem(final Menu menu)
