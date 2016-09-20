@@ -297,7 +297,9 @@ public class MindtermBackend implements Backend {
         // Construct URL
         StringBuilder targetURL = new StringBuilder();
         // protocol
-        targetURL.append(url.getProtocol()).append("://");
+        String protocol = url.getProtocol();
+
+        targetURL.append(protocol).append("://");
         // user (authentication) info
         String userInfo;
         if (account.getLogin() != null)
@@ -316,7 +318,18 @@ public class MindtermBackend implements Backend {
         }
         // host and port
         final String remoteHost = url.getHost();
-        final int remotePort = url.getPort() >= 0 ? url.getPort() : 80;
+        int remotePort =  url.getPort();
+        if (remotePort < 0) {
+            switch (protocol) {
+            case "https" :
+                remotePort = 443;
+                break;
+            case "http":
+            default:
+                remotePort = 80;
+            }
+        }
+
         String targetHost;
         int targetPort;
         SSHAccount throughAccount = getThrough(account);
