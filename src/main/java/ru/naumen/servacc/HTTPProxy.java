@@ -102,7 +102,7 @@ public class HTTPProxy
             {
                 try (ServerSocketWrapper serverSocket = new ServerSocketWrapper(
                         new ServerSocket(port), serverAccount, HTTPProxyActiveChannel.class, acRegistry)) {
-                    while (true)
+                    while (!Thread.currentThread().isInterrupted())
                     {
                         Socket s = serverSocket.accept();
                         executor.submit(new Listener(s, serverAccount));
