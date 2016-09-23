@@ -31,7 +31,7 @@ import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ShellConfiguration;
 import ru.naumen.servacc.settings.impl.DefaultConfiguration;
 
-public class Main implements Runnable
+public class Main
 {
     private static final String WINDOW_HEADER = "Server Access";
     private static final String WINDOW_ICON = "/prog.ico";
@@ -41,7 +41,7 @@ public class Main implements Runnable
         new Main().run();
     }
 
-    public void run()
+    private void run()
     {
         // Create active channels registry
         ActiveChannelsRegistry acRegistry = new ActiveChannelsRegistry();
