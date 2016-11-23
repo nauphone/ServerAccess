@@ -75,7 +75,7 @@ Source: https://github.com/nauphone/ServerAccess
 Description: An SSH,FTP and HTTP client.
  A tool for getting servers info from db and connecting to selected servers by ssh
  or others tools (uses ssh port mapping to local ports)
-Depends: openjdk-8-jre-headless | java-runtime-headless (>= 1.8)
+Depends: openjdk-8-jre-headless | java-runtime-headless (>= 1.8) | java8-runtime-headless
 Recommends: gftp
 Installed-Size: $SIZE
 Priority: optional
