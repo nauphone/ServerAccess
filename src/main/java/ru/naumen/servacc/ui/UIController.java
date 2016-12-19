@@ -205,12 +205,10 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         // Events
         toolitemConnect.addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
 
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 defaultActionRequested(getSelectedTreeItem());
@@ -218,12 +216,10 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         });
         toolitemPortForwarding.addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
 
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 portForwardingRequested(getSelectedTreeItem());
@@ -231,12 +227,10 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         });
         toolitemFTP.addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
 
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 ftpConnectionRequested(getSelectedTreeItem());
@@ -257,12 +251,10 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         });
         toolitemCopy.addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
 
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 passwordCopyRequested(getSelectedTreeItem());
@@ -270,12 +262,10 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         });
         toolitemReloadConfig.addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
 
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 reloadConfig();
@@ -289,7 +279,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         // Selection handling
         filteredTree.getTree().addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
                 Object item = e.item;
@@ -300,7 +289,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
                 defaultActionRequested((TreeItem) item);
             }
 
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 TreeItem item = (TreeItem) e.item;
@@ -318,7 +306,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         // Filter events
         filteredTree.getFilter().addModifyListener(new ModifyListener()
         {
-            @Override
             public void modifyText(ModifyEvent e)
             {
                 scheduleRefresh(filteredTree.getText());
@@ -341,7 +328,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         ds.setTransfer(new Transfer[]{ TextTransfer.getInstance() });
         ds.addDragListener(new DragSourceAdapter()
         {
-            @Override
             public void dragSetData(DragSourceEvent event)
             {
                 event.doit = false;
@@ -375,13 +361,11 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         clearGlobalThrough.setText("clear");
         clearGlobalThrough.addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 backend.clearGlobalThrough();
             }
 
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
@@ -393,7 +377,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         dt.setTransfer(new Transfer[]{ TextTransfer.getInstance() });
         dt.addDropListener(new DropTargetAdapter()
         {
-            @Override
             public void drop(DropTargetEvent event)
             {
                 if (event.data != null)
@@ -430,43 +413,36 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         // set up hide-to-tray behavior
         trayItem.addSelectionListener(new SelectionListener()
         {
-            @Override
             public void widgetSelected(SelectionEvent e)
             {
                 shell.setVisible(true);
                 shell.setFocus();
             }
 
-            @Override
             public void widgetDefaultSelected(SelectionEvent e)
             {
             }
         });
         shell.addShellListener(new ShellListener()
         {
-            @Override
             public void shellIconified(ShellEvent e)
             {
             }
 
-            @Override
             public void shellDeiconified(ShellEvent e)
             {
             }
 
-            @Override
             public void shellDeactivated(ShellEvent e)
             {
             }
 
-            @Override
             public void shellClosed(ShellEvent e)
             {
                 e.doit = false;
                 shell.setVisible(false);
             }
 
-            @Override
             public void shellActivated(ShellEvent e)
             {
             }
@@ -482,7 +458,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         itemQuit.setText("Quit");
         itemQuit.addListener(SWT.Selection, new Listener()
         {
-            @Override
             public void handleEvent(Event e)
             {
                 shell.dispose();
@@ -490,7 +465,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         });
         trayItem.addListener(SWT.MenuDetect, new Listener()
         {
-            @Override
             public void handleEvent(Event arg0)
             {
                 menu.setVisible(true);
@@ -520,7 +494,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         itemEncrypt.setText("Encrypt Local Accounts");
         itemEncrypt.addListener(SWT.Selection, new Listener()
         {
-            @Override
             public void handleEvent(Event event)
             {
                 configLoader.encryptLocalAccounts();
@@ -534,7 +507,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         itemDecrypt.setText("Decrypt Local Accounts");
         itemDecrypt.addListener(SWT.Selection, new Listener()
         {
-            @Override
             public void handleEvent(Event event)
             {
                 configLoader.decryptLocalAccounts();
@@ -883,7 +855,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         }
         TimerTask refreshTask = new TimerTask()
         {
-            @Override
             public void run()
             {
                 Display.getDefault().asyncExec(() ->
