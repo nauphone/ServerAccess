@@ -2,3 +2,14 @@ language: java
 sudo: false
 jdk:
  - oraclejdk8
+addons:
+  sonarqube:
+    token:
+      secure: "UhdM4AAXlAgVaJ1oiFtdhaerRDWNuxu5+S3p7wjobsQl1eYbitGt2nhbHDktR5JZ+qUKGk9K/RIiBimCbpPnzFMcRCxVOeGylN3hbd0VdiRt85x5QXoCLHwEHvZ3vAHGnZQI33kCw59laSktttlN75BQMF3jqtphh/bDsQQ5AtA="
+script:
+ - ./gradlew check
+ - ./gradlew sonarqube
+cache:
+ - '$HOME/.m2/repository'
+ - '$HOME/.gradle'
+ - '.gradle'
