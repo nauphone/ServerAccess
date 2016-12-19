@@ -6,6 +6,8 @@ addons:
   sonarqube:
     token:
       secure: "UhdM4AAXlAgVaJ1oiFtdhaerRDWNuxu5+S3p7wjobsQl1eYbitGt2nhbHDktR5JZ+qUKGk9K/RIiBimCbpPnzFMcRCxVOeGylN3hbd0VdiRt85x5QXoCLHwEHvZ3vAHGnZQI33kCw59laSktttlN75BQMF3jqtphh/bDsQQ5AtA="
+    github_token:
+      secure: "ADVDESfd2JEyGoi3JBaBt9MHtB4lUsYzuoY3N6H01NMjOYbn6Q5UpRiKA/wvHx9eGRYUyhBCzA+tDBXgZm1rqcSPFQT2ZmgZ4ehm3gioNgvSeibbsVza+t4RnF3uYCm64SUwRZV3fq11/RdpDlLWrzJmtYHG6SZ8CiV0GfDBj9M="
 script:
  - ./gradlew check
  - ./gradlew sonarqube
