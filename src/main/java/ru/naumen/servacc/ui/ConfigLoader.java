@@ -198,11 +198,11 @@ public class ConfigLoader
                 String content = new Scanner(getConfigStream(configURL)).useDelimiter("\\A").next();
                 byte[] encryptedContent = new StringEncrypter("DESede", password).encrypt(content).getBytes();
 
-                OutputStream os = new FileOutputStream(configURL.substring(FileResource.URI_PREFIX.length()));
-                os.write(FileResource.ENCRYPTED_HEADER);
-                os.write(System.getProperty("line.separator").getBytes());
-                os.write(encryptedContent);
-                os.close();
+                try(OutputStream os = new FileOutputStream(configURL.substring(FileResource.URI_PREFIX.length()))) {
+                    os.write(FileResource.ENCRYPTED_HEADER);
+                    os.write(System.getProperty("line.separator").getBytes());
+                    os.write(encryptedContent);
+                }
             }
 
             if (encryptableFiles < 1)
@@ -248,9 +248,9 @@ public class ConfigLoader
                 }
                 String content = new Scanner(stream).useDelimiter("\\A").next();
                 stream.close();
-                FileOutputStream os = new FileOutputStream(filePath);
-                os.write(content.getBytes());
-                os.close();
+                try(FileOutputStream os = new FileOutputStream(filePath)) {
+                    os.write(content.getBytes());
+                }
             }
 
             if (decryptableFiles < 1)
