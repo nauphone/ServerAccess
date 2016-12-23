@@ -110,7 +110,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to login as '{}'", user), e);
+            LOG.error(String.format("Failed to login as '%s'", user), e);
             // !!! TODO, should disconnect ???
             return false;
         }
@@ -136,7 +136,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to check file '{}", file), e);
+            LOG.error(String.format("Failed to check file '%s", file), e);
             return false;
         }
     }
@@ -153,7 +153,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
             }
             catch (SSH2SFTP.SFTPException e)
             {
-                LOG.error(String.format("Failed to get realpath of directory '{}'", newDir), e);
+                LOG.error(String.format("Failed to get realpath of directory '%s'", newDir), e);
                 throw new FTPException(FILE_UNAVAILABLE, dir + ": No such directory.");
             }
             newDir = attrs.lname;
@@ -164,7 +164,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
             }
             catch (SSH2SFTP.SFTPException e)
             {
-                LOG.error(String.format("Failed to open directory '{}'", newDir), e);
+                LOG.error(String.format("Failed to open directory '%s'", newDir), e);
                 throw new FTPException(FILE_UNAVAILABLE, dir + ": Not a directory.");
             }
             remoteDir = newDir;
@@ -183,7 +183,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to rename file '{}' into '{}'", from, fPath), e);
+            LOG.error(String.format("Failed to rename file '%s' into '%s'", from, fPath), e);
             throw new FTPException(FILE_UNAVAILABLE, from + ": No such file or directory.");
         }
     }
@@ -199,7 +199,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
             }
             catch (SSH2SFTP.SFTPException e)
             {
-                LOG.error(String.format("Failed to rename file '{}' into '{}'", renameFrom, to), e);
+                LOG.error(String.format("Failed to rename file '%s' into '%s'", renameFrom, to), e);
                 throw new FTPException(FILE_UNAVAILABLE, "rename: Operation failed.");
             }
             finally
@@ -222,12 +222,12 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPPermissionDeniedException e)
         {
-            LOG.error(String.format("Failed to delete file '{}'. Access denied", file), e);
+            LOG.error(String.format("Failed to delete file '%s'. Access denied", file), e);
             throw new FTPException(FILE_UNAVAILABLE, "access denied");
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to delete file '{}'. No such file", file), e);
+            LOG.error(String.format("Failed to delete file '%s'. No such file", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": no such file.");
         }
     }
@@ -241,12 +241,12 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPPermissionDeniedException e)
         {
-            LOG.error(String.format("Failed to delete directory '{}'. Permission denied", dir), e);
+            LOG.error(String.format("Failed to delete directory '%s'. Permission denied", dir), e);
             throw new FTPException(FILE_UNAVAILABLE, "access denied");
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to delete directory '{}'. No such directory", dir), e);
+            LOG.error(String.format("Failed to delete directory '%s'. No such directory", dir), e);
             throw new FTPException(FILE_UNAVAILABLE, dir + ": no such directory.");
         }
     }
@@ -260,7 +260,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to create directory '{}'", dir), e);
+            LOG.error(String.format("Failed to create directory '%s'", dir), e);
             // TODO: should we throw new exception here?
         }
     }
@@ -306,7 +306,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to get file attributes for '{}'. No such file or directory", file), e);
+            LOG.error(String.format("Failed to get file attributes for '%s'. No such file or directory", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": No such file or directory.");
         }
     }
@@ -323,17 +323,17 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (IOException e)
         {
-            LOG.error(String.format("Failed to store file '{}'. Error writing to data connection", file), e);
+            LOG.error(String.format("Failed to store file '%s'. Error writing to data connection", file), e);
             throw new FTPException(CANNOT_OPEN_CONNECTION, "Error writing to data connection: " + e.getMessage());
         }
         catch (SSH2SFTP.SFTPPermissionDeniedException e)
         {
-            LOG.error(String.format("Failed to store file '{}'. Permission denied", file), e);
+            LOG.error(String.format("Failed to store file '%s'. Permission denied", file), e);
             throw new FTPException(FILE_NAME_NOT_ALLOWED, file + ": Permission denied.");
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to store file '{}'. Error in SFTP connection", file), e);
+            LOG.error(String.format("Failed to store file '%s'. Error in SFTP connection", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": Error in SFTP connection, " + e.getMessage());
         }
         finally
@@ -360,12 +360,12 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPNoSuchFileException e)
         {
-            LOG.error(String.format("Failed to retrieve file '{}'. No such file or directory", file), e);
+            LOG.error(String.format("Failed to retrieve file '%s'. No such file or directory", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": No such file or directory.");
         }
         catch (SSH2SFTP.SFTPException | IOException e)
         {
-            LOG.error(String.format("Failed to retrieve file '{}'. Error in SFTP connection", file), e);
+            LOG.error(String.format("Failed to retrieve file '%s'. Error in SFTP connection", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": Error in SFTP connection, " + e.getMessage());
         }
         finally
@@ -426,7 +426,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (IOException e)
         {
-            LOG.error(String.format("Failed to list content of directory '{}'", path), e);
+            LOG.error(String.format("Failed to list content of directory '%s'", path), e);
             throw new FTPException(CANNOT_OPEN_CONNECTION, "Error writing to data connection: " + e.getMessage());
         }
     }
@@ -449,7 +449,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (IOException e)
         {
-            LOG.error(String.format("Failed to name list at '{}'", path), e);
+            LOG.error(String.format("Failed to name list at '%s'", path), e);
             throw new FTPException(CANNOT_OPEN_CONNECTION, "Error writing to data connection: " + e.getMessage());
         }
     }
@@ -485,7 +485,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to list '{}'. Not a directory", path), e);
+            LOG.error(String.format("Failed to list '%s'. Not a directory", path), e);
             throw new FTPException(FILE_UNAVAILABLE, path + ": Not a directory.");
         }
         finally
@@ -536,7 +536,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         }
         catch (SSH2SFTP.SFTPException e)
         {
-            LOG.error(String.format("Failed to change mode bits of file '{}'", file), e);
+            LOG.error(String.format("Failed to change mode bits of file '%s'", file), e);
         }
     }
 }
