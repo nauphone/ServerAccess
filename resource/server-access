@@ -1,12 +1,6 @@
 #!/bin/bash
 
-function try_path() {
-    path=`ls $1 2>/dev/null | head -n1 || echo .`
-    if [ -e $path ]; then echo $path; fi
-}
-
 unset CDPATH
-
 cd "$(dirname "${BASH_SOURCE[0]}")"
 
 FLAGS="-cp ServerAccess-all.jar"
