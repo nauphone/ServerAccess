@@ -53,6 +53,7 @@ import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.SSHKey;
 import ru.naumen.servacc.config2.i.IConfig;
+import ru.naumen.servacc.exception.ServerAccessException;
 import ru.naumen.servacc.platform.Command;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.telnet.ConsoleManager;
@@ -246,9 +247,12 @@ public class MindtermBackend implements Backend {
         return secureRandom;
     }
 
-    private void openSSHAccount(final SSHAccount account, final SSH2SimpleClient client, final String path) throws Exception
+    private void openSSHAccount(final SSHAccount account, final SSH2SimpleClient client, final String path)
     {
         final SSH2SessionChannel session = client.getConnection().newSession();
+        if (session == null) {
+            throw new ServerAccessException("Failed to create SSH session");
+        }
         try
         {
             if (!session.requestPTY("xterm", 24, 80, new byte[] {12, 0, 0, 0, 0, 0}))
@@ -268,13 +272,9 @@ public class MindtermBackend implements Backend {
                 throw new IOException("Failed to start shell on remote side");
             }
         }
-        catch (Exception e)
-        {
-            if (session != null)
-            {
-                session.close();
-            }
-            throw e;
+        catch (IOException e) {
+            LOGGER.error("Failed to open SSH account", e);
+            session.close();
         }
     }
 
