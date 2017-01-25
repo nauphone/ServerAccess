@@ -20,5 +20,7 @@ public interface IConfigItem
 
     default boolean isConnectable() { return false; }
 
+    default boolean isPortForwarder() { return false; }
+
     String getIconName();
 }
