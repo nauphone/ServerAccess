@@ -27,8 +27,6 @@ import org.eclipse.swt.dnd.DropTargetAdapter;
 import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.events.ShellEvent;
@@ -39,9 +37,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.swt.widgets.Shell;
@@ -316,24 +312,12 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
             }
         });
         // Filter events
-        filteredTree.getFilter().addModifyListener(new ModifyListener()
-        {
-            @Override
-            public void modifyText(ModifyEvent e)
+        filteredTree.getFilter().addModifyListener(event -> {scheduleRefresh(filteredTree.getText());});
+        shell.getDisplay().addFilter(SWT.KeyDown, event -> {
+            // Focus on Ctrl+F
+            if (event.stateMask == SWT.CTRL && event.keyCode == (int) 'f')
             {
-                scheduleRefresh(filteredTree.getText());
-            }
-        });
-        shell.getDisplay().addFilter(SWT.KeyDown, new Listener()
-        {
-            @Override
-            public void handleEvent(Event event)
-            {
-                // Focus on Ctrl+F
-                if (event.stateMask == SWT.CTRL && event.keyCode == (int) 'f')
-                {
-                    filteredTree.focusOnFilterField();
-                }
+                filteredTree.focusOnFilterField();
             }
         });
         // Drag source
@@ -480,22 +464,8 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         // tray menu item which is the only way to quit on windows
         MenuItem itemQuit = new MenuItem(menu, SWT.NULL);
         itemQuit.setText("Quit");
-        itemQuit.addListener(SWT.Selection, new Listener()
-        {
-            @Override
-            public void handleEvent(Event e)
-            {
-                shell.dispose();
-            }
-        });
-        trayItem.addListener(SWT.MenuDetect, new Listener()
-        {
-            @Override
-            public void handleEvent(Event arg0)
-            {
-                menu.setVisible(true);
-            }
-        });
+        itemQuit.addListener(SWT.Selection, event -> {shell.dispose();});
+        trayItem.addListener(SWT.MenuDetect, event -> {menu.setVisible(true);});
     }
 
     private void createAppMenu()
@@ -518,28 +488,14 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     {
         final MenuItem itemEncrypt = new MenuItem(menu, SWT.NULL);
         itemEncrypt.setText("Encrypt Local Accounts");
-        itemEncrypt.addListener(SWT.Selection, new Listener()
-        {
-            @Override
-            public void handleEvent(Event event)
-            {
-                configLoader.encryptLocalAccounts();
-            }
-        });
+        itemEncrypt.addListener(SWT.Selection, event -> {configLoader.encryptLocalAccounts();});
     }
 
     private void createDecryptMenuItem(final Menu menu)
     {
         final MenuItem itemDecrypt = new MenuItem(menu, SWT.NULL);
         itemDecrypt.setText("Decrypt Local Accounts");
-        itemDecrypt.addListener(SWT.Selection, new Listener()
-        {
-            @Override
-            public void handleEvent(Event event)
-            {
-                configLoader.decryptLocalAccounts();
-            }
-        });
+        itemDecrypt.addListener(SWT.Selection, event -> {configLoader.decryptLocalAccounts();});
     }
 
     // Event handlers
