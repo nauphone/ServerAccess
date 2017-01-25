@@ -22,5 +22,7 @@ public interface IConfigItem
 
     default boolean isPortForwarder() { return false; }
 
+    default boolean isFtpBrowseable() { return false; }
+
     String getIconName();
 }

@@ -15,10 +15,9 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.naumen.servacc.config2.i.IConnectableConfigItem;
-import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.util.Util;
 
-public class SSHAccount extends Account implements IFTPBrowseable, IConnectableConfigItem
+public class SSHAccount extends Account implements IConnectableConfigItem
 {
     private static final Logger LOGGER = LoggerFactory.getLogger(SSHAccount.class);
     public static final String SSHACCOUNT_TYPE = "ssh";
@@ -180,6 +179,11 @@ public class SSHAccount extends Account implements IFTPBrowseable, IConnectableC
 
     @Override
     public boolean isPortForwarder() {
+        return true;
+    }
+
+    @Override
+    public boolean isFtpBrowseable() {
         return true;
     }
 }
