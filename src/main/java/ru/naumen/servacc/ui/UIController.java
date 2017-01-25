@@ -455,15 +455,8 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         });
 
         final Menu menu = new Menu(shell, SWT.POP_UP);
-        // tray menu items to encrypt/decrypt local accounts
-        createEncryptMenuItem(menu);
-        createDecryptMenuItem(menu);
-        new MenuItem(menu, SWT.SEPARATOR);
-        // tray menu item which is the only way to quit on windows
-        MenuItem itemQuit = new MenuItem(menu, SWT.NULL);
-        itemQuit.setText("Quit");
-        itemQuit.addListener(SWT.Selection, event -> {shell.dispose();});
         trayItem.addListener(SWT.MenuDetect, event -> {menu.setVisible(true);});
+        addFileMenuActions(menu);
     }
 
     private void createAppMenu()
@@ -478,8 +471,18 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         final Menu dropdown = new Menu(menuBar);
         file.setText("File");
         file.setMenu(dropdown);
-        createEncryptMenuItem(dropdown);
-        createDecryptMenuItem(dropdown);
+        addFileMenuActions(dropdown);
+    }
+
+    private void addFileMenuActions(Menu menu) {
+        // tray menu items to encrypt/decrypt local accounts
+        createEncryptMenuItem(menu);
+        createDecryptMenuItem(menu);
+        new MenuItem(menu, SWT.SEPARATOR);
+        // tray menu item which is the only way to quit on windows
+        MenuItem itemQuit = new MenuItem(menu, SWT.NULL);
+        itemQuit.setText("Quit");
+        itemQuit.addListener(SWT.Selection, event -> {shell.dispose();});
     }
 
     private void createEncryptMenuItem(final Menu menu)
