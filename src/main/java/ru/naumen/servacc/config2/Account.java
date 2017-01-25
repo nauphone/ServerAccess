@@ -138,4 +138,9 @@ public class Account implements IConfigItem
     {
         return "/icons/card.png";
     }
+
+    @Override
+    public boolean isAccount() {
+        return true;
+    }
 }

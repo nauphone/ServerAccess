@@ -300,11 +300,12 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
                 if (item != null)
                 {
                     itemSelected(item);
-                    toolitemConnect.setEnabled(isConnectable(item));
-                    toolitemPortForwarding.setEnabled(isPortForwarder(item));
-                    toolitemFTP.setEnabled(isFTPBrowseable(item));
-                    toolItemProxy.setEnabled(isPortForwarder(item));
-                    toolitemCopy.setEnabled(isAccount(item));
+                    final IConfigItem configItem = getConfigTreeItem(item).getData();
+                    toolitemConnect.setEnabled(configItem.isConnectable());
+                    toolitemPortForwarding.setEnabled(configItem.isPortForwarder());
+                    toolitemFTP.setEnabled(configItem.isFtpBrowseable());
+                    toolItemProxy.setEnabled(configItem.isPortForwarder());
+                    toolitemCopy.setEnabled(configItem.isAccount());
                 }
             }
         });
@@ -616,7 +617,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
 
     private void passwordCopyRequested(TreeItem item)
     {
-        if (isAccount(item))
+        if (getConfigTreeItem(item).getData().isAccount())
         {
             TreeItemController tic = getConfigTreeItem(item);
             try
@@ -773,30 +774,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
                 createTreeItem(treeItem, child);
             }
         }
-    }
-
-    private static boolean isPortForwarder(TreeItem item)
-    {
-        TreeItemController tic = getConfigTreeItem(item);
-        return tic.getData().isPortForwarder();
-    }
-
-    private static boolean isAccount(TreeItem item)
-    {
-        TreeItemController tic = getConfigTreeItem(item);
-        return tic.getData() instanceof Account;
-    }
-
-    private static boolean isConnectable(TreeItem item)
-    {
-        TreeItemController tic = getConfigTreeItem(item);
-        return tic.getData().isConnectable();
-    }
-
-    private static boolean isFTPBrowseable(TreeItem item)
-    {
-        TreeItemController tic = getConfigTreeItem(item);
-        return tic.getData().isFtpBrowseable();
     }
 
     private static TreeItemController getConfigTreeItem(TreeItem item)

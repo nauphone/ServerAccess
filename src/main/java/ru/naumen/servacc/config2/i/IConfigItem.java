@@ -18,6 +18,8 @@ public interface IConfigItem
         return true;
     }
 
+    default boolean isAccount() { return false; }
+
     default boolean isConnectable() { return false; }
 
     default boolean isPortForwarder() { return false; }
