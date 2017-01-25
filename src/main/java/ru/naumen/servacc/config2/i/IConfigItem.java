@@ -12,11 +12,13 @@ package ru.naumen.servacc.config2.i;
 public interface IConfigItem
 {
     boolean matches(String filter);
-    
+
     default boolean isAutoExpanded()
     {
         return true;
     }
+
+    default boolean isConnectable() { return false; }
 
     String getIconName();
 }

@@ -9,11 +9,10 @@
  */
 package ru.naumen.servacc.config2;
 
-import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IConnectableConfigItem;
 import ru.naumen.servacc.util.Util;
 
-public class HTTPAccount extends Account implements IConnectable, IConnectableConfigItem
+public class HTTPAccount extends Account implements IConnectableConfigItem
 {
     public static final String HTTPACCOUNT_TYPE = "http";
     public static final String HTTPACCOUNT_PARAM_URL = "url";

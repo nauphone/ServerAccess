@@ -63,7 +63,6 @@ import ru.naumen.servacc.config2.Path;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.config2.i.IConfig;
 import ru.naumen.servacc.config2.i.IConfigItem;
-import ru.naumen.servacc.config2.i.IConnectable;
 import ru.naumen.servacc.config2.i.IFTPBrowseable;
 import ru.naumen.servacc.config2.i.IPortForwarder;
 import ru.naumen.servacc.exception.ServerAccessException;
@@ -793,7 +792,7 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private static boolean isConnectable(TreeItem item)
     {
         TreeItemController tic = getConfigTreeItem(item);
-        return tic.getData() instanceof IConnectable;
+        return tic.getData().isConnectable();
     }
 
     private static boolean isFTPBrowseable(TreeItem item)
