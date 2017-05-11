@@ -99,49 +99,56 @@ def configureShadowJarArch(ShadowJar shadowJarArch, String arch, Configuration s
     }
 }
 
-task prepareRelease {dependsOn build} << {
-    copy {
-        from 'resource/server-access'
-        from 'resource/log4j.properties'
-        into 'build/libs'
+task prepareRelease(dependsOn: build) {
+    doLast {
+        copy {
+            from 'resource/server-access'
+            from 'resource/log4j.properties'
+            into 'build/libs'
+        }
     }
 }
 
-task win32 {dependsOn prepareRelease, shadowJarWin32} << {
-    exec {
-        workingDir 'nsis'
-        commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
-        standardOutput = new FileOutputStream('build/nsis32.out')
-        errorOutput = new FileOutputStream('build/nsis32.err')
+task win32 (dependsOn: [prepareRelease, shadowJarWin32]) {
+    doLast {
+        exec {
+            workingDir 'nsis'
+            commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
+            standardOutput = new FileOutputStream('build/nsis32.out')
+            errorOutput = new FileOutputStream('build/nsis32.err')
+        }
     }
 }
 
-task win64 {dependsOn prepareRelease, shadowJarWin64} << {
-    exec {
-        workingDir 'nsis'
-        commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
-        standardOutput = new FileOutputStream('build/nsis64.out')
-        errorOutput = new FileOutputStream('build/nsis64.err')
+task win64 (dependsOn: [prepareRelease, shadowJarWin64]) {
+    doLast {
+        exec {
+            workingDir 'nsis'
+            commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
+            standardOutput = new FileOutputStream('build/nsis64.out')
+            errorOutput = new FileOutputStream('build/nsis64.err')
+        }
     }
 }
 
-task lin64 {dependsOn prepareRelease, shadowJarLin64} << {}
+task lin64(dependsOn: [prepareRelease, shadowJarLin64]) { doLast{} }
 
-task macosx {dependsOn build, shadowJarMacosx} << {
-
-    copy {
-        from zipTree('resource/ServerAccess.app.tmpl.zip')
-        into 'build/libs'
-    }
-    copy {
-        from configurations.runtime
-        into 'build/libs/ServerAccess.app/Contents/MacOS'
-    }
-    copy {
-        from 'resource/log4j.properties'
-        from 'build/libs/64/ServerAccess-all.jar'
-        from 'resource/scripts/serveraccess'
-        into 'build/libs/ServerAccess.app/Contents/MacOS'
+task macosx (dependsOn: [build, shadowJarMacosx]) {
+    doLast {
+        copy {
+            from zipTree('resource/ServerAccess.app.tmpl.zip')
+            into 'build/libs'
+        }
+        copy {
+            from configurations.runtime
+            into 'build/libs/ServerAccess.app/Contents/MacOS'
+        }
+        copy {
+            from 'resource/log4j.properties'
+            from 'build/libs/64/ServerAccess-all.jar'
+            from 'resource/scripts/serveraccess'
+            into 'build/libs/ServerAccess.app/Contents/MacOS'
+        }
     }
 }
 
