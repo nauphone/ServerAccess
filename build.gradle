@@ -42,8 +42,8 @@ repositories {
 
 dependencies {
     compile files('lib/mindterm.jar')
-    compile 'org.slf4j:slf4j-api:1.7.21'
-    compile 'org.slf4j:slf4j-log4j12:1.7.21'
+    compile 'org.slf4j:slf4j-api:1.7.25'
+    compile 'org.slf4j:slf4j-log4j12:1.7.25'
     compile 'log4j:log4j:1.2.17'
 
     compileOnly "org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:${swtVersion}"
