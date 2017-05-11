@@ -9,24 +9,19 @@
  */
 package ru.naumen.servacc.test;
 
-import static org.hamcrest.CoreMatchers.containsString;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.not;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assume.assumeThat;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.util.concurrent.TimeUnit;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.params.ConnRoutePNames;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.util.EntityUtils;
 import org.junit.After;
 import org.junit.Before;
@@ -34,13 +29,19 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.Timeout;
 import ru.naumen.servacc.Backend;
-import ru.naumen.servacc.MindtermBackend;
-import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;
+import ru.naumen.servacc.MindtermBackend;
+import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.SSHAccount;
 import ru.naumen.servacc.platform.OS;
+
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assume.assumeThat;
 
 /**
  * @author Andrey Hitrin
@@ -66,7 +67,7 @@ public class HTTPProxyConnectionTest
         }
     };
     @Rule
-    public final Timeout testTimeout = new Timeout(10000);
+    public final Timeout testTimeout = new Timeout(10, TimeUnit.SECONDS);
 
     // system under test
     private final HTTPProxy proxy = new HTTPProxy(backend, executorService, new ActiveChannelsRegistry());
@@ -140,14 +141,17 @@ public class HTTPProxyConnectionTest
 
     private HttpResponse httpGet(String uri) throws IOException
     {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
+        CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         return httpClient.execute(new HttpGet(uri));
     }
 
     private HttpResponse httpGet(String uri, HttpHost proxy) throws IOException
     {
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
+
+        CloseableHttpClient httpClient = HttpClientBuilder.create()
+            .setRoutePlanner(routePlanner)
+            .build();
         return httpClient.execute(new HttpGet(uri));
     }
 
