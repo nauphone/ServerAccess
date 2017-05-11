@@ -21,7 +21,7 @@ configurations {
 }
 
 ext {
-    swtVersion = '4.6'
+    swtVersion = '4.6.1'
 }
 
 def detectVersion() {
