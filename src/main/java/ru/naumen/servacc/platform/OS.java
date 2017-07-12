@@ -60,7 +60,8 @@ public class OS
 
     private static boolean isUnityDesktop()
     {
-        return "Unity".equals(System.getenv("XDG_CURRENT_DESKTOP"));
+        String desktop = System.getenv("XDG_CURRENT_DESKTOP");
+        return desktop != null && desktop.startsWith("Unity");
     }
 
     public GUIOptions getGUIOptions()
