@@ -16,7 +16,7 @@ import ru.naumen.servacc.util.FileUtil;
 public class OS
 {
     private static final GUIOptions MAC_OS_X_LOOK = new GUIOptions(false, true, true);
-    private static final GUIOptions UNITY_LOOK = new GUIOptions(false, true, true);
+    private static final GUIOptions UBUNTU_LOOK = new GUIOptions(false, true, true);
     private static final GUIOptions MAINSTREAM_LOOK = new GUIOptions(true, false, false);
 
     private final Platform platform;
@@ -35,10 +35,10 @@ public class OS
             platform = new Windows();
             guiOptions = MAINSTREAM_LOOK;
         }
-        else if (isUnityDesktop())
+        else if (isUnityDesktop() | isGnomeDesktop())
         {
             platform = new Linux();
-            guiOptions = UNITY_LOOK;
+            guiOptions = UBUNTU_LOOK;
         }
         else
         {
@@ -62,6 +62,12 @@ public class OS
     {
         String desktop = System.getenv("XDG_CURRENT_DESKTOP");
         return desktop != null && desktop.startsWith("Unity");
+    }
+
+    private static boolean isGnomeDesktop()
+    {
+        String desktop = System.getenv("XDG_CURRENT_DESKTOP");
+        return "ubuntu:GNOME".equals(desktop);
     }
 
     public GUIOptions getGUIOptions()
