@@ -312,10 +312,21 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         // Filter events
         filteredTree.getFilter().addModifyListener(event -> {scheduleRefresh(filteredTree.getText());});
         shell.getDisplay().addFilter(SWT.KeyDown, event -> {
-            // Focus on Ctrl+F
-            if (event.stateMask == SWT.CTRL && event.keyCode == (int) 'f')
+            if (event.stateMask == SWT.CTRL)
             {
-                filteredTree.focusOnFilterField();
+                switch (event.keyCode) {
+                case (int) 'f':
+                    // Focus on Ctrl+F
+                    filteredTree.focusOnFilterField();
+                    break;
+                case (int) 'c':
+                    // Copy password on Ctrl+C
+                    passwordCopyRequested(getSelectedTreeItem());
+                    break;
+                default:
+                    // Unknown keycode - just ignore it
+                    break;
+                }
             }
         });
         // Drag source
@@ -616,7 +627,6 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
             // TODO: display proxy status somewhere
         }
     }
-
 
     private void passwordCopyRequested(TreeItem item)
     {
