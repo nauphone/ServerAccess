@@ -24,6 +24,11 @@ import com.mindbright.ssh2.SSH2SFTPClient;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -397,6 +402,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         try
         {
             SSH2SFTP.FileAttributes[] list = dirList(path);
+
             for (SSH2SFTP.FileAttributes attributes : list)
             {
                 if (".".equals(attributes.name) || "..".equals(attributes.name))
@@ -412,7 +418,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
                 str.append(" ");
                 str.append(rightJustify(Long.toString(attributes.size), 16));
                 str.append(" ");
-                str.append(attributes.mtime);
+                str.append(formatMtime(attributes.mtime));
                 str.append(" ");
                 str.append(attributes.name);
                 String row = str.toString();
@@ -538,5 +544,17 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         {
             LOG.error(String.format("Failed to change mode bits of file '%s'", file), e);
         }
+    }
+
+    private String formatMtime(int mtime) {
+        ZonedDateTime now = ZonedDateTime.now();
+        ZonedDateTime mtimeDate = Instant.ofEpochSecond(mtime).atZone(ZoneId.systemDefault());
+        DateTimeFormatter dateFormat;
+        if (mtimeDate.getYear() == now.getYear()) {
+            dateFormat = DateTimeFormatter.ofPattern("MMM dd HH:mm", Locale.ENGLISH);
+        } else {
+            dateFormat = DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
+        }
+        return mtimeDate.format(dateFormat);
     }
 }
