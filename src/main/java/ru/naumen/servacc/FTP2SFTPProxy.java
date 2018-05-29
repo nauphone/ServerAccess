@@ -26,6 +26,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 
 /**
  * Implements a proxy which proxies between an ftp client and an sftp server.
@@ -397,6 +400,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
         try
         {
             SSH2SFTP.FileAttributes[] list = dirList(path);
+            Date currentDate = new Date();
             for (SSH2SFTP.FileAttributes attributes : list)
             {
                 if (".".equals(attributes.name) || "..".equals(attributes.name))
@@ -412,7 +416,13 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
                 str.append(" ");
                 str.append(rightJustify(Long.toString(attributes.size), 16));
                 str.append(" ");
-                str.append(attributes.mtime);
+                Date mtimeDate = new Date((long)attributes.mtime*1000);
+                SimpleDateFormat dateFormat;
+                if (mtimeDate.getYear() == currentDate.getYear())
+                    dateFormat = new SimpleDateFormat("MMM dd HH:mm", Locale.ENGLISH);
+                else
+                    dateFormat = new SimpleDateFormat("MMM dd yyyy", Locale.ENGLISH);
+                str.append(dateFormat.format(mtimeDate));
                 str.append(" ");
                 str.append(attributes.name);
                 String row = str.toString();
