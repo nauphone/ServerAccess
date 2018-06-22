@@ -88,7 +88,8 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
     private ToolItem toolitemPortForwarding;
     private ToolItem toolitemFTP;
     private ToolItem toolItemProxy;
-    private ToolItem toolitemCopy;
+    private ToolItem toolitemCopyHost;
+    private ToolItem toolitemCopyPass;
 
     private Label globalThrough;
     private Button clearGlobalThrough;
@@ -182,10 +183,15 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
         toolItemProxy.setImage(ImageCache.getImage("/icons/earth.png"));
         toolItemProxy.setEnabled(false);
 
-        toolitemCopy = new ToolItem(toolbar, SWT.PUSH);
-        toolitemCopy.setText("Copy Password");
-        toolitemCopy.setImage(ImageCache.getImage("/icons/document-copy.png"));
-        toolitemCopy.setEnabled(false);
+        toolitemCopyHost = new ToolItem(toolbar, SWT.PUSH);
+        toolitemCopyHost.setText("Copy Host");
+        toolitemCopyHost.setImage(ImageCache.getImage("/icons/document-copy.png"));
+        toolitemCopyHost.setEnabled(false);
+
+        toolitemCopyPass = new ToolItem(toolbar, SWT.PUSH);
+        toolitemCopyPass.setText("Copy Password");
+        toolitemCopyPass.setImage(ImageCache.getImage("/icons/document-copy.png"));
+        toolitemCopyPass.setEnabled(false);
 
         new ToolItem(toolbar, SWT.SEPARATOR);
 
@@ -248,7 +254,20 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
             {
             }
         });
-        toolitemCopy.addSelectionListener(new SelectionListener()
+        toolitemCopyHost.addSelectionListener(new SelectionListener()
+        {
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e)
+            {
+            }
+
+            @Override
+            public void widgetSelected(SelectionEvent e)
+            {
+                hostCopyRequested(getSelectedTreeItem());
+            }
+        });
+        toolitemCopyPass.addSelectionListener(new SelectionListener()
         {
             @Override
             public void widgetDefaultSelected(SelectionEvent e)
@@ -305,7 +324,8 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
                     toolitemPortForwarding.setEnabled(configItem.isPortForwarder());
                     toolitemFTP.setEnabled(configItem.isFtpBrowseable());
                     toolItemProxy.setEnabled(configItem.isPortForwarder());
-                    toolitemCopy.setEnabled(configItem.isAccount());
+                    toolitemCopyHost.setEnabled(configItem.isAccount());
+                    toolitemCopyPass.setEnabled(configItem.isAccount());
                 }
             }
         });
@@ -625,6 +645,25 @@ public class UIController implements GlobalThroughView, ActiveChannelsObserver
 
             httpProxy.setProxyOn((SSHAccount) tic.getData(), dialog.getPort(), asynchronousAlert);
             // TODO: display proxy status somewhere
+        }
+    }
+
+    private void hostCopyRequested(TreeItem item)
+    {
+        if (getConfigTreeItem(item).getData().isAccount())
+        {
+            TreeItemController tic = getConfigTreeItem(item);
+            try
+            {
+                final String host = ((Account) tic.getData()).getAddress();
+                clipboard.setContents(
+                    new Object[]{ host },
+                    new Transfer[]{ TextTransfer.getInstance() });
+            }
+            catch (Exception e)
+            {
+                LOGGER.error("Cannot copy password", e);
+            }
         }
     }
 

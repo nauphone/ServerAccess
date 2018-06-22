@@ -38,6 +38,11 @@ public class Account implements IConfigItem
         return params.get(ACCOUNT_PARAM_LOGIN);
     }
 
+    public String getAddress()
+    {
+        return params.get(ACCOUNT_PARAM_ADDRESS);
+    }
+
     public String getPassword()
     {
         return params.get(ACCOUNT_PARAM_PASSWORD);
