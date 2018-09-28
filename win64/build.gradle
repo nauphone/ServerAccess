@@ -4,8 +4,12 @@ dependencies {
 }
 
 task fullBuild(dependsOn: [prepareRelease, shadowJar], type: Exec) {
-    workingDir '../nsis'
-    commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
-    standardOutput = new FileOutputStream('win64/build/nsis64.out')
-    errorOutput = new FileOutputStream('win64/build/nsis64.err')
+    doLast {
+        exec {
+            workingDir '../nsis'
+            commandLine 'makensis', '-DArch=64', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
+            standardOutput = new FileOutputStream('win64/build/nsis64.out')
+            errorOutput = new FileOutputStream('win64/build/nsis64.err')
+        }
+    }
 }

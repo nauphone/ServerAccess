@@ -9,7 +9,7 @@
 
 Name         "Server Access"
 Caption      "Server Access"
-BrandingText "пїЅ NAUMEN 2005-2013"
+BrandingText "© NAUMEN 2005-2013"
 Icon         "gfx\naumen.ico"
 OutFile      "..\win${Arch}\build\sa_install-${BuildVersion}_${Arch}.exe"
 
@@ -54,7 +54,7 @@ InstallDir   "$PROGRAMFILES\NAUMEN\ServerAccess"
 Section -Main
     ;SectionIn RO
     SetOutPath "$INSTDIR"
-    File "..\win${Arch}\build\libs\ServerAccess-all.jar"
+    File "..\win${Arch}\build\libs\${Arch}\ServerAccess-all.jar"
     File "..\resource\log4j.properties"
     File "..\resource\putty.exe"
     File "..\resource\rdesktop.exe"
@@ -131,16 +131,16 @@ FunctionEnd
 !insertmacro MUI_LANGUAGE "Russian"
 
 LangString TEXT_DesktopShortcut             ${LANG_ENGLISH} "Desktop shortcut"
-LangString TEXT_DesktopShortcut             ${LANG_RUSSIAN} "пїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ"
+LangString TEXT_DesktopShortcut             ${LANG_RUSSIAN} "Ярлык на Рабочий стол"
 
 LangString TEXT_IncorrectJavaVersion        ${LANG_ENGLISH} "You need version of Java not older than ${JAVA_MAJOR_VERSION}.${JAVA_MINOR_VERSION} to run this application.$\nProceed with installation?"
-LangString TEXT_IncorrectJavaVersion        ${LANG_RUSSIAN} "пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Java пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅ ${JAVA_MAJOR_VERSION}.${JAVA_MINOR_VERSION}.$\nпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ?"
+LangString TEXT_IncorrectJavaVersion        ${LANG_RUSSIAN} "Для запуска приложения требуется Java версии не ниже ${JAVA_MAJOR_VERSION}.${JAVA_MINOR_VERSION}.$\nПродолжить установку?"
 
 ;LangString TEXT_JavaNotInstalled            ${LANG_ENGLISH}     ""
 ;LangString TEXT_JavaNotInstalled            ${LANG_RUSSIAN}     ""
 
 LangString TEXT_EnableBasicAuthorization    ${LANG_ENGLISH} "Enable basic authorization feature for IEv6+"
-LangString TEXT_EnableBasicAuthorization    ${LANG_RUSSIAN} "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ Basic Authorization пїЅпїЅпїЅ IEv6+"
+LangString TEXT_EnableBasicAuthorization    ${LANG_RUSSIAN} "Включить поддержку Basic Authorization для IEv6+"
 
 LangString TEXT_InstallDefaultPuttyCodepage    ${LANG_ENGLISH} "Install default codepage for putty to UTF-8"
-LangString TEXT_InstallDefaultPuttyCodepage    ${LANG_RUSSIAN} "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ putty пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ UTF-8"
+LangString TEXT_InstallDefaultPuttyCodepage    ${LANG_RUSSIAN} "Установить для putty кодировку UTF-8"
