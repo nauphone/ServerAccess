@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':base')
+    compile "org.eclipse.swt:org.eclipse.swt.gtk.linux.x86_64:${swtVersion}"
+}
+
+task fullBuild(dependsOn: [prepareRelease, shadowJar], type: Copy) {
+    from "resources/server-access"
+    into 'build/libs'
+}

@@ -1,1 +1,3 @@
 rootProject.name = 'ServerAccess'
+
+include 'base', 'win32', 'win64',  'lin64', 'macosx'

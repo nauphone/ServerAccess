@@ -39,29 +39,29 @@ Windows
 -------
 Use one of the following commands to build the installer (depending of the target architecture):
 
-    ``gradlew.bat win32``
+    ``gradlew.bat win32:fullBuild``
 
 or:
 
-    ``gradlew.bat win64``
+    ``gradlew.bat win64:fullBuild``
 
-Run the resulting ``build/sa_install-<version>.exe`` which will guide you through the rest of install process.
+Run the resulting ``win<version>/build/sa_install-<version>.exe`` which will guide you through the rest of install process.
 
 Mac OS X
 --------
 Use the following command to build the application bundle for 64-bit architecture:
 
-    ``./gradlew macosx``
+    ``./gradlew macosx:fullBuild``
 
-Copy ``ServerAccess.app`` (from ``build/libs`` subdirectory) to your ``/Applications`` folder.
+Copy ``ServerAccess.app`` (from ``macosx/build/libs`` subdirectory) to your ``/Applications`` folder.
 
 GNU Linux/Other
 ---------------
-Use ``./gradlew lin64`` command to build application distribution.
+Use ``./gradlew lin64:fullBuild`` command to build application distribution.
 
 Then launch it (you will probably need to download SWT binaries for your platform and add them to Java class path):
 
-    ``./build/libs/server-access``
+    ``./lin64/build/libs/server-access``
 
 To create deb-package for Debian/Ubuntu distributive, use following script:
 

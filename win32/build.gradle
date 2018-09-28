@@ -1,0 +1,11 @@
+dependencies {
+    compile project(':base')
+    compile "org.eclipse.swt:org.eclipse.swt.win32.win32.x86:${swtVersion}"
+}
+
+task fullBuild(dependsOn: [prepareRelease, shadowJar], type: Exec) {
+    workingDir '../nsis'
+    commandLine 'makensis', '-DArch=32', '-DbuildVersion=' + currentVersion, 'serveraccess2.nsi'
+    standardOutput = new FileOutputStream('win32/build/nsis32.out')
+    errorOutput = new FileOutputStream('win32/build/nsis32.err')
+}
