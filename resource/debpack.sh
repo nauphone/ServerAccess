@@ -43,10 +43,11 @@ mkdir -p $tmpdir/usr/share/pixmaps/naumen-server-access
 echo copying files
 
 cp ./lin64/build/libs/ServerAccess-all.jar $TARGET/
+cp ./lin64/resources/server-access $TARGET/
+cp ./lin64/resources/naumen-server-access.desktop $tmpdir/usr/share/applications
+
 cp ./resource/log4j.properties $TARGET/
-cp ./resource/server-access $TARGET/
 cp -R ./base/src/main/resources/icons/ $tmpdir/usr/share/pixmaps/naumen-server-access
-cp ./resource/naumen-server-access.desktop $tmpdir/usr/share/applications
 cp ./resource/naumen-server-access.png $tmpdir/usr/share/pixmaps/
 cp LICENSE.GPL $TARGET/
 touch $TARGET/serveraccess.log
