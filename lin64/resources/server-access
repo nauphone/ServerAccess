@@ -6,8 +6,4 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 FLAGS="-cp ServerAccess-all.jar:."
 ARCH=`uname -i`
 
-if [ "$ARCH" == "x86_64" ] ;then
-  FLAGS="-d64 $FLAGS"
-fi
-
 java $FLAGS ru.naumen.servacc.ui.Main
