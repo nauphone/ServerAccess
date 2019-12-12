@@ -18,17 +18,27 @@ package ru.naumen.servacc.backend.mindterm;
 import com.mindbright.net.ftp.FTPException;
 import com.mindbright.net.ftp.FTPServer;
 import com.mindbright.net.ftp.FTPServerEventHandler;
-import com.mindbright.ssh2.SSH2Connection;
-import com.mindbright.ssh2.SSH2SFTP;
-import com.mindbright.ssh2.SSH2SFTPClient;
+import com.mindbright.ssh2.SSH2SFTP.FileAttributes;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.time.Instant;
+import java.nio.channels.Channels;
+import java.nio.file.attribute.FileTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.Set;
+import org.apache.sshd.client.session.ClientSession;
+import org.apache.sshd.client.subsystem.sftp.SftpClient;
+import org.apache.sshd.client.subsystem.sftp.SftpClient.Attribute;
+import org.apache.sshd.client.subsystem.sftp.SftpClient.Attributes;
+import org.apache.sshd.client.subsystem.sftp.SftpClient.CloseableHandle;
+import org.apache.sshd.client.subsystem.sftp.SftpClient.DirEntry;
+import org.apache.sshd.client.subsystem.sftp.SftpClient.OpenMode;
+import org.apache.sshd.client.subsystem.sftp.SftpClientFactory;
+import org.apache.sshd.client.subsystem.sftp.SftpRemotePathChannel;
+import org.apache.sshd.common.util.io.IoUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,38 +55,32 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
 
     private static final Logger LOG = LoggerFactory.getLogger(MindtermFTP2SFTPProxy.class);
 
-    private SSH2Connection connection;
-    private SSH2SFTPClient sftp;
+    private SftpClient sftp;
     private FTPServer ftp;
     private String remoteDir;
     private String renameFrom;
     private String user;
-    private SSH2SFTP.FileAttributes attrs;
+    private Attributes attrs;
 
-    public MindtermFTP2SFTPProxy(SSH2Connection connection, InputStream ftpInput, OutputStream ftpOutput, String identity) throws SSH2SFTP.SFTPException
+    public MindtermFTP2SFTPProxy(ClientSession session, InputStream ftpInput, OutputStream ftpOutput, String identity) throws IOException
     {
-        initSFTP(connection);
+        initSFTP(session);
         initFTP(ftpInput, ftpOutput, identity, false);
     }
 
     /**
-     * Connect this instance with an <code>SSH2Connection</code> which is
+     * Connect this instance with an <code>ClientSession</code> which is
      * connected to the server we want to transfer files to/from.
      *
-     * @param connection Established connection to the server.
+     * @param session Established session to the server.
      */
-    private void initSFTP(SSH2Connection connection) throws SSH2SFTP.SFTPException
+    private void initSFTP(ClientSession session) throws IOException
     {
-        this.connection = connection;
         this.attrs = null;
-        try
-        {
-            this.sftp = new SSH2SFTPClient(connection, false);
-        }
-        catch (SSH2SFTP.SFTPException e)
-        {
-            if (ftp != null)
-            {
+        try {
+            this.sftp = SftpClientFactory.instance().createSftpClient(session);
+        } catch (IOException e) {
+            if (ftp != null) {
                 ftp.terminate();
             }
             throw e;
@@ -108,12 +112,12 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
     @Override
     public boolean login(String user, String pass)
     {
-        connection.getLog().notice("SSH2FTPOverSFTP", "user " + user + " login");
+        //        session.getLog().notice("SSH2FTPOverSFTP", "user " + user + " login");
         try
         {
-            attrs = sftp.realpath(".");
+            attrs = sftp.stat(".");
         }
-        catch (SSH2SFTP.SFTPException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to login as '%s'", user), e);
             // !!! TODO, should disconnect ???
@@ -127,8 +131,12 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
     @Override
     public void quit()
     {
-        connection.getLog().notice("SSH2FTPOverSFTP", "user " + user + " logout");
-        sftp.terminate();
+        //session.getLog().notice("SSH2FTPOverSFTP", "user " + user + " logout");
+        try {
+            sftp.close();
+        } catch (IOException e) {
+            LOG.error(e.getMessage(), e);
+        }
     }
 
     @Override
@@ -137,9 +145,9 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
         try
         {
             attrs = sftp.lstat(expandRemote(file));
-            return attrs.isFile();
+            return attrs.isRegularFile();
         }
-        catch (SSH2SFTP.SFTPException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to check file '%s", file), e);
             return false;
@@ -154,20 +162,10 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
             String newDir = expandRemote(dir);
             try
             {
-                attrs = sftp.realpath(newDir);
-            }
-            catch (SSH2SFTP.SFTPException e)
-            {
-                LOG.error(String.format("Failed to get realpath of directory '%s'", newDir), e);
-                throw new FTPException(FILE_UNAVAILABLE, dir + ": No such directory.");
-            }
-            newDir = attrs.lname;
-            try
-            {
-                SSH2SFTP.FileHandle f = sftp.opendir(newDir);
+                CloseableHandle f = sftp.openDir(newDir);
                 sftp.close(f);
             }
-            catch (SSH2SFTP.SFTPException e)
+            catch (IOException e)
             {
                 LOG.error(String.format("Failed to open directory '%s'", newDir), e);
                 throw new FTPException(FILE_UNAVAILABLE, dir + ": Not a directory.");
@@ -186,7 +184,7 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
             attrs = sftp.lstat(fPath);
             renameFrom = fPath;
         }
-        catch (SSH2SFTP.SFTPException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to rename file '%s' into '%s'", from, fPath), e);
             throw new FTPException(FILE_UNAVAILABLE, from + ": No such file or directory.");
@@ -202,7 +200,7 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
             {
                 sftp.rename(renameFrom, expandRemote(to));
             }
-            catch (SSH2SFTP.SFTPException e)
+            catch (IOException e)
             {
                 LOG.error(String.format("Failed to rename file '%s' into '%s'", renameFrom, to), e);
                 throw new FTPException(FILE_UNAVAILABLE, "rename: Operation failed.");
@@ -225,12 +223,7 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
         {
             sftp.remove(expandRemote(file));
         }
-        catch (SSH2SFTP.SFTPPermissionDeniedException e)
-        {
-            LOG.error(String.format("Failed to delete file '%s'. Access denied", file), e);
-            throw new FTPException(FILE_UNAVAILABLE, "access denied");
-        }
-        catch (SSH2SFTP.SFTPException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to delete file '%s'. No such file", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": no such file.");
@@ -244,15 +237,10 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
         {
             sftp.rmdir(expandRemote(dir));
         }
-        catch (SSH2SFTP.SFTPPermissionDeniedException e)
+        catch (IOException e)
         {
-            LOG.error(String.format("Failed to delete directory '%s'. Permission denied", dir), e);
-            throw new FTPException(FILE_UNAVAILABLE, "access denied");
-        }
-        catch (SSH2SFTP.SFTPException e)
-        {
-            LOG.error(String.format("Failed to delete directory '%s'. No such directory", dir), e);
-            throw new FTPException(FILE_UNAVAILABLE, dir + ": no such directory.");
+            LOG.error(String.format("Failed to delete directory '%s'", dir), e);
+            throw new FTPException(FILE_UNAVAILABLE, dir);
         }
     }
 
@@ -261,9 +249,9 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
     {
         try
         {
-            sftp.mkdir(expandRemote(dir), new SSH2SFTP.FileAttributes());
+            sftp.mkdir(expandRemote(dir));
         }
-        catch (SSH2SFTP.SFTPException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to create directory '%s'", dir), e);
             // TODO: should we throw new exception here?
@@ -301,15 +289,16 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
             long[] ts = new long[2];
             String fPath = expandRemote(file);
             attrs = sftp.lstat(fPath);
-            if (!attrs.hasSize || !attrs.hasModTime)
+            Set<Attribute> flags = attrs.getFlags();
+            if (!flags.contains(Attribute.Size) || !flags.contains(Attribute.ModifyTime))
             {
                 throw new FTPException(FILE_UNAVAILABLE, "SFTP server don't return time/size.");
             }
-            ts[0] = attrs.mtime * 1000L;
-            ts[1] = attrs.size;
+            ts[0] = attrs.getModifyTime().toMillis();
+            ts[1] = attrs.getSize();
             return ts;
         }
-        catch (SSH2SFTP.SFTPException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to get file attributes for '%s'. No such file or directory", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": No such file or directory.");
@@ -319,24 +308,13 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
     @Override
     public void store(String file, InputStream data, boolean binary) throws FTPException
     {
-        try
-        {
-            String expandedFile = expandRemote(file);
-            SSH2SFTP.FileHandle handle = sftp.open(expandedFile, SSH2SFTP.SSH_FXF_WRITE | SSH2SFTP.SSH_FXF_TRUNC |
-                SSH2SFTP.SSH_FXF_CREAT, new SSH2SFTP.FileAttributes());
-            sftp.writeFully(handle, data);
+        String expandedFile = expandRemote(file);
+        try {
+            SftpRemotePathChannel channel = sftp.openRemoteFileChannel(expandedFile, OpenMode.Write, OpenMode.Truncate, OpenMode.Create);
+            OutputStream outputStream = Channels.newOutputStream(channel);
+            IoUtils.copy(data, outputStream);
         }
         catch (IOException e)
-        {
-            LOG.error(String.format("Failed to store file '%s'. Error writing to data connection", file), e);
-            throw new FTPException(CANNOT_OPEN_CONNECTION, "Error writing to data connection: " + e.getMessage());
-        }
-        catch (SSH2SFTP.SFTPPermissionDeniedException e)
-        {
-            LOG.error(String.format("Failed to store file '%s'. Permission denied", file), e);
-            throw new FTPException(FILE_NAME_NOT_ALLOWED, file + ": Permission denied.");
-        }
-        catch (SSH2SFTP.SFTPException e)
         {
             LOG.error(String.format("Failed to store file '%s'. Error in SFTP connection", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": Error in SFTP connection, " + e.getMessage());
@@ -360,15 +338,11 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
         try
         {
             String expandedFile = expandRemote(file);
-            SSH2SFTP.FileHandle handle = sftp.open(expandedFile, SSH2SFTP.SSH_FXF_READ, new SSH2SFTP.FileAttributes());
-            sftp.readFully(handle, data);
+            SftpRemotePathChannel channel = sftp.openRemoteFileChannel(expandedFile, OpenMode.Read);
+            InputStream inputStream = Channels.newInputStream(channel);
+            IoUtils.copy(inputStream, data);
         }
-        catch (SSH2SFTP.SFTPNoSuchFileException e)
-        {
-            LOG.error(String.format("Failed to retrieve file '%s'. No such file or directory", file), e);
-            throw new FTPException(FILE_UNAVAILABLE, file + ": No such file or directory.");
-        }
-        catch (SSH2SFTP.SFTPException | IOException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to retrieve file '%s'. Error in SFTP connection", file), e);
             throw new FTPException(FILE_UNAVAILABLE, file + ": Error in SFTP connection, " + e.getMessage());
@@ -397,30 +371,37 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
     }
 
     @Override
-    public void list(String path, OutputStream data) throws FTPException
-    {
+    public void list(String path, OutputStream data) throws FTPException {
+        path = expandRemote(path);
+
         try
         {
-            SSH2SFTP.FileAttributes[] list = dirList(path);
+            Iterable<DirEntry> list = sftp.readDir(path);
 
-            for (SSH2SFTP.FileAttributes attributes : list)
+            for (DirEntry entry : list)
             {
-                if (".".equals(attributes.name) || "..".equals(attributes.name))
-                {
+                String name = entry.getFilename();
+                if (".".equals(name) || "..".equals(name)) {
                     continue;
                 }
+
+                Attributes attributes = entry.getAttributes();
+
+                FileAttributes permAttrs = new FileAttributes();
+                permAttrs.permissions = attributes.getPermissions();
+
                 StringBuilder str = new StringBuilder();
-                str.append(attributes.permString());
+                str.append(permAttrs.permString());
                 str.append("    1 ");
-                str.append(rightJustify(Integer.toString(attributes.uid), 8));
+                str.append(rightJustify(Integer.toString(attributes.getUserId()), 8));
                 str.append(" ");
-                str.append(rightJustify(Integer.toString(attributes.gid), 8));
+                str.append(rightJustify(Integer.toString(attributes.getGroupId()), 8));
                 str.append(" ");
-                str.append(rightJustify(Long.toString(attributes.size), 16));
+                str.append(rightJustify(Long.toString(attributes.getSize()), 16));
                 str.append(" ");
-                str.append(formatMtime(attributes.mtime));
+                str.append(formatMtime(attributes.getModifyTime()));
                 str.append(" ");
-                str.append(attributes.name);
+                str.append(name);
                 String row = str.toString();
                 if (row.endsWith("/"))
                 {
@@ -442,14 +423,15 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
     {
         try
         {
-            SSH2SFTP.FileAttributes[] list = dirList(path);
-            for (SSH2SFTP.FileAttributes attributes : list)
+            Iterable<DirEntry> list = sftp.readDir(path);
+            for (DirEntry dirEntry : list)
             {
-                if (".".equals(attributes.name) || "..".equals(attributes.name))
+                String name = dirEntry.getFilename();
+                if (".".equals(name) || "..".equals(name))
                 {
                     continue;
                 }
-                String row = attributes.name + "\r\n";
+                String row = name + "\r\n";
                 data.write(row.getBytes());
             }
         }
@@ -458,58 +440,6 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
             LOG.error(String.format("Failed to name list at '%s'", path), e);
             throw new FTPException(CANNOT_OPEN_CONNECTION, "Error writing to data connection: " + e.getMessage());
         }
-    }
-
-    private SSH2SFTP.FileAttributes[] dirList(String path) throws FTPException
-    {
-        SSH2SFTP.FileHandle handle = null;
-        SSH2SFTP.FileAttributes[] list;
-
-        try
-        {
-            String fPath = expandRemote(path);
-            attrs = sftp.lstat(fPath);
-            if (attrs.isDirectory())
-            {
-                handle = sftp.opendir(fPath);
-                list = sftp.readdir(handle);
-                if (list != null)
-                {
-                    for (SSH2SFTP.FileAttributes attributes : list)
-                    {
-                        attributes.lname = attributes.toString(attributes.name);
-                    }
-                }
-            }
-            else
-            {
-                list = new SSH2SFTP.FileAttributes[1];
-                list[0] = new SSH2SFTP.FileAttributes();
-                list[0].name = path;
-                list[0].lname = attrs.toString(path);
-            }
-        }
-        catch (SSH2SFTP.SFTPException e)
-        {
-            LOG.error(String.format("Failed to list '%s'. Not a directory", path), e);
-            throw new FTPException(FILE_UNAVAILABLE, path + ": Not a directory.");
-        }
-        finally
-        {
-            try
-            {
-                if (handle != null)
-                {
-                    sftp.close(handle);
-                }
-            }
-            catch (Exception e)
-            {
-                LOG.warn("Unexpected error while closing chanel", e);
-            }
-        }
-
-        return list;
     }
 
     @Override
@@ -535,20 +465,19 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
     {
         try
         {
-            SSH2SFTP.FileAttributes fa = new SSH2SFTP.FileAttributes();
-            fa.permissions = mod;
-            fa.hasPermissions = true;
-            sftp.setstat(expandRemote(file), fa);
+            Attributes fa = new Attributes();
+            fa.setPermissions(mod);
+            sftp.setStat(expandRemote(file), fa);
         }
-        catch (SSH2SFTP.SFTPException e)
+        catch (IOException e)
         {
             LOG.error(String.format("Failed to change mode bits of file '%s'", file), e);
         }
     }
 
-    private String formatMtime(int mtime) {
+    private String formatMtime(FileTime mtime) {
         ZonedDateTime now = ZonedDateTime.now();
-        ZonedDateTime mtimeDate = Instant.ofEpochSecond(mtime).atZone(ZoneId.systemDefault());
+        ZonedDateTime mtimeDate = mtime.toInstant().atZone(ZoneId.systemDefault());
         DateTimeFormatter dateFormat;
         if (mtimeDate.getYear() == now.getYear()) {
             dateFormat = DateTimeFormatter.ofPattern("MMM dd HH:mm", Locale.ENGLISH);
@@ -556,5 +485,10 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
             dateFormat = DateTimeFormatter.ofPattern("MMM dd yyyy", Locale.ENGLISH);
         }
         return mtimeDate.format(dateFormat);
+    }
+
+    private String permString(int permissions) {
+        // TODO PosixFilePermissions.fromString()
+        return "777";
     }
 }

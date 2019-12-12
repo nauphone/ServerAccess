@@ -20,10 +20,9 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.IAuthenticationParametersGetter;
-import ru.naumen.servacc.SSHKeyLoader;
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.backend.Backend;
-import ru.naumen.servacc.backend.mindterm.MindtermBackend;
+import ru.naumen.servacc.backend.sshd.SshdBackend;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ShellConfiguration;
@@ -53,7 +52,9 @@ public class Main
         Shell shell = createShell(display, configuration.getWindowProperties());
         ExecutorService executor = Executors.newCachedThreadPool(new DaemonizerThreadFactory());
         IAuthenticationParametersGetter authParamsGetter = new AuthenticationDialogParametersGetter(shell);
-        Backend backend = new MindtermBackend(system, executor, acRegistry, new SSHKeyLoader(authParamsGetter, system.getKeyStoreDirectory(), system.getTempKeyStoreDirectory()));
+        //Backend backend = new MindtermBackend(system, executor, acRegistry,
+        //      new SSHKeyLoader(authParamsGetter, system.getKeyStoreDirectory(), system.getTempKeyStoreDirectory()));
+        Backend backend = new SshdBackend(system, executor, acRegistry, authParamsGetter);
         HTTPProxy httpProxy = new HTTPProxy(backend, executor, acRegistry);
         UIController controller = new UIController(shell, system.getGUIOptions(), backend, executor, httpProxy,
             configuration.filterProperties("source[0-9]*"), acRegistry);

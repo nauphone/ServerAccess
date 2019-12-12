@@ -95,9 +95,9 @@ public class ConfigTest
 
         assertThat(account.getLogin(), is("honey"));
         assertThat(account.getPassword(), is(nullValue()));
-        assertThat(key.protocolType, is("ssh-rsa"));
-        assertThat(key.path, is("id_rsa.pub"));
-        assertThat(key.password, is("princess"));
+        assertThat(key.getProtocolType(), is("ssh-rsa"));
+        assertThat(key.getPath(), is("id_rsa.pub"));
+        assertThat(key.getPassword(), is("princess"));
     }
 
     @Test
@@ -118,8 +118,8 @@ public class ConfigTest
 
         assertThat(account.getLogin(), is("honey"));
         assertThat(account.getPassword(), is(nullValue()));
-        assertThat(key.protocolType, is("ssh-dss"));
-        assertThat(key.path, is("id_dsa.pub"));
-        assertThat(key.password, is("ebola"));
+        assertThat(key.getProtocolType(), is("ssh-dss"));
+        assertThat(key.getPath(), is("id_dsa.pub"));
+        assertThat(key.getPassword(), is("ebola"));
     }
 }

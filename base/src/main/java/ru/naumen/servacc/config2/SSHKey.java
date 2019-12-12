@@ -6,14 +6,26 @@ package ru.naumen.servacc.config2;
  */
 public class SSHKey
 {
-    public final String protocolType;
-    public final String path;
-    public final String password;
+    private final String protocolType;
+    private final String path;
+    private final String password;
 
     public SSHKey(String protocolType, String path, String password)
     {
         this.protocolType = protocolType;
         this.path = path;
         this.password = password;
+    }
+
+    public String getProtocolType() {
+        return protocolType;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }
