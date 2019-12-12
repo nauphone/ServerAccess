@@ -1,6 +1,6 @@
 dependencies {
-    compile project(':base')
-    compile "org.eclipse.swt:org.eclipse.swt.cocoa.macosx.x86_64:${swtVersion}"
+    implementation project(':base')
+    implementation "org.eclipse.swt:org.eclipse.swt.cocoa.macosx.x86_64:${swtVersion}"
 }
 
 task fullBuild(dependsOn: [prepareRelease, shadowJar]) {
