@@ -55,7 +55,6 @@ Section -Main
     ;SectionIn RO
     SetOutPath "$INSTDIR"
     File "..\win${Arch}\build\libs\ServerAccess-all.jar"
-    File "..\resource\log4j.properties"
     File "..\resource\putty.exe"
     File "..\resource\rdesktop.exe"
     File "..\base\src\main\resources\prog.ico"

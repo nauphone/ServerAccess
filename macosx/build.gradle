@@ -10,7 +10,6 @@ task fullBuild(dependsOn: [prepareRelease, shadowJar]) {
             into 'build/libs'
         }
         copy {
-            from "$rootDir/resource/log4j.properties"
             from 'build/libs/ServerAccess-all.jar'
             from 'resources/scripts/serveraccess'
             into 'build/libs/ServerAccess.app/Contents/MacOS'
