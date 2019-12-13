@@ -45,7 +45,7 @@ subprojects {
     tasks.shadowJar.dependsOn 'prepareRelease'
 
     task prepareRelease(dependsOn: build, type: Copy) {
-        from "$rootDir/resource/log4j.properties"
+        from "$rootDir/base/resource/log4j.properties"
         into 'build/libs'
     }
 }
