@@ -7,7 +7,7 @@
  * packaging of this file.
  *
  */
-package ru.naumen.servacc;
+package ru.naumen.servacc.backend.mindterm;
 
 import com.mindbright.ssh2.SSH2Interactor;
 import com.mindbright.ssh2.SSH2UserCancelException;

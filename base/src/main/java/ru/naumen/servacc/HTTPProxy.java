@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
 import ru.naumen.servacc.activechannel.HTTPProxyActiveChannel;
 import ru.naumen.servacc.activechannel.sockets.ServerSocketWrapper;
+import ru.naumen.servacc.backend.Backend;
 import ru.naumen.servacc.backend.DualChannel;
 import ru.naumen.servacc.config2.SSHAccount;
 

@@ -13,7 +13,7 @@
  *
  *****************************************************************************/
 
-package ru.naumen.servacc;
+package ru.naumen.servacc.backend.mindterm;
 
 import com.mindbright.net.ftp.FTPException;
 import com.mindbright.net.ftp.FTPServer;
@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Implements a proxy which proxies between an ftp client and an sftp server.
  */
-public class FTP2SFTPProxy implements FTPServerEventHandler
+public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
 {
     // FTP error codes
     public static final int CANNOT_OPEN_CONNECTION = 425;
@@ -43,7 +43,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
     public static final int FILE_UNAVAILABLE = 550;
     public static final int FILE_NAME_NOT_ALLOWED = 553;
 
-    private static final Logger LOG = LoggerFactory.getLogger(FTP2SFTPProxy.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MindtermFTP2SFTPProxy.class);
 
     private SSH2Connection connection;
     private SSH2SFTPClient sftp;
@@ -53,7 +53,7 @@ public class FTP2SFTPProxy implements FTPServerEventHandler
     private String user;
     private SSH2SFTP.FileAttributes attrs;
 
-    public FTP2SFTPProxy(SSH2Connection connection, InputStream ftpInput, OutputStream ftpOutput, String identity) throws SSH2SFTP.SFTPException
+    public MindtermFTP2SFTPProxy(SSH2Connection connection, InputStream ftpInput, OutputStream ftpOutput, String identity) throws SSH2SFTP.SFTPException
     {
         initSFTP(connection);
         initFTP(ftpInput, ftpOutput, identity, false);

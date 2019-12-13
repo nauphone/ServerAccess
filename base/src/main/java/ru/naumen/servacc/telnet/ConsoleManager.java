@@ -9,7 +9,6 @@
  */
 package ru.naumen.servacc.telnet;
 
-import com.mindbright.ssh2.SSH2SessionChannel;
 import java.io.FilterOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ru.naumen.servacc.backend.IShell;
 
 public class ConsoleManager
 {
@@ -120,9 +120,7 @@ public class ConsoleManager
             switch (command)
             {
                 case O_WINDOW_SIZE_NEG:
-                    session.sendWindowChange(
-                        arr[2] * 256 + arr[3],
-                        arr[0] * 256 + arr[1]);
+                    shell.changeWindowDimensions(lst.get(1), lst.get(3), lst.get(0), lst.get(2));
                     break;
                 default:
                     LOGGER.warn("IAC SB UNKNOWN(" + command + ")");
@@ -247,14 +245,14 @@ public class ConsoleManager
     private Socket client;
     private ConsoleManagerInputStream in = null;
     private ConsoleManagerOutputStream out = null;
-    private SSH2SessionChannel session;
+    private IShell shell;
     private String password;
     private boolean inSudoLogin;
 
-    public ConsoleManager(Socket client, SSH2SessionChannel session, String password, boolean sudoLogin)
+    public ConsoleManager(Socket client, IShell shell, String password, boolean sudoLogin)
     {
         this.client = client;
-        this.session = session;
+        this.shell = shell;
         this.password = password;
         this.inSudoLogin = sudoLogin;
     }

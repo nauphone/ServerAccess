@@ -9,8 +9,6 @@
  */
 package ru.naumen.servacc.activechannel;
 
-import com.mindbright.ssh2.SSH2SimpleClient;
-
 import ru.naumen.servacc.ConnectionsManager;
 import ru.naumen.servacc.SocketUtils;
 import ru.naumen.servacc.activechannel.i.IActiveChannelThrough;
@@ -90,23 +88,6 @@ public class SSHActiveChannel extends ActiveChannelThrough implements IHidableCh
     public String toString()
     {
         return "ports: " + port + (portThrough != -1 ? " via " + portThrough : "") + "(" + sshAccount.toString() + ")";
-    }
-
-    public SSH2SimpleClient getSSHClient()
-    {
-        String connectionId = getSSHAccountId();
-
-        if (connManager.containsKey(connectionId))
-        {
-            return connManager.get(connectionId);
-        }
-
-        return null;
-    }
-
-    public String getSSHAccountId()
-    {
-        return sshAccount.getUniqueIdentity();
     }
 
     @Override

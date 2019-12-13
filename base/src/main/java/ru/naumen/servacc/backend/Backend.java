@@ -8,8 +8,9 @@
  *
  */
 
-package ru.naumen.servacc;
+package ru.naumen.servacc.backend;
 
+import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.backend.DualChannel;
 import ru.naumen.servacc.config2.Account;
 import ru.naumen.servacc.config2.HTTPAccount;

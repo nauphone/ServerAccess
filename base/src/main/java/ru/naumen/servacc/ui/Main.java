@@ -12,20 +12,18 @@ package ru.naumen.servacc.ui;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadFactory;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
-
-import ru.naumen.servacc.Backend;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.IAuthenticationParametersGetter;
-import ru.naumen.servacc.MindtermBackend;
 import ru.naumen.servacc.SSHKeyLoader;
 import ru.naumen.servacc.activechannel.ActiveChannelsRegistry;
+import ru.naumen.servacc.backend.Backend;
+import ru.naumen.servacc.backend.mindterm.MindtermBackend;
 import ru.naumen.servacc.platform.OS;
 import ru.naumen.servacc.settings.ApplicationProperties;
 import ru.naumen.servacc.settings.ShellConfiguration;

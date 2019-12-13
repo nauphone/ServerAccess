@@ -48,7 +48,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.naumen.servacc.Backend;
+import ru.naumen.servacc.backend.Backend;
 import ru.naumen.servacc.GlobalThroughView;
 import ru.naumen.servacc.HTTPProxy;
 import ru.naumen.servacc.MessageListener;

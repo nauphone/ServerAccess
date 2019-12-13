@@ -1,11 +1,10 @@
 package ru.naumen.servacc;
 
-import com.mindbright.ssh2.SSH2SimpleClient;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import ru.naumen.servacc.backend.ISshClient;
 
 /**
  * Stores list of connections.
@@ -15,8 +14,8 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public class ConnectionsManager
 {
-    private List<SSH2SimpleClient> connections;
-    private Map<String, SSH2SimpleClient> cache;
+    private List<ISshClient> connections;
+    private Map<String, ISshClient> cache;
 
     public ConnectionsManager()
     {
@@ -24,7 +23,7 @@ public class ConnectionsManager
         connections = new ArrayList<>();
     }
 
-    public void put(String key, SSH2SimpleClient client)
+    public void put(String key, ISshClient client)
     {
         cache.put(key, client);
     }
@@ -35,7 +34,7 @@ public class ConnectionsManager
         cache.remove(key);
     }
 
-    public SSH2SimpleClient get(String key)
+    public ISshClient get(String key)
     {
         return cache.get(key);
     }
@@ -55,11 +54,11 @@ public class ConnectionsManager
     public void cleanup()
     {
         clearCache();
-        for (SSH2SimpleClient client : connections)
+        for (ISshClient client : connections)
         {
-            if (client.getTransport().isConnected())
+            if (client.isConnected())
             {
-                client.getTransport().normalDisconnect("quit");
+                client.normalDisconnect("quit");
             }
         }
     }

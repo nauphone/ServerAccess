@@ -11,3 +11,5 @@ distr
 .sonar
 target
 .gradle
+
+serveraccess.log
