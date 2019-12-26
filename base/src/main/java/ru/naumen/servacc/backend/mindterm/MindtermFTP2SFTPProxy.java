@@ -145,7 +145,7 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
         try
         {
             attrs = sftp.lstat(expandRemote(file));
-            return attrs.isRegularFile();
+            return attrs.isRegularFile() || attrs.isSymbolicLink();
         }
         catch (IOException e)
         {
@@ -162,13 +162,27 @@ public class MindtermFTP2SFTPProxy implements FTPServerEventHandler
             String newDir = expandRemote(dir);
             try
             {
+                attrs = sftp.stat(newDir);
+            }
+            catch (IOException e)
+            {
+                LOG.error(String.format("Failed to get attrs of '%s'", newDir), e);
+                throw new FTPException(FILE_UNAVAILABLE, dir + ": Failed to get attrs.");
+            }
+
+            if (!attrs.isDirectory()) {
+                throw new FTPException(FILE_UNAVAILABLE, dir + ": Not a directory.");
+            }
+
+            try
+            {
                 CloseableHandle f = sftp.openDir(newDir);
                 sftp.close(f);
             }
             catch (IOException e)
             {
                 LOG.error(String.format("Failed to open directory '%s'", newDir), e);
-                throw new FTPException(FILE_UNAVAILABLE, dir + ": Not a directory.");
+                throw new FTPException(FILE_UNAVAILABLE, dir + ": Failed to open a directory.");
             }
             remoteDir = newDir;
         }
